@@ -3,6 +3,25 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Dd]ebug*/
+[Rr]elease*/
+
+# ASP.NET Secrets
+secrets.json
+
+# Log files
+*.log
 # dotenv files
 .env
 
