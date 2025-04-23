@@ -2,10 +2,9 @@
 
 namespace DollarProject.Enums
 {
-    public enum UserRole
+    public enum ProductType
     {
-        Admin = 1,
-        Staff = 2,
-        Customer = 3
+        GameAccount,
+        GameItem
     }
 }

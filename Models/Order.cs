@@ -7,27 +7,47 @@ namespace DollarProject.Models
     public class Order
     {
         [Key]
-        public int Id { get; set; }
+        public int OrderID { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        public int UserID { get; set; }
 
-        [Required]
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalAmount { get; set; }
+        public int SellerID { get; set; }
 
-        public OrderStatus Status { get; set; } = OrderStatus.NotDelivered;
+        public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        public DateTime OrderDate { get; set; }
+        public int TotalPriceXu { get; set; }
 
-        public DateTime? DeliveryDate { get; set; }
+        public bool IsPaidWithWallet { get; set; } = false;
+
+        [StringLength(50)]
+        public string OrderStatus { get; set; } // From StatusEnum
+
+        [StringLength(50)]
+        public string DeliveryStatus { get; set; } = StatusEnum.Pending.ToString();
+
+        [StringLength(50)]
+        public string DeliveryMethod { get; set; } = Enums.DeliveryMethod.Automatic.ToString();
+
+        public string DeliveryNotes { get; set; }
+
+        public DateTime? DeliveredAt { get; set; }
+
+        [StringLength(50)]
+        public string? RefundStatus { get; set; } // NULL, or from StatusEnum
+
+        public string? RefundReason { get; set; }
 
         // Navigation properties
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        [ForeignKey("UserID")]
+        public virtual User Buyer { get; set; }
 
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        [ForeignKey("SellerID")]
+        public virtual User Seller { get; set; }
 
-        public virtual Payment Payment { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<OrderStatusHistory> StatusHistories { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
+        public virtual ICollection<OrderDispute> Disputes { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

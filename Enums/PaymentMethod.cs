@@ -2,10 +2,10 @@
 
 namespace DollarProject.Enums
 {
-    public enum UserRole
+    public enum PaymentMethod
     {
-        Admin = 1,
-        Staff = 2,
-        Customer = 3
+        Wallet,
+        VNPay,
+        Manual
     }
 }
