@@ -10,6 +10,7 @@
 </head>
 
 <body>
+
     <!-- preloader start -->
     <div class="preloader">
         <div class="loader"></div>
@@ -49,64 +50,89 @@
                                 </span>
                                 News For You
                             </a>
-                            <div class="flex items-center lg:gap-x-32p gap-x-2">
-                                <div class="hidden lg:flex items-center gap-1 shrink-0">
-                                    <a href="./shopping-cart.html" class="btn-c btn-c-lg btn-c-dark-outline">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart">
+
+                            <div class="hidden lg:flex items-center gap-3 shrink-0 ml-4">
+                                <!-- Giỏ hàng (giữ nguyên) -->
+                                <a href="./shopping-cart.html" class="btn-c btn-c-lg btn-c-dark-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                        <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                        <path d="M17 17h-11v-14h-2"></path>
+                                        <path d="M6 5l14 1l-1 7h-13"></path>
+                                    </svg>
+                                </a>
+
+                                <!-- Thông báo (giữ nguyên) -->
+                                <div class="relative hidden lg:block">
+                                    <a href="chat.html" class="btn-c btn-c-lg btn-c-dark-outline">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                            <path d="M17 17h-11v-14h-2"></path>
-                                            <path d="M6 5l14 1l-1 7h-13"></path>
+                                            <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
+                                            <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
                                         </svg>
                                     </a>
-                                    <div class="relative hidden lg:block">
-                                        <a href="chat.html" class="btn-c btn-c-lg btn-c-dark-outline">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bell">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
-                                                <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
                                 </div>
-                                <div x-data="dropdown" class="dropdown relative shrink-0 lg:block hidden">
-                                    <button @@click="toggle()" class="dropdown-toggle gap-24p">
-                                        <span class="flex items-center gap-3">
-                                            <img class="size-48p rounded-full shrink-0" src="images/user1.png" alt="profile">
-                                            <span class="">
-                                                <span class="text-m-medium text-w-neutral-1 mb-1">
-                                                    David Malan
-                                                </span>
-                                                <span class="text-sm text-w-neutral-4 block">
-                                                    270 Followars
-                                                </span>
-                                            </span>
-                                        </span>
-                                        <span :class="isOpen ? '-rotate-180' : ''" class="btn-c btn-c-lg text-w-neutral-4 icon-32 transition-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <path d="M6 9l6 6l6 -6"></path>
-                                            </svg>
-                                        </span>
+
+                                <!-- Đăng nhập -->
+                                <a href="#" id="loginButton" class="flex items-center gap-2 px-4 py-2 border border-gray-400 text-gray-300 rounded-md hover:bg-gray-700 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                                        <path d="M20 12h-13l3 -3m0 6l-3 -3" />
+                                    </svg>
+                                    <span>Login</span>
+                                </a>
+
+                                <!-- Đăng ký -->
+                                <a href="./register.html" class="flex items-center gap-2 px-4 py-2 border border-gray-400 text-gray-300 rounded-md hover:bg-gray-700 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                        <path d="M16 19h6" />
+                                        <path d="M19 16v6" />
+                                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+                                    </svg>
+                                    <span>Register</span>
+                                </a>
+                                
+
+                                    <button class="lg:hidden btn-c btn-c-lg btn-c-dark-outline nav-toggole shrink-0">
+                                        <i class="ti ti-menu-2"></i>
                                     </button>
-
-                                    <div x-show="isOpen" x-transition="" @@click.away="close()" class="dropdown-content">
-                                        <a href="./profile.html" class="dropdown-item">Profile</a>
-                                        <a href="./user-settings.html" class="dropdown-item">Settings</a>
-                                        <button type="button" @@click="close()" class="dropdown-item">Logout</button>
-                                        <a href="./contact-us.html" class="dropdown-item">Help</a>
-                                    </div>
                                 </div>
-
-                                <button class="lg:hidden btn-c btn-c-lg btn-c-dark-outline nav-toggole shrink-0">
-                                    <i class="ti ti-menu-2"></i>
-                                </button>
                             </div>
-                        </div>
                     </nav>
                 </div>
             </div>
+            <!-- Login Modal Wrapper -->
+            <div id="loginWrapper" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] hidden">
+                <div class="bg-white rounded-lg p-6 w-[300px] sm:w-[400px] relative shadow-lg">
+                    <button id="closeLogin" class="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
+                    <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
+                    <form>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm mb-1">Email</label>
+                            <input type="email" id="email" class="w-full border px-3 py-2 rounded" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="block text-sm mb-1">Password</label>
+                            <input type="password" id="password" class="w-full border px-3 py-2 rounded" placeholder="Enter password">
+                        </div>
+                        <div class="flex items-center justify-between text-sm mb-4">
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" class="form-checkbox">
+                                Remember me
+                            </label>
+                            <a href="#" class="text-blue-600 hover:underline">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="w-full bg-black text-white py-2 rounded hover:bg-gray-800">Login</button>
+                    </form>
+                    <p class="text-sm text-center mt-4">Don't have an account? <a href="#" class="text-blue-600 hover:underline">Register</a></p>
+                </div>
+            </div>
+
+        </div>
             <nav class="w-full flex justify-between items-center">
                 <div class="small-nav fixed top-0 left-0 h-screen w-full shadow-lg z-[999] transform transition-transform ease-in-out invisible md:translate-y-full max-md:-translate-x-full duration-500">
                     <div class="absolute z-[5] inset-0 bg-b-neutral-3 flex-col-c min-h-screen max-md:max-w-[400px]">
@@ -756,6 +782,25 @@
         <!-- footer end -->
     </div>
     <!-- app layout end -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
 
 </body>
+<script>
+    document.getElementById("loginButton").addEventListener("click", function () {
+        document.getElementById("loginWrapper").classList.remove("hidden");
+    });
+
+    document.getElementById("closeLogin").addEventListener("click", function () {
+        document.getElementById("loginWrapper").classList.add("hidden");
+    });
+
+    // Optional: Click outside to close
+    document.getElementById("loginWrapper").addEventListener("click", function (e) {
+        if (e.target === this) {
+            this.classList.add("hidden");
+        }
+    });
+</script>
 </html>
