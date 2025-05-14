@@ -1,0 +1,59 @@
+﻿
+.login-btn {
+    transition: all 0.3s ease;
+    background: linear-gradient(90deg, #f97316, #f59e0b);
+    border: none;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:hover {
+    background: linear-gradient(90deg, #ea580c, #d97706);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.login-modal-wrapper {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.login-modal-wrapper.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.login-modal {
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.login-modal-wrapper.show .login-modal {
+    transform: scale(1);
+}
+
+.close-modal-btn {
+    transition: all 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    transform: rotate(90deg);
+    color: #ef4444;
+}
+
+.submit-btn {
+    background: linear-gradient(90deg, #f97316, #f59e0b);
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(90deg, #ea580c, #d97706);
+    transform: translateY(-2px);
+}

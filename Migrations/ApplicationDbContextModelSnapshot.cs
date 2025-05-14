@@ -52,7 +52,7 @@ namespace DollarProject.Migrations
                     b.HasIndex("UserID", "ProductID")
                         .IsUnique();
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
 
                     b.HasData(
                         new
@@ -86,7 +86,7 @@ namespace DollarProject.Migrations
 
                     b.HasKey("ConversationID");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversations", (string)null);
 
                     b.HasData(
                         new
@@ -131,7 +131,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("ConversationParticipants");
+                    b.ToTable("ConversationParticipants", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.CurrencyConversionRate", b =>
@@ -155,7 +155,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("SetByUserID");
 
-                    b.ToTable("CurrencyConversionRates");
+                    b.ToTable("CurrencyConversionRates", (string)null);
 
                     b.HasData(
                         new
@@ -191,7 +191,7 @@ namespace DollarProject.Migrations
                     b.HasIndex("FollowerID", "SellerID")
                         .IsUnique();
 
-                    b.ToTable("Followers");
+                    b.ToTable("Followers", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Message", b =>
@@ -221,7 +221,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("SenderID");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.MessageReadStatus", b =>
@@ -250,7 +250,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("MessageReadStatuses");
+                    b.ToTable("MessageReadStatuses", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Notification", b =>
@@ -289,7 +289,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
 
                     b.HasData(
                         new
@@ -370,7 +370,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
 
                     b.HasData(
                         new
@@ -427,7 +427,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
 
                     b.HasData(
                         new
@@ -498,7 +498,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("ReportedByUserID");
 
-                    b.ToTable("OrderDisputes");
+                    b.ToTable("OrderDisputes", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.OrderStatusHistory", b =>
@@ -533,7 +533,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("OrderStatusHistories");
+                    b.ToTable("OrderStatusHistories", (string)null);
 
                     b.HasData(
                         new
@@ -577,7 +577,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
 
                     b.HasData(
                         new
@@ -662,7 +662,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -719,7 +719,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("ParentCategoryID");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
 
                     b.HasData(
                         new
@@ -860,7 +860,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("OrderDetailID");
 
-                    b.ToTable("ProductDeliveryDetails");
+                    b.ToTable("ProductDeliveryDetails", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Review", b =>
@@ -901,7 +901,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Role", b =>
@@ -919,7 +919,7 @@ namespace DollarProject.Migrations
 
                     b.HasKey("RoleID");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new
@@ -979,7 +979,7 @@ namespace DollarProject.Migrations
                     b.HasIndex("SellerID")
                         .IsUnique();
 
-                    b.ToTable("SellerStores");
+                    b.ToTable("SellerStores", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.User", b =>
@@ -1050,7 +1050,7 @@ namespace DollarProject.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -1130,7 +1130,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserActivityLogs");
+                    b.ToTable("UserActivityLogs", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Wallet", b =>
@@ -1155,7 +1155,7 @@ namespace DollarProject.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallets", (string)null);
 
                     b.HasData(
                         new
@@ -1224,7 +1224,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("WalletID");
 
-                    b.ToTable("WalletTransactions");
+                    b.ToTable("WalletTransactions", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Wishlist", b =>
@@ -1251,7 +1251,7 @@ namespace DollarProject.Migrations
                     b.HasIndex("UserID", "ProductID")
                         .IsUnique();
 
-                    b.ToTable("Wishlists");
+                    b.ToTable("Wishlists", (string)null);
 
                     b.HasData(
                         new
@@ -1310,7 +1310,7 @@ namespace DollarProject.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("WithdrawRequests");
+                    b.ToTable("WithdrawRequests", (string)null);
                 });
 
             modelBuilder.Entity("DollarProject.Models.Cart", b =>
