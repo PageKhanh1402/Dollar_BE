@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <title>EXGame</title>
-    <script defer="" src="js/app.js"></script>
+    <script defer src="js/app.js"></script>
     <link href="css/app.css" rel="stylesheet">
+    <!-- Thêm Tailwind CSS từ CDN để sử dụng các lớp tiện ích -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="~/css/loginStyle.css" rel="stylesheet">
 </head>
-
 <body>
-
     <!-- preloader start -->
     <div class="preloader">
         <div class="loader"></div>
@@ -39,7 +40,7 @@
                             </form>
                         </div>
                         <div class="3xl:col-span-6 xl:col-span-7 flex items-center xl:justify-between justify-end w-full">
-                            <a href="#" class="hidden xl:inline-flex items-center gap-3 pl-1 py-1 pr-6  rounded-full bg-[rgba(242,150,32,0.10)] text-w-neutral-1 text-base">
+                            <a href="#" class="hidden xl:inline-flex items-center gap-3 pl-1 py-1 pr-6 rounded-full bg-[rgba(242,150,32,0.10)] text-w-neutral-1 text-base">
                                 <span class="size-48p flex-c text-b-neutral-4 bg-primary rounded-full icon-32">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-speakerphone">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -50,9 +51,8 @@
                                 </span>
                                 News For You
                             </a>
-
                             <div class="hidden lg:flex items-center gap-3 shrink-0 ml-4">
-                                <!-- Giỏ hàng (giữ nguyên) -->
+                                <!-- Giỏ hàng -->
                                 <a href="./shopping-cart.html" class="btn-c btn-c-lg btn-c-dark-outline">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -62,8 +62,7 @@
                                         <path d="M6 5l14 1l-1 7h-13"></path>
                                     </svg>
                                 </a>
-
-                                <!-- Thông báo (giữ nguyên) -->
+                                <!-- Thông báo -->
                                 <div class="relative hidden lg:block">
                                     <a href="chat.html" class="btn-c btn-c-lg btn-c-dark-outline">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
@@ -73,66 +72,52 @@
                                         </svg>
                                     </a>
                                 </div>
-
-                                <!-- Đăng nhập -->
-                                <a href="#" id="loginButton" class="flex items-center gap-2 px-4 py-2 border border-gray-400 text-gray-300 rounded-md hover:bg-gray-700 transition">
+                                <!-- Button Login -->
+                                <button id="loginButton" class="login-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
                                         <path d="M20 12h-13l3 -3m0 6l-3 -3" />
                                     </svg>
                                     <span>Login</span>
-                                </a>
-
-                                <!-- Đăng ký -->
-                                <a href="./register.html" class="flex items-center gap-2 px-4 py-2 border border-gray-400 text-gray-300 rounded-md hover:bg-gray-700 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                                        <path d="M16 19h6" />
-                                        <path d="M19 16v6" />
-                                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
-                                    </svg>
-                                    <span>Register</span>
-                                </a>
-                                
-
-                                    <button class="lg:hidden btn-c btn-c-lg btn-c-dark-outline nav-toggole shrink-0">
-                                        <i class="ti ti-menu-2"></i>
-                                    </button>
-                                </div>
+                                </button>
+                                <button class="lg:hidden btn-c btn-c-lg btn-c-dark-outline nav-toggole shrink-0">
+                                    <i class="ti ti-menu-2"></i>
+                                </button>
                             </div>
+                        </div>
                     </nav>
                 </div>
             </div>
             <!-- Login Modal Wrapper -->
-            <div id="loginWrapper" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] hidden">
-                <div class="bg-white rounded-lg p-6 w-[300px] sm:w-[400px] relative shadow-lg">
-                    <button id="closeLogin" class="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
-                    <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
-                    <form>
+            <div id="loginWrapper" class="login-modal-wrapper fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+                <div class="login-modal bg-gray-800 rounded-lg p-6 w-[300px] sm:w-[400px] relative shadow-lg">
+                    <button id="closeLogin" class="close-modal-btn absolute top-2 right-2 text-gray-300 hover:text-white text-2xl font-bold">×</button>
+                    <h2 class="text-2xl font-bold mb-4 text-center text-white">Sign In</h2>
+                    <form id="loginForm" action="/login" method="POST">
                         <div class="mb-4">
-                            <label for="email" class="block text-sm mb-1">Email</label>
-                            <input type="email" id="email" class="w-full border px-3 py-2 rounded" placeholder="Enter your email">
+                            <label for="email" class="block text-sm mb-1 text-gray-300">Email</label>
+                            <input type="email" id="email" name="email" class="w-full border border-gray-600 bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your email" required>
                         </div>
                         <div class="mb-4">
-                            <label for="password" class="block text-sm mb-1">Password</label>
-                            <input type="password" id="password" class="w-full border px-3 py-2 rounded" placeholder="Enter password">
+                            <label for="password" class="block text-sm mb-1 text-gray-300">Password</label>
+                            <input type="password" id="password" name="password" class="w-full border border-gray-600 bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your password" required>
                         </div>
-                        <div class="flex items-center justify-between text-sm mb-4">
+                        <div class="flex items-center justify-between text-sm mb-4 text-gray-300">
                             <label class="flex items-center gap-2">
-                                <input type="checkbox" class="form-checkbox">
-                                Remember me
+                                <input type="checkbox" class="form-checkbox text-orange-500" name="remember">
+                                <span>Remember me</span>
                             </label>
-                            <a href="#" class="text-blue-600 hover:underline">Forgot Password?</a>
+                            <a href="#" class="text-orange-500 hover:underline">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="w-full bg-black text-white py-2 rounded hover:bg-gray-800">Login</button>
+                        <button type="submit" class="submit-btn w-full text-white py-2 rounded">Sign In</button>
                     </form>
-                    <p class="text-sm text-center mt-4">Don't have an account? <a href="#" class="text-blue-600 hover:underline">Register</a></p>
+                    <p class="text-sm text-center mt-4 text-gray-300">Don't have an account? <a href="#" class="text-orange-500 hover:underline">Create one</a></p>
                 </div>
             </div>
-
         </div>
+        <!-- Mobile Navigation -->
+        <div>
             <nav class="w-full flex justify-between items-center">
                 <div class="small-nav fixed top-0 left-0 h-screen w-full shadow-lg z-[999] transform transition-transform ease-in-out invisible md:translate-y-full max-md:-translate-x-full duration-500">
                     <div class="absolute z-[5] inset-0 bg-b-neutral-3 flex-col-c min-h-screen max-md:max-w-[400px]">
@@ -154,44 +139,20 @@
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Home</span>
                                                         <span class="collapse-icon mobail-submenu-icon">
-                                                            <i class="ti ti-chevron-down "></i>
+                                                            <i class="ti ti-chevron-down"></i>
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="index.html">
-                                                                - Home One
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="home-two.html">
-                                                                - Home Two
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="home-three.html">
-                                                                - Home Three
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="home-four.html">
-                                                                - Home Four
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="index.html">- Home One</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="home-two.html">- Home Two</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="home-three.html">- Home Three</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="home-four.html">- Home Four</a></li>
                                                     </ul>
                                                 </li>
-                                                <li class="mobail-menu">
-                                                    <a href="trending.html">Trending</a>
-                                                </li>
-                                                <li class="mobail-menu">
-                                                    <a href="community.html">Community</a>
-                                                </li>
-                                                <li class="mobail-menu">
-                                                    <a href="saved.html">Saved</a>
-                                                </li>
-                                                <li class="mobail-menu">
-                                                    <a href="live-stream.html">Live Stream</a>
-                                                </li>
+                                                <li class="mobail-menu"><a href="trending.html">Trending</a></li>
+                                                <li class="mobail-menu"><a href="community.html">Community</a></li>
+                                                <li class="mobail-menu"><a href="saved.html">Saved</a></li>
+                                                <li class="mobail-menu"><a href="live-stream.html">Live Stream</a></li>
                                                 <li class="sub-menu mobail-submenu">
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Library</span>
@@ -200,16 +161,8 @@
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="library.html">
-                                                                - Library
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="library-details.html">
-                                                                - Library Details
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="library.html">- Library</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="library-details.html">- Library Details</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
@@ -220,21 +173,9 @@
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="games.html">
-                                                                - Games
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="game-details.html">
-                                                                - Game Details One
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="game-details-two.html">
-                                                                - Game Details Two
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="games.html">- Games</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="game-details.html">- Game Details One</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="game-details-two.html">- Game Details Two</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
@@ -245,41 +186,13 @@
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="groups-one.html">
-                                                                - Groups One
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="groups-two.html">
-                                                                - Group Two
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="group-home.html">
-                                                                - Group Home
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="group-related-groups.html">
-                                                                - Related Groups
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="group-forum.html">
-                                                                - Group Forum
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="group-members.html">
-                                                                - Group Members
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="group-media.html">
-                                                                - Group Media
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="groups-one.html">- Groups One</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="groups-two.html">- Group Two</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="group-home.html">- Group Home</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="group-related-groups.html">- Related Groups</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="group-forum.html">- Group Forum</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="group-members.html">- Group Members</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="group-media.html">- Group Media</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
@@ -290,31 +203,11 @@
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="teams.html">
-                                                                - Teams
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="team-home.html">
-                                                                - Team Members
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="team-games.html">
-                                                                - Team Games
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="team-ranks.html">
-                                                                - Team Ranks
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="team-tournament.html">
-                                                                - Team Tournament
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="teams.html">- Teams</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="team-home.html">- Team Members</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="team-games.html">- Team Games</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="team-ranks.html">- Team Ranks</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="team-tournament.html">- Team Tournament</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
@@ -325,41 +218,15 @@
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="tournaments.html">
-                                                                - Tournaments
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-overview.html">
-                                                                - Tournament Overview
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-prizes.html">
-                                                                - Tournament Prizes
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-participants.html">
-                                                                - Tournament Participants
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-matches.html">
-                                                                - Tournament Matches
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-brackets.html">
-                                                                - Tournament Brackets
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="tournaments.html">- Tournaments</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-overview.html">- Tournament Overview</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-prizes.html">- Tournament Prizes</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-participants.html">- Tournament Participants</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-matches.html">- Tournament Matches</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="tournament-brackets.html">- Tournament Brackets</a></li>
                                                     </ul>
                                                 </li>
-                                                <li class="mobail-menu">
-                                                    <a href="leaderboard.html">Leaderboard</a>
-                                                </li>
+                                                <li class="mobail-menu"><a href="leaderboard.html">Leaderboard</a></li>
                                                 <li class="sub-menu mobail-submenu">
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Marketplace</span>
@@ -368,181 +235,75 @@
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="marketplace-one.html">
-                                                                - Marketplace One
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="marketplace-two.html">
-                                                                - Marketplace Two
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="marketplace-details.html">
-                                                                - Marketplace Details
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="marketplace-one.html">- Marketplace One</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="marketplace-two.html">- Marketplace Two</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="marketplace-details.html">- Marketplace Details</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Profile</span>
                                                         <span class="collapse-icon mobail-submenu-icon">
-                                                            <i class="ti ti-chevron-down "></i>
+                                                            <i class="ti ti-chevron-down"></i>
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="profile.html">
-                                                                - Post Item
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-game-stats.html">
-                                                                - Game Stats
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-about.html">
-                                                                - About
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-team.html">
-                                                                - My Team
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-groups.html">
-                                                                - My Group
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-forums.html">
-                                                                - Forums
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-videos.html">
-                                                                - Videos
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-achievements.html">
-                                                                - Achievements
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="chat.html">
-                                                                - Chat
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="user-settings.html">
-                                                                - Settings
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="profile.html">- Post Item</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-game-stats.html">- Game Stats</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-about.html">- About</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-team.html">- My Team</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-groups.html">- My Group</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-forums.html">- Forums</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-videos.html">- Videos</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-achievements.html">- Achievements</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="chat.html">- Chat</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="user-settings.html">- Settings</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Shop</span>
                                                         <span class="collapse-icon mobail-submenu-icon">
-                                                            <i class="ti ti-chevron-down "></i>
+                                                            <i class="ti ti-chevron-down"></i>
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="shop.html">
-                                                                - Shop
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="shop-details.html">
-                                                                - Shop Details
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="shopping-cart.html">
-                                                                - Shopping Cart
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="shipping.html">
-                                                                - Shipping
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="checkout.html">
-                                                                - checkout
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="shop.html">- Shop</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="shop-details.html">- Shop Details</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="shopping-cart.html">- Shopping Cart</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="shipping.html">- Shipping</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="checkout.html">- Checkout</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Blogs</span>
                                                         <span class="collapse-icon mobail-submenu-icon">
-                                                            <i class="ti ti-chevron-down "></i>
+                                                            <i class="ti ti-chevron-down"></i>
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="blogs.html">
-                                                                - Blogs
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="blog-details.html">
-                                                                - Blog Details
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="blogs.html">- Blogs</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="blog-details.html">- Blog Details</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="sub-menu mobail-submenu">
                                                     <span class="mobail-submenu-btn">
                                                         <span class="submenu-btn">Pages</span>
                                                         <span class="collapse-icon mobail-submenu-icon">
-                                                            <i class="ti ti-chevron-down "></i>
+                                                            <i class="ti ti-chevron-down"></i>
                                                         </span>
                                                     </span>
                                                     <ul class="grid gap-y-2 px-16p">
-                                                        <li class="pt-2">
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="pricing-plan.html">
-                                                                - Pricing Plan
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="terms-conditions.html">
-                                                                - Terms Conditions
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="faqs.html">
-                                                                - Faq's
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="not-found.html">
-                                                                - Not Found
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="login.html">
-                                                                - Login
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a aria-label="item" class="text-base hover:text-primary transition-1" href="sign-up.html">
-                                                                - Sign Up
-                                                            </a>
-                                                        </li>
+                                                        <li class="pt-2"><a aria-label="item" class="text-base hover:text-primary transition-1" href="pricing-plan.html">- Pricing Plan</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="terms-conditions.html">- Terms Conditions</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="faqs.html">- Faq's</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="not-found.html">- Not Found</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="login.html">- Login</a></li>
+                                                        <li><a aria-label="item" class="text-base hover:text-primary transition-1" href="sign-up.html">- Sign Up</a></li>
                                                     </ul>
                                                 </li>
-                                                <li class="mobail-menu">
-                                                    <a href="contact-us.html">Contact Us</a>
-                                                </li>
+                                                <li class="mobail-menu"><a href="contact-us.html">Contact Us</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -557,26 +318,14 @@
                                             <div class="mt-40p">
                                                 <img class="mb-16p" src="images/logo.png" alt="logo">
                                                 <p class="text-base text-w-neutral-3 mb-32p">
-                                                    Become visionary behind a sprawling metropolis in Metropolis Tycoon Plan
-                                                    empire
-                                                    progress.
+                                                    Become visionary behind a sprawling metropolis in Metropolis Tycoon Plan empire progress.
                                                 </p>
                                                 <div class="flex items-center flex-wrap gap-3">
-                                                    <a href="#" class="btn-socal-primary">
-                                                        <i class="ti ti-brand-facebook"></i>
-                                                    </a>
-                                                    <a href="#" class="btn-socal-primary">
-                                                        <i class="ti ti-brand-twitch"></i>
-                                                    </a>
-                                                    <a href="#" class="btn-socal-primary">
-                                                        <i class="ti ti-brand-instagram"></i>
-                                                    </a>
-                                                    <a href="#" class="btn-socal-primary">
-                                                        <i class="ti ti-brand-discord"></i>
-                                                    </a>
-                                                    <a href="#" class="btn-socal-primary">
-                                                        <i class="ti ti-brand-youtube"></i>
-                                                    </a>
+                                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-facebook"></i></a>
+                                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-twitch"></i></a>
+                                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-instagram"></i></a>
+                                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-discord"></i></a>
+                                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-youtube"></i></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -607,13 +356,13 @@
                         </svg>
                     </button>
                     <div class="flex flex-col gap-2 rounded-full bg-b-neutral-1 w-fit p-2 shrink-0">
-                        <a href="./trending.html" class="nav-item btn-c btn-c-3xl text-white  transition-1">
+                        <a href="./trending.html" class="nav-item btn-c btn-c-3xl text-white transition-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-flame">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.621 -2.333 5.588c0 3.704 3.134 6.706 7 6.706s7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235"></path>
                             </svg>
                         </a>
-                        <a href="./groups-two.html" class="nav-item btn-c btn-c-3xl text-white  transition-1">
+                        <a href="./groups-two.html" class="nav-item btn-c btn-c-3xl text-white transition-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users-group">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
@@ -624,13 +373,13 @@
                                 <path d="M3 13v-1a2 2 0 0 1 2 -2h2"></path>
                             </svg>
                         </a>
-                        <a href="./saved.html" class="nav-item btn-c btn-c-3xl text-white  transition-1">
+                        <a href="./saved.html" class="nav-item btn-c btn-c-3xl text-white transition-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bookmark">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M18 7v14l-6 -4l-6 4v-14a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4z"></path>
                             </svg>
                         </a>
-                        <a href="./user-achievements.html" class="nav-item btn-c btn-c-3xl text-white  transition-1">
+                        <a href="./user-achievements.html" class="nav-item btn-c btn-c-3xl text-white transition-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-star">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
@@ -638,21 +387,21 @@
                         </a>
                     </div>
                     <div class="flex flex-col gap-2 rounded-full w-fit p-2 shrink-0">
-                        <a href="./marketplace-two.html" class="nav-item btn-c btn-c-3xl ">
+                        <a href="./marketplace-two.html" class="nav-item btn-c btn-c-3xl">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-diamond">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M6 5h12l3 5l-8.5 9.5a.7 .7 0 0 1 -1 0l-8.5 -9.5l3 -5"></path>
                                 <path d="M10 12l-2 -2.2l.6 -1"></path>
                             </svg>
                         </a>
-                        <a href="./chat.html" class="nav-item btn-c btn-c-3xl ">
+                        <a href="./chat.html" class="nav-item btn-c btn-c-3xl">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-messages">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"></path>
                                 <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"></path>
                             </svg>
                         </a>
-                        <a href="./profile.html" class="nav-item btn-c btn-c-3xl ">
+                        <a href="./profile.html" class="nav-item btn-c btn-c-3xl">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -670,46 +419,14 @@
                 <div class="flex flex-col items-center gap-16p rounded-full w-fit p-2">
                     <div class="swiper infinity-slide-vertical messenger-carousel max-h-[288px] w-full">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar1.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar2.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar3.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar4.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar1.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar2.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar3.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar4.png" alt="avatar">
-                                </a>
-                            </div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar1.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar2.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar3.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar4.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar1.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar2.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar3.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar4.png" alt="avatar"></a></div>
                         </div>
                     </div>
                     <a href="#" class="btn-c btn-c-xl bg-b-neutral-1 hover:bg-primary text-white hover:text-b-neutral-4 transition-1">
@@ -724,46 +441,14 @@
                 <div class="flex flex-col items-center gap-16p rounded-full w-fit p-2">
                     <div class="swiper infinity-slide-vertical messenger-carousel max-h-[136px] w-full">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar5.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar6.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar3.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar4.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar1.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar2.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar3.png" alt="avatar">
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="./chat.html" class="avatar size-60p">
-                                    <img src="images/avatar4.png" alt="avatar">
-                                </a>
-                            </div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar5.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar6.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar3.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar4.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar1.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar2.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar3.png" alt="avatar"></a></div>
+                            <div class="swiper-slide"><a href="./chat.html" class="avatar size-60p"><img src="images/avatar4.png" alt="avatar"></a></div>
                         </div>
                     </div>
                 </div>
@@ -784,23 +469,28 @@
     <!-- app layout end -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    
+    <script>
+        document.getElementById("loginButton").addEventListener("click", function () {
+            document.getElementById("loginWrapper").classList.add("show");
+        });
 
+        document.getElementById("closeLogin").addEventListener("click", function () {
+            document.getElementById("loginWrapper").classList.remove("show");
+        });
+
+        document.getElementById("loginWrapper").addEventListener("click", function (e) {
+            if (e.target === this) {
+                this.classList.remove("show");
+            }
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            console.log("Login attempt:", { email, password });
+            // Thêm logic gửi dữ liệu đến server hoặc xử lý đăng nhập tại đây
+        });
+    </script>
 </body>
-<script>
-    document.getElementById("loginButton").addEventListener("click", function () {
-        document.getElementById("loginWrapper").classList.remove("hidden");
-    });
-
-    document.getElementById("closeLogin").addEventListener("click", function () {
-        document.getElementById("loginWrapper").classList.add("hidden");
-    });
-
-    // Optional: Click outside to close
-    document.getElementById("loginWrapper").addEventListener("click", function (e) {
-        if (e.target === this) {
-            this.classList.add("hidden");
-        }
-    });
-</script>
 </html>
