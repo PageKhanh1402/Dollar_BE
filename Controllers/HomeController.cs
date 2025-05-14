@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DollarProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -14,11 +14,6 @@ namespace DollarProject.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
