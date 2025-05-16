@@ -3,7 +3,6 @@ using DollarProject.DbConnection;
 using DollarProject.Dto;
 using DollarProject.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace DollarProject.Controllers
@@ -21,30 +20,47 @@ namespace DollarProject.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, string? sortOrder = null)
         {
+            // Fake UserID for testing (replace with UserManager later)
+            const int fakeUserId = 5;
+
             var query = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
                 .Where(p => p.IsApproved)
                 .AsQueryable();
 
-            // Lọc theo danh mục nếu có
+            // Filter by category if provided
             if (categoryId.HasValue)
             {
                 query = query.Where(p => p.CategoryID == categoryId.Value);
             }
 
-            // Sắp xếp
+            // Sort
             query = sortOrder switch
             {
-                "popular" => query.OrderBy(p => p.PriceXu), // Popular: Giá thấp đến cao
-                "popular-desc" => query.OrderByDescending(p => p.PriceXu), // Popular: Giá cao đến thấp
-                _ => query.OrderBy(p => p.PriceXu) // Mặc định: Giá thấp đến cao
+                "popular" => query.OrderBy(p => p.PriceXu),
+                "popular-desc" => query.OrderByDescending(p => p.PriceXu),
+                _ => query.OrderBy(p => p.PriceXu)
             };
 
-            // Ánh xạ sang ProductDto
-            var productDtos = _mapper.Map<List<ProductDto>>(query);
+            // Get products
+            var products = await query.ToListAsync();
 
-            // Lấy danh sách danh mục để hiển thị tab
+            // Map to ProductDto
+            var productDtos = _mapper.Map<List<ProductDto>>(products);
+
+            // Update Wishlist status
+            var wishlistProductIds = await _context.Wishlists
+                .Where(w => w.UserID == fakeUserId)
+                .Select(w => w.ProductID)
+                .ToListAsync();
+
+            foreach (var dto in productDtos)
+            {
+                dto.IsInWishlist = wishlistProductIds.Contains(dto.ProductID);
+            }
+
+            // Get categories
             var categories = await _context.ProductCategories
                 .Select(c => new { c.CategoryID, c.CategoryName })
                 .ToListAsync();
