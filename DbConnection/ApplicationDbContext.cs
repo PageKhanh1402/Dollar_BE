@@ -197,7 +197,8 @@ namespace DollarProject.DbConnection
                     Username = "admin",
                     Password = "Admin@123", // Should be hashed in production
                     RoleID = 1,  // Admin role
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    IsVerifiedSeller = true
                 },
                 new User
                 {
@@ -208,7 +209,8 @@ namespace DollarProject.DbConnection
                     Username = "staff",
                     Password = "Staff@123", // Should be hashed in production
                     RoleID = 2,  // Staff role
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    IsVerifiedSeller = true
                 },
                 new User
                 {
@@ -219,7 +221,8 @@ namespace DollarProject.DbConnection
                     Username = "customer",
                     Password = "Customer@123", // Should be hashed in production
                     RoleID = 3,  // Customer role
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    IsVerifiedSeller = true
                 }
             );
 
@@ -290,24 +293,29 @@ namespace DollarProject.DbConnection
                 new Product
                 {
                     ProductID = 1,
-                    ProductName = "Game Account A",
+                    ProductName = "Valorant Account",
                     Description = "Full MMORPG account.",
                     PriceXu = 100,
                     ProductType = Enums.ProductType.GameAccount.ToString(),
                     SellerID = 1, // Admin's store
                     CategoryID = 1, // Game Accounts category
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    IsApproved = true,
+                    ImageURL = "marketplace5.png",
+
                 },
                 new Product
                 {
                     ProductID = 2,
-                    ProductName = "Weapon A",
+                    ProductName = "Mastering Mindset",
                     Description = "In-game weapon for RPG.",
                     PriceXu = 50,
                     ProductType = Enums.ProductType.GameItem.ToString(),
                     SellerID = 2, // Staff's store
                     CategoryID = 9, // Weapons category
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    IsApproved = true,
+                    ImageURL = "marketplace6.png",
                 }
             );
 

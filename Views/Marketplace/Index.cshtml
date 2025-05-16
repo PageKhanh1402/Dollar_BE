@@ -59,17 +59,17 @@
                     </form>
                     <div class="flex items-center max-sm:justify-center overflow-x-auto scrollbar-0 max-w-[680px]">
                         <div class="flex flex-wrap gap-2 text-base text-w-neutral-1 *:rounded-12 *:px-32p *:py-3 whitespace-nowrap">
-                            <a asp-action="Index" asp-route-categoryId="@ViewData["CategoryId"]" asp-route-sortOrder=""
+                            <a asp-action="Index" asp-route-sortOrder=""
                                class="bg-b-neutral-3"
                                x-bind:class="{ 'bg-b-neutral-2': activeTab == '', 'bg-b-neutral-3': activeTab != '' }">
                                 Popular
                             </a>
-                            <a asp-action="Index" asp-route-categoryId="@ViewData["CategoryId"]" asp-route-sortOrder="popular"
+                            <a asp-action="Index" asp-route-sortOrder="popular"
                                class="bg-b-neutral-3"
                                x-bind:class="{ 'bg-b-neutral-2': activeTab == 'popular', 'bg-b-neutral-3': activeTab != 'popular' }">
                                 Price Low to High
                             </a>
-                            <a asp-action="Index" asp-route-categoryId="@ViewData["CategoryId"]" asp-route-sortOrder="popular-desc"
+                            <a asp-action="Index" asp-route-sortOrder="popular-desc"
                                class="bg-b-neutral-3"
                                x-bind:class="{ 'bg-b-neutral-2': activeTab == 'popular-desc', 'bg-b-neutral-3': activeTab != 'popular-desc' }">
                                 Price High to Low
@@ -86,17 +86,17 @@
                                     <div class="overflow-hidden">
                                         <span class="badge badge-neutral absolute top-3 left-3 z-10">
                                             <i class="avatar avatar-primary size-3"></i>
-                                            <span class="text-s-regular text-w-neutral-1">@product.CategoryName</span>
+                                            <span class="text-s-regular text-w-neutral-1">@(product.CategoryName ?? "Unknown")</span>
                                         </span>
                                         <div class="absolute top-3 right-3 z-10 flex gap-2">
-                                            <button class="text-w-neutral-1 hover:text-primary">
+                                            <button class="wishlist-btn text-w-neutral-1 hover:text-primary @(product.IsInWishlist ? "text-red-500" : "")" data-product-id="@product.ProductID">
                                                 <i class="ti ti-heart icon-24"></i>
                                             </button>
                                             <button class="text-w-neutral-1 hover:text-primary">
                                                 <i class="ti ti-shopping-cart icon-24"></i>
                                             </button>
                                         </div>
-                                        <img src="~/images/@product.ImageURL" class="w-full 3xl:h-[310px] xl:h-[280px] lg:h-[260px] h-[240px] object-cover object-top group-hover:scale-110 group-hover:rotate-2 transition-1" alt="@product.ProductName">
+                                        <img src="~/images/@(product.ImageURL ?? "placeholder.png")" class="w-full 3xl:h-[310px] xl:h-[280px] lg:h-[260px] h-[240px] object-cover object-top group-hover:scale-110 group-hover:rotate-2 transition-1" alt="@product.ProductName">
                                     </div>
                                     <div class="p-28p">
                                         <a asp-controller="Marketplace" asp-action="Details" asp-route-id="@product.ProductID" class="heading-3 link-1 mb-2 line-clamp-1">
@@ -106,10 +106,10 @@
                                             Price: <span class="span">@product.PriceXu Coins</span>
                                         </p>
                                         <div class="flex-y flex-wrap gap-3 mt-24p">
-                                            <img class="size-60p rounded-full shrink-0" src="~/images/@product.ImageURL" alt="@product.SellerName">
+                                            <img class="size-60p rounded-full shrink-0" src="/images/@product.ImageURL" alt="@(product.SellerName ?? "Unknown")">
                                             <div>
                                                 <a href="./profile.html" class="flex-y gap-2 text-l-medium link-1 text-w-neutral-1 mb-1">
-                                                    <span>@product.SellerName</span>
+                                                    <span>@(product.SellerName ?? "Unknown")</span>
                                                     @if (product.IsVerifiedSeller)
                                                     {
                                                         <i class="ti ti-circle-check-filled text-secondary icon-24"></i>
@@ -128,3 +128,35 @@
     </section>
     <!-- marketplace section end -->
 </main>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.wishlist-btn').on('click', function () {
+                var button = $(this);
+                var productId = button.data('product-id');
+
+                $.ajax({
+                    url: '@Url.Action("ToggleWishlist", "Wishlist")',
+                    type: 'POST',
+                    data: { productId: productId },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            button.toggleClass('text-red-500');
+                            alert(response.message);
+                        } else {
+                            alert(response.message || 'An error occurred. Please try again.');
+                        }
+                    },
+                    error: function () {
+                        alert('Please log in to use Wishlist.');
+                    }
+                });
+            });
+        });
+    </script>
+}
