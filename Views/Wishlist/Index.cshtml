@@ -94,9 +94,11 @@
                                                 <button class="wishlist-btn text-w-neutral-1 hover:text-primary @(product.IsInWishlist ? "text-red-500" : "")" data-product-id="@product.ProductID">
                                                     <i class="ti ti-heart icon-24"></i>
                                                 </button>
-                                                <button class="text-w-neutral-1 hover:text-primary">
-                                                    <i class="ti ti-shopping-cart icon-24"></i>
-                                                </button>
+                                                <form asp-controller="Checkout" asp-action="Index" method="post">
+                                                    <button class="text-w-neutral-1 hover:text-primary">
+                                                        <i class="ti ti-shopping-cart icon-24"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                             <img src="~/images/@(product.ImageURL ?? "placeholder.png")" class="w-full 3xl:h-[310px] xl:h-[280px] lg:h-[260px] h-[240px] object-cover object-top group-hover:scale-110 group-hover:rotate-2 transition-1" alt="@product.ProductName">
                                         </div>
@@ -108,7 +110,7 @@
                                                 Price: <span class="span">@product.PriceXu Coins</span>
                                             </p>
                                             <div class="flex-y flex-wrap gap-3 mt-24p">
-                                                <img class="size-60p rounded-full shrink-0" src="/images/user-placeholder.png" alt="@(product.SellerName ?? "Unknown")">
+                                                <img class="size-60p rounded-full shrink-0" src="~/images/@product.SellerImageURL" alt="@(product.SellerName ?? "Unknown")">
                                                 <div>
                                                     <a href="./profile.html" class="flex-y gap-2 text-l-medium link-1 text-w-neutral-1 mb-1">
                                                         <span>@(product.SellerName ?? "Unknown")</span>
