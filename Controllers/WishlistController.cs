@@ -2,8 +2,11 @@
 using DollarProject.DbConnection;
 using DollarProject.Dto;
 using DollarProject.Models;
+using DollarProject.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DollarProject.Controllers
 {
@@ -20,12 +23,20 @@ namespace DollarProject.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, string? sortOrder = null)
         {
-            // Fake UserID for testing (replace with UserManager later)
-            const int fakeUserId = 3;
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", new { showLogin = true });
+            }
+
+            string userIdClaim = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return RedirectToAction("Index", "Home", new { showLogin = true });
+            }
 
             // Query Wishlist
             var wishlistQuery = _context.Wishlists
-                .Where(w => w.UserID == fakeUserId)
+                .Where(w => w.UserID == userId)
                 .Include(w => w.Product)
                     .ThenInclude(p => p.Category)
                 .Include(w => w.Product)
@@ -73,11 +84,19 @@ namespace DollarProject.Controllers
         [HttpPost]
         public async Task<IActionResult> ToggleWishlist(int productId)
         {
-            // Fake UserID for testing (replace with UserManager later)
-            const int fakeUserId = 5;
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", new { showLogin = true });
+            }
+
+            string userIdClaim = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return RedirectToAction("Index", "Home", new { showLogin = true });
+            }
 
             var wishlistItem = await _context.Wishlists
-                .FirstOrDefaultAsync(w => w.UserID == fakeUserId && w.ProductID == productId);
+                .FirstOrDefaultAsync(w => w.UserID == userId && w.ProductID == productId);
 
             bool isInWishlist;
             if (wishlistItem == null)
@@ -85,7 +104,7 @@ namespace DollarProject.Controllers
                 // Add to Wishlist
                 _context.Wishlists.Add(new Wishlist
                 {
-                    UserID = fakeUserId,
+                    UserID = userId,
                     ProductID = productId,
                     CreatedAt = DateTime.Now
                 });

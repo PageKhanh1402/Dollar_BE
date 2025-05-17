@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,9 +8,9 @@
     <title>EXGame</title>
     <script defer src="js/app.js"></script>
     <link href="css/app.css" rel="stylesheet">
-    <!-- Thêm Tailwind CSS từ CDN để sử dụng các lớp tiện ích -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="~/css/loginStyle.css" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <!-- preloader start -->
@@ -66,7 +67,7 @@
                                 @if (!User.Identity.IsAuthenticated)
                                 {
                                     <!-- Button Login -->
-                                    <button id="loginButton" class="login-btn">
+                                    <button id="loginButton" class="login-btn flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
@@ -82,31 +83,27 @@
                                             <span class="flex items-center gap-3">
                                                 <img class="size-48p rounded-full shrink-0" src="images/user1.png" alt="profile">
                                                 <span class="">
-                                                    <span class="text-m-medium text-w-neutral-1 mb-1">
-                                                        David Malan
-                                                    </span>
-                                                    <span class="text-sm text-w-neutral-4 block">
-                                                        270 Followars
-                                                    </span>
+                                                    <span class="text-m-medium text-w-neutral-1 mb-1">@User.FindFirstValue(ClaimTypes.GivenName)</span>
+                                                    <span class="text-sm text-w-neutral-4 block">options</span>
                                                 </span>
                                             </span>
                                             <span :class="isOpen ? '-rotate-180' : ''" class="btn-c btn-c-lg text-w-neutral-4 icon-32 transition-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M6 9l6 6l6 -6"></path>
                                                 </svg>
                                             </span>
                                         </button>
-
                                         <div x-show="isOpen" x-transition="" @@click.away="close()" class="dropdown-content">
                                             <a href="./profile.html" class="dropdown-item">Profile</a>
                                             <a href="./user-settings.html" class="dropdown-item">Settings</a>
-                                            <button type="button" @@click="close()" class="dropdown-item">Logout</button>
+                                            <form asp-controller="Auth" asp-action="Logout" method="post">
+                                                <button type="submit" class="dropdown-item">Logout</button>
+                                            </form>
                                             <a href="./contact-us.html" class="dropdown-item">Help</a>
                                         </div>
                                     </div>
                                 }
-                                
                                 <button class="lg:hidden btn-c btn-c-lg btn-c-dark-outline nav-toggole shrink-0">
                                     <i class="ti ti-menu-2"></i>
                                 </button>
@@ -117,29 +114,7 @@
             </div>
             <!-- Login Modal Wrapper -->
             <div id="loginWrapper" class="login-modal-wrapper fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-                <div class="login-modal bg-gray-800 rounded-lg p-6 w-[300px] sm:w-[400px] relative shadow-lg">
-                    <button id="closeLogin" class="close-modal-btn absolute top-2 right-2 text-gray-300 hover:text-white text-2xl font-bold">×</button>
-                    <h2 class="text-2xl font-bold mb-4 text-center text-white">Sign In</h2>
-                    <form id="loginForm" action="/login" method="POST">
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm mb-1 text-gray-300">Email</label>
-                            <input type="email" id="email" name="email" class="w-full border border-gray-600 bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your email" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="password" class="block text-sm mb-1 text-gray-300">Password</label>
-                            <input type="password" id="password" name="password" class="w-full border border-gray-600 bg-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your password" required>
-                        </div>
-                        <div class="flex items-center justify-between text-sm mb-4 text-gray-300">
-                            <label class="flex items-center gap-2">
-                                <input type="checkbox" class="form-checkbox text-orange-500" name="remember">
-                                <span>Remember me</span>
-                            </label>
-                            <a href="#" class="text-orange-500 hover:underline">Forgot Password?</a>
-                        </div>
-                        <button type="submit" class="submit-btn w-full text-white py-2 rounded">Sign In</button>
-                    </form>
-                    <p class="text-sm text-center mt-4 text-gray-300">Don't have an account? <a href="#" class="text-orange-500 hover:underline">Create one</a></p>
-                </div>
+                @await Html.PartialAsync("~/Views/Auth/_LoginPartial.cshtml", new DollarProject.ViewModels.LoginViewModel())
             </div>
         </div>
     </header>
@@ -151,7 +126,7 @@
             <div class="max-h-screen overflow-y-auto scrollbar-0">
                 <div class="flex flex-col items-center xxl:gap-[30px] xl:gap-6 lg:gap-5 gap-4 h-[700px] side-navbar-one">
                     <button class="nav-toggole btn-c btn-c-3xl btn-primary icon-32 shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-layout-grid">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
                             <path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
@@ -160,27 +135,27 @@
                         </svg>
                     </button>
                     <div class="flex flex-col gap-2 rounded-full bg-b-neutral-1 w-fit p-2 shrink-0">
-                        <a asp-controller="Home" asp-action="Index" class="nav-item btn-c btn-c-3xl text-white  transition-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-flame">
+                        <a asp-controller="Home" asp-action="Index" class="nav-item btn-c btn-c-3xl text-white transition-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.621 -2.333 5.588c0 3.704 3.134 6.706 7 6.706s7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235"></path>
                             </svg>
                         </a>
                         <a asp-controller="Marketplace" asp-action="Index" class="nav-item btn-c btn-c-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-diamond">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M6 5h12l3 5l-8.5 9.5a.7 .7 0 0 1 -1 0l-8.5 -9.5l3 -5"></path>
                                 <path d="M10 12l-2 -2.2l.6 -1"></path>
                             </svg>
                         </a>
                         <a asp-controller="Wishlist" asp-action="Index" class="nav-item btn-c btn-c-3xl text-white transition-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bookmark">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M18 7v14l-6 -4l-6 4v-14a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4z"></path>
                             </svg>
                         </a>
                         <a href="./chat.html" class="nav-item btn-c btn-c-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-messages">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"></path>
                                 <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"></path>
@@ -198,35 +173,99 @@
         <!-- main start -->
         @RenderBody()
         <!-- main end -->
-        @RenderSection("Scripts", required: false)
+
         <!-- footer-->
         @await Html.PartialAsync("_Footer")
     </div>
     <!-- app layout end -->
 
+    @RenderSection("Scripts", required: false)
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
         document.getElementById("loginButton").addEventListener("click", function () {
             document.getElementById("loginWrapper").classList.add("show");
+            document.querySelector(".app-layout").classList.add("blur");
         });
 
         document.getElementById("closeLogin").addEventListener("click", function () {
             document.getElementById("loginWrapper").classList.remove("show");
+            document.querySelector(".app-layout").classList.remove("blur");
         });
 
         document.getElementById("loginWrapper").addEventListener("click", function (e) {
             if (e.target === this) {
                 this.classList.remove("show");
+                document.querySelector(".app-layout").classList.remove("blur");
             }
         });
 
+        // Auto-show login modal if URL has ?showLogin=true
+        window.addEventListener('load', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+                    console.log('showLogin:', urlParams.get('showLogin'));
+            if (urlParams.get('showLogin') === 'true') {
+                document.getElementById("loginWrapper").classList.remove("hidden");
+                document.getElementById("loginWrapper").classList.add("show");
+                document.querySelector(".app-layout").classList.add("blur");
+            }
+        });
+
+        // Handle submit form login
         document.getElementById("loginForm").addEventListener("submit", function (e) {
             e.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            console.log("Login attempt:", { email, password });
-            // Thêm logic gửi dữ liệu đến server hoặc xử lý đăng nhập tại đây
+
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+            .then(response => response.json().then(data => ({ status: response.status, data })))
+            .then(({ status, data }) => {
+                if (status === 200 && data.success) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    const errorContainer = document.querySelector(".text-danger");
+                    errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Handle Google Sign-In callback
+        window.addEventListener('load', function () {
+            // Check URL have parameters callback từ Google
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('code') || urlParams.has('error')) {
+                fetch(`/Auth/ExternalLoginCallback?returnUrl=${encodeURIComponent(urlParams.get('returnUrl') || '/')}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        document.getElementById("loginWrapper").classList.add("show");
+                        document.querySelector(".app-layout").classList.add("blur");
+                        const errorContainer = document.querySelector(".text-danger");
+                        errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
+                    }
+                })
+                .catch(error => {
+                    console.error('Google Sign-In Error:', error);
+                    document.getElementById("loginWrapper").classList.add("show");
+                    document.querySelector(".app-layout").classList.add("blur");
+                    const errorContainer = document.querySelector(".text-danger");
+                    errorContainer.innerHTML = '<p>Google Sign-In failed. Please try again.</p>';
+                });
+            }
         });
     </script>
 </body>

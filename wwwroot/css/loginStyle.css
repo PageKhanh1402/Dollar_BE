@@ -1,59 +1,60 @@
-﻿
-.login-btn {
-    transition: all 0.3s ease;
-    background: linear-gradient(90deg, #f97316, #f59e0b);
-    border: none;
-    color: white;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.5rem;
-    border-radius: 9999px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.login-btn:hover {
-    background: linear-gradient(90deg, #ea580c, #d97706);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
+﻿/* Modal */
 .login-modal-wrapper {
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    opacity: 0;
-    visibility: hidden;
+    display: none;
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-.login-modal-wrapper.show {
-    opacity: 1;
-    visibility: visible;
-}
+    .login-modal-wrapper.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
 .login-modal {
-    transform: scale(0.8);
+    transform: translateY(-20px);
     transition: transform 0.3s ease;
+    max-width: 400px;
+    width: 90%;
 }
 
 .login-modal-wrapper.show .login-modal {
-    transform: scale(1);
-}
-
-.close-modal-btn {
-    transition: all 0.2s ease;
-}
-
-.close-modal-btn:hover {
-    transform: rotate(90deg);
-    color: #ef4444;
+    transform: translateY(0);
 }
 
 .submit-btn {
-    background: linear-gradient(90deg, #f97316, #f59e0b);
-    transition: all 0.3s ease;
+    background-color: #f97316;
+    transition: background-color 0.3s ease;
 }
 
-.submit-btn:hover {
-    background: linear-gradient(90deg, #ea580c, #d97706);
-    transform: translateY(-2px);
+    .submit-btn:hover {
+        background-color: #ea580c;
+    }
+
+/* Đảm bảo input hoạt động */
+.login-modal input {
+    pointer-events: auto;
+    user-select: auto;
+    outline: none;
+}
+
+/* Làm mờ layout */
+.app-layout.blur {
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .login-modal {
+        width: 95%;
+        padding: 1.5rem;
+    }
 }
