@@ -86,10 +86,14 @@ namespace DollarProject.Controllers
 
         #region External Login
         [HttpGet]
-        public IActionResult ExternalLogin(string provider, string? returnUrl)
+        public IActionResult ExternalLogin(string provider, string? returnUrl, string? prompt = null)
         {
             var redirectUrl = Url.Action("ExternalLoginCallback", "Auth", new { returnUrl });
             var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            if (!string.IsNullOrEmpty(prompt))
+            {
+                properties.Items["prompt"] = prompt; // Lưu prompt để sử dụng trong Challenge
+            }
             return Challenge(properties, provider);
         }
 
@@ -107,13 +111,11 @@ namespace DollarProject.Controllers
                 return Json(new { success = false, errors = new[] { "External authentication failed." } });
             }
 
-            // Lấy thông tin từ Google
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
             var familyName = info.Principal.FindFirstValue(ClaimTypes.Surname);
             var picture = info.Principal.FindFirstValue("urn:google:picture");
 
-            // Tìm hoặc tạo người dùng
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
@@ -124,13 +126,12 @@ namespace DollarProject.Controllers
                     LastName = familyName,
                     ImageURL = picture,
                     RoleID = 3, // Customer role
-                    Password = null 
+                    Password = null
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
 
-            // Tạo claims
             var claims = new List<Claim>
             {
                 new Claim("UserId", user.UserID.ToString()),
@@ -162,8 +163,9 @@ namespace DollarProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            // Set flag to indicate logout
+            Response.Cookies.Append("JustLoggedOut", "true", new CookieOptions { Expires = DateTimeOffset.Now.AddMinutes(1) });
             return RedirectToAction("Index", "Home");
         }
         #endregion
