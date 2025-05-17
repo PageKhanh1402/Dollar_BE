@@ -58,7 +58,7 @@ namespace DollarProject.Controllers
                 {
                     new Claim("UserId", user.UserID.ToString()),
                     new Claim(ClaimTypes.GivenName, user.FirstName),
-                    new Claim("ImageUrl", user.ImageURL ?? ""),
+                    new Claim("ImageUrl", user.ImageURL ?? "avatar3.png"),
                     new Claim(ClaimTypes.Role, user.RoleID == 1 ? "Admin" : user.RoleID == 2 ? "Staff" : "Customer")
                 };
 
@@ -135,7 +135,7 @@ namespace DollarProject.Controllers
             {
                 new Claim("UserId", user.UserID.ToString()),
                 new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim("ImageUrl", user.ImageURL ?? ""),
+                new Claim("ImageUrl", user.ImageURL ?? "avatar3.png"),
                 new Claim(ClaimTypes.Role, user.RoleID == 1 ? "Admin" : user.RoleID == 2 ? "Staff" : "Customer")
             };
 

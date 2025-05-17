@@ -45,7 +45,7 @@
                         <div class="3xl:col-span-6 xl:col-span-7 flex items-center xl:justify-between justify-end w-full">
                             <div class="hidden lg:flex items-center gap-3 shrink-0 ml-4">
                                 <!-- Giỏ hàng -->
-                                <a href="./shopping-cart.html" class="btn-c btn-c-lg btn-c-dark-outline">
+                                @* <a href="./shopping-cart.html" class="btn-c btn-c-lg btn-c-dark-outline">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
@@ -53,9 +53,9 @@
                                         <path d="M17 17h-11v-14h-2"></path>
                                         <path d="M6 5l14 1l-1 7h-13"></path>
                                     </svg>
-                                </a>
+                                </a> *@
                                 <!-- Thông báo -->
-                                <div class="relative hidden lg:block">
+                                <div class="relative hidden lg:block mb-1">
                                     <a href="chat.html" class="btn-c btn-c-lg btn-c-dark-outline">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -81,7 +81,10 @@
                                     <div x-data="dropdown" class="dropdown relative shrink-0 lg:block hidden">
                                         <button @@click="toggle()" class="dropdown-toggle gap-24p">
                                             <span class="flex items-center gap-3">
-                                                <img class="size-48p rounded-full shrink-0" src="images/user1.png" alt="profile">
+                                                @{
+                                                    var image = User.FindFirstValue("ImageUrl");
+                                                }
+                                                <img class="size-48p rounded-full shrink-0" src="~/images/@User.FindFirstValue("ImageUrl")" alt="profile">
                                                 <span class="">
                                                     <span class="text-m-medium text-w-neutral-1 mb-1">@User.FindFirstValue(ClaimTypes.GivenName)</span>
                                                     <span class="text-sm text-w-neutral-4 block">options</span>

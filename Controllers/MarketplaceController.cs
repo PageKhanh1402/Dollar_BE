@@ -4,6 +4,7 @@ using DollarProject.Dto;
 using DollarProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DollarProject.Controllers
 {
@@ -20,8 +21,8 @@ namespace DollarProject.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, string? sortOrder = null)
         {
-            // Fake UserID for testing (replace with UserManager later)
-            const int fakeUserId = 5;
+            string userIdClaim = User.FindFirstValue("UserId");
+            int userId = Int32.Parse(userIdClaim);
 
             var query = _context.Products
                 .Include(p => p.Category)
@@ -51,7 +52,7 @@ namespace DollarProject.Controllers
 
             // Update Wishlist status
             var wishlistProductIds = await _context.Wishlists
-                .Where(w => w.UserID == fakeUserId)
+                .Where(w => w.UserID == userId)
                 .Select(w => w.ProductID)
                 .ToListAsync();
 
