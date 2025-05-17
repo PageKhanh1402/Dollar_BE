@@ -12,6 +12,7 @@ namespace DollarProject.Dto
         public string? ProductType { get; set; }
         public string? CategoryName { get; set; }
         public string? SellerName { get; set; }
+        public string? SellerImageURL { get; set; }
         public bool IsVerifiedSeller { get; set; }
         public bool IsInWishlist { get; set; }
     }

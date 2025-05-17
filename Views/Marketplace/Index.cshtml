@@ -106,7 +106,7 @@
                                             Price: <span class="span">@product.PriceXu Coins</span>
                                         </p>
                                         <div class="flex-y flex-wrap gap-3 mt-24p">
-                                            <img class="size-60p rounded-full shrink-0" src="/images/@product.ImageURL" alt="@(product.SellerName ?? "Unknown")">
+                                            <img class="size-60p rounded-full shrink-0" src="/images/@(product.SellerImageURL ?? "user-placeholder.png")" alt="@(product.SellerName ?? "Unknown")">
                                             <div>
                                                 <a href="./profile.html" class="flex-y gap-2 text-l-medium link-1 text-w-neutral-1 mb-1">
                                                     <span>@(product.SellerName ?? "Unknown")</span>
@@ -131,6 +131,8 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css" rel="stylesheet">
     <script>
         $(document).ready(function () {
             $('.wishlist-btn').on('click', function () {
@@ -146,14 +148,47 @@
                     },
                     success: function (response) {
                         if (response.success) {
-                            button.toggleClass('text-red-500');
-                            alert(response.message);
+                            if (response.isInWishlist) {
+                                button.addClass('text-red-500');
+                                Toastify({
+                                    text: response.message,
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "right",
+                                    backgroundColor: "#4CAF50",
+                                    stopOnFocus: true
+                                }).showToast();
+                            } else {
+                                button.removeClass('text-red-500');
+                                Toastify({
+                                    text: response.message,
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "right",
+                                    backgroundColor: "#F44336",
+                                    stopOnFocus: true
+                                }).showToast();
+                            }
                         } else {
-                            alert(response.message || 'An error occurred. Please try again.');
+                            Toastify({
+                                text: response.message || 'An error occurred. Please try again.',
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#F44336",
+                                stopOnFocus: true
+                            }).showToast();
                         }
                     },
                     error: function () {
-                        alert('Please log in to use Wishlist.');
+                        Toastify({
+                            text: 'Please log in to use Wishlist.',
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#F44336",
+                            stopOnFocus: true
+                        }).showToast();
                     }
                 });
             });

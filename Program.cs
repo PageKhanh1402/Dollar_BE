@@ -1,8 +1,15 @@
-using DollarProject.DbConnection;
+﻿using DollarProject.DbConnection;
 using DollarProject.Mappings;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -10,8 +17,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(ProductProfile));
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/SignIn";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+    })
+    .AddGoogle(googleoptions =>
+    {
+        googleoptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleoptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    });
 
 var app = builder.Build();
 
@@ -28,6 +44,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
