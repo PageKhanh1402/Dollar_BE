@@ -84,15 +84,6 @@ namespace DollarProject.Controllers
         }
         #endregion
 
-
-        [HttpGet]
-        public IActionResult LoginFull(string? returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View("LoginFull", new LoginViewModel());
-        }
-
-
         #region External Login
         [HttpGet]
         public IActionResult ExternalLogin(string provider, string? returnUrl, string? prompt = null)
@@ -178,5 +169,12 @@ namespace DollarProject.Controllers
             return RedirectToAction("Index", "Home");
         }
         #endregion
+
+        [HttpGet]
+        public IActionResult LoginFull(string? returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View("LoginFull", new LoginViewModel());
+        }
     }
 }

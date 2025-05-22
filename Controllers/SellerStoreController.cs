@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace DollarProject.Controllers
 {
@@ -26,24 +27,31 @@ namespace DollarProject.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _context.Users
-                .Include(u => u.SellerStore)
-                .ThenInclude(s => s.Products)
+            var userIdStr = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdStr, out int userId))
+                return Challenge();
+
+            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);
+            if (currentUser == null)
+                return Challenge();
+
+            var sellerStore = await _context.SellerStores
+                .Include(s => s.Products)
                 .ThenInclude(p => p.Category)
-                .FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+                .FirstOrDefaultAsync(s => s.SellerID == userId);
 
-            if (currentUser == null || currentUser.SellerStore == null)
-            {
+            if (sellerStore == null)
                 return RedirectToAction("RegisterSeller");
-            }
-            ViewBag.Categories = await _context.ProductCategories
-            .Where(c => c.ParentCategoryID == null)
-            .ToListAsync();
 
-            return View(currentUser.SellerStore);
+            ViewBag.Categories = await _context.ProductCategories
+                .Where(c => c.ParentCategoryID == null)
+                .ToListAsync();
+
+            return View(sellerStore);
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult RegisterSeller()
         {
             return View();
@@ -51,51 +59,49 @@ namespace DollarProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> RegisterSeller(SellerStore model, IFormFile LogoFile, IFormFile BannerFile)
         {
-            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
-            if (currentUser == null)
-                return Unauthorized();
+            var userIdStr = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdStr, out int userId))
+                return Challenge();
 
-            var existingStore = await _context.SellerStores.FirstOrDefaultAsync(s => s.SellerID == currentUser.UserID);
+            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);
+            if (currentUser == null)
+                return Challenge();
+
+            var existingStore = await _context.SellerStores.FirstOrDefaultAsync(s => s.SellerID == userId);
             if (existingStore != null)
             {
                 ModelState.AddModelError("", "You have already registered as a seller.");
                 return View(model);
             }
 
-            // Save logo image
+            // Save logo
             if (LogoFile != null && LogoFile.Length > 0)
             {
                 var fileName = Guid.NewGuid() + Path.GetExtension(LogoFile.FileName);
-                var logoPath = Path.Combine("images", fileName);
-                var savePath = Path.Combine(_environment.WebRootPath, logoPath);
+                var path = Path.Combine(_environment.WebRootPath, "images", fileName);
 
-                using (var stream = new FileStream(savePath, FileMode.Create))
-                {
-                    await LogoFile.CopyToAsync(stream);
-                }
+                using var stream = new FileStream(path, FileMode.Create);
+                await LogoFile.CopyToAsync(stream);
 
                 model.LogoURL = "/images/" + fileName;
             }
 
-            // Save banner image
+            // Save banner
             if (BannerFile != null && BannerFile.Length > 0)
             {
                 var fileName = Guid.NewGuid() + Path.GetExtension(BannerFile.FileName);
-                var bannerPath = Path.Combine("images", fileName);
-                var savePath = Path.Combine(_environment.WebRootPath, bannerPath);
+                var path = Path.Combine(_environment.WebRootPath, "images", fileName);
 
-                using (var stream = new FileStream(savePath, FileMode.Create))
-                {
-                    await BannerFile.CopyToAsync(stream);
-                }
+                using var stream = new FileStream(path, FileMode.Create);
+                await BannerFile.CopyToAsync(stream);
 
                 model.BannerURL = "/images/" + fileName;
             }
 
-
-            model.SellerID = currentUser.UserID;
+            model.SellerID = userId;
             model.CreatedAt = DateTime.Now;
             model.IsVerified = false;
 
