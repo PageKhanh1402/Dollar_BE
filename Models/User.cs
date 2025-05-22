@@ -39,6 +39,8 @@ namespace DollarProject.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public bool? IsBlock { get; set; }
+
         // Navigation properties
         [ForeignKey("RoleID")]
         public virtual Role Role { get; set; }
