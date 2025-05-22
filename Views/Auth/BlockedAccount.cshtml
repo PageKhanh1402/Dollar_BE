@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Account Blocked";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Account Blocked</h2>
+            @if (TempData["Error"] != null)
+            {
+                <p class="text-red-600 bg-red-100 border border-red-400 rounded-md p-4 mb-6">@TempData["Error"]</p>
+            }
+            <p class="text-gray-600 mb-8">Your account has been blocked. Please contact the administrator for assistance.</p>
+            <a asp-controller="Home" asp-action="Index" class="inline-block bg-blue-600 text-white font-semibold py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300">Return to Homepage</a>
+        </div>
+    </div>
+</body>
+</html>

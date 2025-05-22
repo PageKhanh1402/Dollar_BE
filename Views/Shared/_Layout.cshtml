@@ -83,12 +83,12 @@
                                             </span>
                                         </button>
                                         <div x-show="isOpen" x-transition="" @@click.away="close()" class="dropdown-content">
-                                            <a href="./profile.html" class="dropdown-item">Profile</a>
-                                            <a href="./user-settings.html" class="dropdown-item">Settings</a>
+                                            <a href="#" class="dropdown-item">Profile</a>
+                                            <a href="#" class="dropdown-item">Settings</a>
                                             <form asp-controller="Auth" asp-action="Logout" method="post" id="logoutForm">
                                                 <button type="submit" class="dropdown-item">Logout</button>
                                             </form>
-                                            <a href="./contact-us.html" class="dropdown-item">Help</a>
+                                            <a href="#" class="dropdown-item">Help</a>
                                         </div>
                                     </div>
                                 }
@@ -141,7 +141,7 @@
                                 <path d="M18 7v14l-6 -4l-6 4v-14a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4z"></path>
                             </svg>
                         </a>
-                        <a href="./chat.html" class="nav-item btn-c btn-c-3xl">
+                        <a asp-controller="Chat" asp-action="Index" class="nav-item btn-c btn-c-3xl">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"></path>
