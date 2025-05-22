@@ -1,0 +1,88 @@
+﻿@model DollarProject.Models.User
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/admin/assets/css/users_edit_management.css" />
+
+<h4>Edit User</h4>
+<hr />
+<div class="form-wrapper">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="UserID" />
+        <div class="form-group">
+            <label asp-for="ImageURL" class="control-label"></label>
+            <input asp-for="ImageURL" class="form-control" />
+            <span asp-validation-for="ImageURL" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstName" class="control-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="control-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Username" class="control-label"></label>
+            <input asp-for="Username" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RoleID" class="control-label"></label>
+            <select asp-for="RoleID" class="form-control" asp-items="ViewBag.RoleID"></select>
+            <span asp-validation-for="RoleID" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="IsVerifiedSeller" /> @Html.DisplayNameFor(model => model.IsVerifiedSeller)
+            </label>
+        </div>
+        <div class="form-group">
+            <label asp-for="SellerRating" class="control-label"></label>
+            <input asp-for="SellerRating" class="form-control" />
+            <span asp-validation-for="SellerRating" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SellerDescription" class="control-label"></label>
+            <input asp-for="SellerDescription" class="form-control" />
+            <span asp-validation-for="SellerDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreatedAt" class="control-label"></label>
+            <input asp-for="CreatedAt" class="form-control" />
+            <span asp-validation-for="CreatedAt" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+
+        <a asp-action="Index" class="back-btn"><i class="fas fa-arrow-left"></i> Back to List</a>
+    </form>
+</div>
