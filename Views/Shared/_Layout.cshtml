@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <title>EXGame</title>
-    <script defer src="js/app.js"></script>
-    <link href="css/app.css" rel="stylesheet">
+    <title>TradeMax Arena</title>
+    <script defer src="/js/app.js"></script>
+    <link href="~/css/app.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="~/css/loginStyle.css" rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 </head>
 <body>
     <!-- preloader start -->
@@ -18,13 +19,11 @@
         <div class="loader"></div>
     </div>
     <!-- preloader end -->
-
     <!-- scroll to top button start -->
     <button class="scroll-to-top show" id="scrollToTop">
         <i class="ti ti-arrow-up"></i>
     </button>
     <!-- scroll to top button end -->
-
     <!-- header start -->
     <header id="header" class="absolute w-full z-[999]">
         <div class="mx-auto relative">
@@ -33,7 +32,7 @@
                     <nav class="relative xl:grid xl:grid-cols-12 flex justify-between items-center gap-24p text-semibold w-full">
                         <div class="3xl:col-span-6 xl:col-span-5 flex items-center 3xl:gap-x-10 gap-x-5">
                             <a asp-controller="Home" asp-action="Index" class="shrink-0">
-                                <img class="xl:w-[170px] sm:w-36 w-30 h-auto shrink-0" src="images/logo.png" alt="brand">
+                                <img class="xl:w-[170px] sm:w-36 w-30 h-auto shrink-0" src="/images/logo.png" alt="brand">
                             </a>
                             <form class="hidden lg:flex items-center sm:gap-3 gap-2 min-w-[300px] max-w-[670px] w-full px-20p py-16p bg-b-neutral-4 rounded-full">
                                 <span class="flex-c icon-20 text-white">
@@ -41,19 +40,23 @@
                                 </span>
                                 <input autocomplete="off" class="bg-transparent w-full" type="text" name="search" id="search" placeholder="Search...">
                             </form>
+
                         </div>
-                        <div class="3xl:col-span-6 xl:col-span-7 flex items-center xl:justify-between justify-end w-full">
+                        <div class="3xl:col-span-6 xl:col-span-7 flex items-center justify-end w-full">
                             <div class="hidden lg:flex items-center gap-3 shrink-0 ml-4">
-                                <!-- Giỏ hàng -->
-                                @* <a href="./shopping-cart.html" class="btn-c btn-c-lg btn-c-dark-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                        <path d="M17 17h-11v-14h-2"></path>
-                                        <path d="M6 5l14 1l-1 7h-13"></path>
+                                <!-- Cửa hàng -->
+                                <a asp-controller="SellerStore" asp-action="Index" class="btn-c btn-c-lg btn-c-dark-outline">
+                                    <svg fill="#ebeaea" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84px" height="84px" viewBox="-245.5 -245.5 982.00 982.00" xml:space="preserve" stroke="#ebeaea" transform="matrix(1, 0, 0, 1, 0, 0)">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier"> <g> <g> 
+                                    <path d="M82.695,159.575V112.3c6.321-5.45,10.337-13.498,10.337-22.499c0-16.412-13.306-29.718-29.719-29.718 c-16.412,0-29.718,13.306-29.718,29.718c0,9.001,4.016,17.048,10.337,22.499v47.275H82.695z"></path> <path d="M444.484,159.575V112.3c6.32-5.45,10.337-13.498,10.337-22.499c0-16.412-13.307-29.718-29.72-29.718 c-16.412,0-29.719,13.306-29.719,29.718c0,9.001,4.017,17.048,10.337,22.499v47.275H444.484z"></path> 
+                                    <polygon points="188.296,317.212 212.417,317.212 200.294,277.735 "></polygon> 
+                                    <path d="M405.721,172.496H82.695H43.932H0v258.421h491V172.496h-46.516H405.721z M129.019,342.578 c-3.895,5.944-9.339,10.45-16.329,13.521c-6.991,3.069-15.805,4.607-26.442,4.607c-18.676,0-31.61-3.596-38.802-10.787 c-7.192-7.191-11.262-16.329-12.21-27.415l32.285-2.021c0.701,5.242,2.122,9.238,4.27,11.984c3.496,4.445,8.489,6.668,14.98,6.668 c4.843,0,8.577-1.138,11.197-3.408c2.621-2.271,3.934-4.908,3.934-7.902c0-2.846-1.249-5.395-3.745-7.643 c-2.497-2.248-8.291-4.369-17.379-6.367c-14.882-3.347-25.494-7.791-31.835-13.334c-6.393-5.543-9.588-12.608-9.588-21.198 c0-5.644,1.636-10.976,4.908-15.993c3.271-5.02,8.189-8.966,14.756-11.836c6.566-2.871,15.567-4.309,27.005-4.309 c14.032,0,24.73,2.609,32.098,7.828c7.365,5.219,11.748,13.521,13.146,24.905l-31.985,1.874c-0.85-4.943-2.633-8.538-5.357-10.786 c-2.721-2.248-6.479-3.371-11.272-3.371c-3.946,0-6.915,0.839-8.913,2.511c-1.998,1.672-2.995,3.709-2.995,6.106 c0,1.746,0.824,3.32,2.473,4.718c1.597,1.448,5.393,2.797,11.386,4.045c14.831,3.196,25.457,6.43,31.874,9.701 s11.086,7.329,14.006,12.172c2.92,4.846,4.383,10.262,4.383,16.256C134.862,330.144,132.914,336.638,129.019,342.578z M224.951,358.56l-5.494-18.09h-38.528l-5.357,18.09H140.93l41.275-108.537h37.014L260.48,358.56H224.951z M359.205,358.56 h-87.863V250.022h33.595v82.693h54.27L359.205,358.56L359.205,358.56z M465.158,250.022v23.258h-56.854v15.505h51.685v23.258 h-51.685v20.674h56.854v25.843h-90.447V250.022H465.158z"></path></g> </g> </g>
                                     </svg>
-                                </a> *@
+                                </a>
+
+
+
                                 <!-- Thông báo -->
                                 <div class="relative hidden lg:block mb-1">
                                     <a href="chat.html" class="btn-c btn-c-lg btn-c-dark-outline">
@@ -84,7 +87,7 @@
                                                 @{
                                                     var image = User.FindFirstValue("ImageUrl");
                                                 }
-                                                <img class="size-48p rounded-full shrink-0" src="~/images/@User.FindFirstValue("ImageUrl")" alt="profile">
+                                                <img class="size-48p rounded-full shrink-0" src="/images/@User.FindFirstValue("ImageUrl")" alt="profile">
                                                 <span class="">
                                                     <span class="text-m-medium text-w-neutral-1 mb-1">@User.FindFirstValue(ClaimTypes.GivenName)</span>
                                                     <span class="text-sm text-w-neutral-4 block">options</span>
@@ -98,7 +101,7 @@
                                             </span>
                                         </button>
                                         <div x-show="isOpen" x-transition="" @@click.away="close()" class="dropdown-content">
-                                            <a href="./profile.html" class="dropdown-item">Profile</a>
+                                            <a asp-controller="Profile" asp-action="Index" class="dropdown-item">Profile</a>
                                             <a href="./user-settings.html" class="dropdown-item">Settings</a>
                                             <form asp-controller="Auth" asp-action="Logout" method="post">
                                                 <button type="submit" class="dropdown-item">Logout</button>
@@ -115,14 +118,16 @@
                     </nav>
                 </div>
             </div>
-            <!-- Login Modal Wrapper -->
-            <div id="loginWrapper" class="login-modal-wrapper fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-                @await Html.PartialAsync("~/Views/Auth/_LoginPartial.cshtml", new DollarProject.ViewModels.LoginViewModel())
-            </div>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <!-- Login Modal Wrapper -->
+                <div id="loginWrapper" class="login-modal-wrapper fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+                    @await Html.PartialAsync("~/Views/Auth/_LoginPartial.cshtml", new DollarProject.ViewModels.LoginViewModel())
+                </div>
+            }
         </div>
     </header>
     <!-- header end -->
-
     <!-- sidebar start -->
     <div>
         <div class="fixed top-0 left-0 lg:translate-x-0 -translate-x-full h-screen z-30 bg-b-neutral-4 pt-30 px-[27px] transition-1">
@@ -170,106 +175,132 @@
         </div>
     </div>
     <!-- sidebar end -->
-
     <!-- app layout start -->
     <div class="app-layout">
         <!-- main start -->
         @RenderBody()
         <!-- main end -->
-
         <!-- footer-->
         @await Html.PartialAsync("_Footer")
     </div>
     <!-- app layout end -->
-
     @RenderSection("Scripts", required: false)
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        document.getElementById("loginButton").addEventListener("click", function () {
-            document.getElementById("loginWrapper").classList.add("show");
-            document.querySelector(".app-layout").classList.add("blur");
-        });
+        window.addEventListener('DOMContentLoaded', function () {
+            const loginButton = document.getElementById("loginButton");
+            const loginWrapper = document.getElementById("loginWrapper");
+            const closeLogin = document.getElementById("closeLogin");
+            const appLayout = document.querySelector(".app-layout");
+            const loginForm = document.getElementById("loginForm");
 
-        document.getElementById("closeLogin").addEventListener("click", function () {
-            document.getElementById("loginWrapper").classList.remove("show");
-            document.querySelector(".app-layout").classList.remove("blur");
-        });
-
-        document.getElementById("loginWrapper").addEventListener("click", function (e) {
-            if (e.target === this) {
-                this.classList.remove("show");
-                document.querySelector(".app-layout").classList.remove("blur");
+            // Mở modal login
+            if (loginButton && loginWrapper && appLayout) {
+                loginButton.addEventListener("click", function () {
+                    loginWrapper.classList.remove("hidden");
+                    loginWrapper.classList.add("show");
+                    appLayout.classList.add("blur");
+                });
             }
-        });
 
-        // Auto-show login modal if URL has ?showLogin=true
-        window.addEventListener('load', function () {
+            // Đóng modal khi nhấn nút x
+            if (closeLogin && loginWrapper && appLayout) {
+                closeLogin.addEventListener("click", function () {
+                    loginWrapper.classList.remove("show");
+                    appLayout.classList.remove("blur");
+                });
+            }
+
+            // Đóng modal khi click ra ngoài
+            if (loginWrapper && appLayout) {
+                loginWrapper.addEventListener("click", function (e) {
+                    if (e.target === loginWrapper) {
+                        loginWrapper.classList.remove("show");
+                        appLayout.classList.remove("blur");
+                    }
+                });
+            }
+
+            // Auto mở modal nếu có ?showLogin=true
             const urlParams = new URLSearchParams(window.location.search);
-                    console.log('showLogin:', urlParams.get('showLogin'));
-            if (urlParams.get('showLogin') === 'true') {
-                document.getElementById("loginWrapper").classList.remove("hidden");
-                document.getElementById("loginWrapper").classList.add("show");
-                document.querySelector(".app-layout").classList.add("blur");
+            if (urlParams.get('showLogin') === 'true' && loginWrapper && appLayout) {
+                loginWrapper.classList.remove("hidden");
+                loginWrapper.classList.add("show");
+                appLayout.classList.add("blur");
+            }
+
+            // Xử lý submit form login
+            if (loginForm) {
+                loginForm.addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(loginForm);
+
+                    fetch(loginForm.action, {
+                        method: loginForm.method,
+                        body: formData
+                    })
+                        .then(response => response.json().then(data => ({ status: response.status, data })))
+                        .then(({ status, data }) => {
+                            if (status === 200 && data.success) {
+                                window.location.href = data.redirectUrl;
+                            } else {
+                                const errorContainer = document.querySelector(".text-danger");
+                                if (errorContainer) {
+                                    errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Login Error:', error);
+                        });
+                });
             }
         });
 
-        // Handle submit form login
-        document.getElementById("loginForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const form = this;
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: form.method,
-                body: formData
-            })
-            .then(response => response.json().then(data => ({ status: response.status, data })))
-            .then(({ status, data }) => {
-                if (status === 200 && data.success) {
-                    window.location.href = data.redirectUrl;
-                } else {
-                    const errorContainer = document.querySelector(".text-danger");
-                    errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        // Handle Google Sign-In callback
+        // Xử lý callback từ Google login
         window.addEventListener('load', function () {
-            // Check URL have parameters callback từ Google
+            const loginWrapper = document.getElementById("loginWrapper");
+            const appLayout = document.querySelector(".app-layout");
+
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('code') || urlParams.has('error')) {
                 fetch(`/Auth/ExternalLoginCallback?returnUrl=${encodeURIComponent(urlParams.get('returnUrl') || '/')}`, {
                     method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = data.redirectUrl;
-                    } else {
-                        document.getElementById("loginWrapper").classList.add("show");
-                        document.querySelector(".app-layout").classList.add("blur");
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = data.redirectUrl;
+                        } else {
+                            if (loginWrapper && appLayout) {
+                                loginWrapper.classList.remove("hidden");
+                                loginWrapper.classList.add("show");
+                                appLayout.classList.add("blur");
+                            }
+                            const errorContainer = document.querySelector(".text-danger");
+                            if (errorContainer) {
+                                errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Google Sign-In Error:', error);
+                        if (loginWrapper && appLayout) {
+                            loginWrapper.classList.remove("hidden");
+                            loginWrapper.classList.add("show");
+                            appLayout.classList.add("blur");
+                        }
                         const errorContainer = document.querySelector(".text-danger");
-                        errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
-                    }
-                })
-                .catch(error => {
-                    console.error('Google Sign-In Error:', error);
-                    document.getElementById("loginWrapper").classList.add("show");
-                    document.querySelector(".app-layout").classList.add("blur");
-                    const errorContainer = document.querySelector(".text-danger");
-                    errorContainer.innerHTML = '<p>Google Sign-In failed. Please try again.</p>';
-                });
+                        if (errorContainer) {
+                            errorContainer.innerHTML = '<p>Google Sign-In failed. Please try again.</p>';
+                        }
+                    });
             }
         });
     </script>
+
 </body>
 </html>

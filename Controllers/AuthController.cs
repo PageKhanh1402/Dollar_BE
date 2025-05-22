@@ -84,6 +84,15 @@ namespace DollarProject.Controllers
         }
         #endregion
 
+
+        [HttpGet]
+        public IActionResult LoginFull(string? returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View("LoginFull", new LoginViewModel());
+        }
+
+
         #region External Login
         [HttpGet]
         public IActionResult ExternalLogin(string provider, string? returnUrl)

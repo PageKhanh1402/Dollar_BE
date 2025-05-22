@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace DollarProject.Models
 {
@@ -27,5 +28,9 @@ namespace DollarProject.Models
         // Navigation property
         [ForeignKey("SellerID")]
         public virtual User Seller { get; set; }
+
+        [ValidateNever]
+        public virtual ICollection<Product> Products { get; set; }
+
     }
 }

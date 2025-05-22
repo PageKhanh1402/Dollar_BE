@@ -4,6 +4,7 @@ using DollarProject.DbConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DollarProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250521131224_AddStoreRelationToProduct")]
+    partial class AddStoreRelationToProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             CartID = 1,
-                            AddedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5549),
+                            AddedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3068),
                             ProductID = 2,
                             Quantity = 0,
                             UserID = 3
@@ -92,15 +95,15 @@ namespace DollarProject.Migrations
                         new
                         {
                             ConversationID = 1,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5692),
-                            LastMessageAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5693),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3213),
+                            LastMessageAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3214),
                             Title = "Customer Support Conversation"
                         },
                         new
                         {
                             ConversationID = 2,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5696),
-                            LastMessageAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5696),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3216),
+                            LastMessageAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3217),
                             Title = "Seller to Customer Inquiry"
                         });
                 });
@@ -161,7 +164,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             RateID = 1,
-                            EffectiveFrom = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5402),
+                            EffectiveFrom = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2950),
                             SetByUserID = 1,
                             VNDtoXuRate = 1000m
                         });
@@ -296,7 +299,7 @@ namespace DollarProject.Migrations
                         {
                             NotificationID = 1,
                             Content = "Your order has been received!",
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5671),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3190),
                             IsRead = false,
                             RelatedEntityType = "Order",
                             UserID = 3
@@ -305,7 +308,7 @@ namespace DollarProject.Migrations
                         {
                             NotificationID = 2,
                             Content = "A new product has been approved.",
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5674),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3191),
                             IsRead = false,
                             RelatedEntityType = "Product",
                             UserID = 2
@@ -380,7 +383,7 @@ namespace DollarProject.Migrations
                             DeliveryNotes = "Leave at the front door",
                             DeliveryStatus = "Pending",
                             IsPaidWithWallet = false,
-                            OrderDate = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5579),
+                            OrderDate = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3094),
                             OrderStatus = "Pending",
                             SellerID = 3,
                             TotalPriceXu = 100,
@@ -393,7 +396,7 @@ namespace DollarProject.Migrations
                             DeliveryNotes = "Deliver after 5 PM",
                             DeliveryStatus = "Pending",
                             IsPaidWithWallet = false,
-                            OrderDate = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5582),
+                            OrderDate = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3099),
                             OrderStatus = "Pending",
                             SellerID = 3,
                             TotalPriceXu = 50,
@@ -539,7 +542,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             HistoryID = 1,
-                            ChangedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5653),
+                            ChangedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3174),
                             ChangedByUserID = 1,
                             NewStatus = "Pending",
                             OrderID = 1
@@ -585,7 +588,7 @@ namespace DollarProject.Migrations
                             PaymentID = 1,
                             AmountXu = 150,
                             OrderID = 1,
-                            PaymentDate = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5626),
+                            PaymentDate = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3149),
                             PaymentMethod = "VNPay",
                             PaymentStatus = "Processing"
                         },
@@ -594,7 +597,7 @@ namespace DollarProject.Migrations
                             PaymentID = 2,
                             AmountXu = 50,
                             OrderID = 2,
-                            PaymentDate = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5630),
+                            PaymentDate = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3153),
                             PaymentMethod = "Wallet",
                             PaymentStatus = "Processing"
                         });
@@ -607,9 +610,6 @@ namespace DollarProject.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"));
-
-                    b.Property<string>("AccountInfomation")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ApprovedByUserID")
                         .HasColumnType("int");
@@ -676,7 +676,7 @@ namespace DollarProject.Migrations
                         {
                             ProductID = 1,
                             CategoryID = 1,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5471),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3017),
                             Description = "Full MMORPG account.",
                             ImageURL = "marketplace5.png",
                             IsApproved = true,
@@ -690,7 +690,7 @@ namespace DollarProject.Migrations
                         {
                             ProductID = 2,
                             CategoryID = 9,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5475),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3020),
                             Description = "In-game weapon for RPG.",
                             ImageURL = "marketplace6.png",
                             IsApproved = true,
@@ -1060,7 +1060,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             UserID = 1,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5312),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2831),
                             Email = "admin@gamemarketplace.com",
                             FirstName = "Admin",
                             IsVerifiedSeller = true,
@@ -1073,7 +1073,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             UserID = 2,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5315),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2834),
                             Email = "staff@gamemarketplace.com",
                             FirstName = "Staff",
                             IsVerifiedSeller = true,
@@ -1086,7 +1086,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             UserID = 3,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5317),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2836),
                             Email = "customer@gamemarketplace.com",
                             FirstName = "Customer",
                             IsVerifiedSeller = true,
@@ -1165,21 +1165,21 @@ namespace DollarProject.Migrations
                         new
                         {
                             WalletID = 1,
-                            LastUpdated = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5426),
+                            LastUpdated = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2979),
                             UserID = 1,
                             XuBalance = 1000
                         },
                         new
                         {
                             WalletID = 2,
-                            LastUpdated = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5428),
+                            LastUpdated = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2980),
                             UserID = 2,
                             XuBalance = 500
                         },
                         new
                         {
                             WalletID = 3,
-                            LastUpdated = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5430),
+                            LastUpdated = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(2982),
                             UserID = 3,
                             XuBalance = 100
                         });
@@ -1261,7 +1261,7 @@ namespace DollarProject.Migrations
                         new
                         {
                             WishlistID = 1,
-                            CreatedAt = new DateTime(2025, 5, 22, 15, 7, 11, 123, DateTimeKind.Local).AddTicks(5498),
+                            CreatedAt = new DateTime(2025, 5, 21, 20, 12, 23, 933, DateTimeKind.Local).AddTicks(3047),
                             ProductID = 1,
                             UserID = 3
                         });
