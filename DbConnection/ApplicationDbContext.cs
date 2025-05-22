@@ -77,6 +77,13 @@ namespace DollarProject.DbConnection
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Product - Sellerstore relationship
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Store)
+                .WithMany(s => s.Products)
+                .HasForeignKey(p => p.StoreID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Order - User relationships (buyer and seller)
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Buyer)
@@ -302,6 +309,7 @@ namespace DollarProject.DbConnection
                     CreatedAt = DateTime.Now,
                     IsApproved = true,
                     ImageURL = "marketplace5.png",
+                    AccountInfomation = "product1@gmail.com + Pass: 123456",
 
                 },
                 new Product
@@ -316,6 +324,7 @@ namespace DollarProject.DbConnection
                     CreatedAt = DateTime.Now,
                     IsApproved = true,
                     ImageURL = "marketplace6.png",
+                    AccountInfomation = "product2@gmail.com + Pass: 123456",
                 }
             );
 

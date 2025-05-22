@@ -1,0 +1,81 @@
+﻿@model DollarProject.Models.Product
+@{
+    ViewBag.Title = "Create Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section-pt overflow-visible">
+    <div class="container">
+        <div class="max-w-4xl mx-auto bg-b-neutral-3 rounded-xl p-8 shadow">
+            <h2 class="text-w-neutral-1 text-3xl font-semibold mb-6">Post New Product</h2>
+
+            <form asp-controller="Seller" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1">Product Name</label>
+                        <input name="ProductName" class="box-input-3 w-full bg-b-neutral-4 text-white" required />
+                    </div>
+
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1">Product Type</label>
+                        <select name="ProductType" class="box-input-3 w-full bg-gray-800 text-white">
+                            <option value="GameAccount">Game Account</option>
+                            <option value="GameItem">Game Item</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1">Category</label>
+                        @if (ViewBag.Categories != null)
+                        {
+                            <select name="CategoryID" class="box-input-3 w-full bg-gray-800 text-white">
+                                @foreach (var cat in ViewBag.Categories)
+                                {
+                                    <option value="@cat.CategoryID">@cat.CategoryName</option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <select disabled class="box-input-3 w-full text-red-400 bg-gray-800">
+                                <option>No categories available</option>
+                            </select>
+                        }
+                    </div>
+
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1">Price (Xu)</label>
+                        <input name="PriceXu" type="number" min="0" class="box-input-3 w-full bg-b-neutral-4 text-white" required />
+                    </div>
+
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1">Stock Quantity</label>
+                        <input name="Stock" type="number" min="1" class="box-input-3 w-full bg-b-neutral-4 text-white" required />
+                    </div>
+
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1 text-lg font-semibold">Description</label>
+                        <div class="grid grid-cols-1 gap-4">
+                            <input name="GameName" placeholder="Game Name" class="box-input-3 w-full bg-b-neutral-4 text-white" />
+                            <input name="Level" placeholder="Level" class="box-input-3 w-full bg-b-neutral-4 text-white" />
+                            <input name="Skins" placeholder="Skins" class="box-input-3 w-full bg-b-neutral-4 text-white" />
+                            <input name="LinkedAccounts" placeholder="Linked Accounts" class="box-input-3 w-full bg-b-neutral-4 text-white" />
+                            <textarea name="ExtraInfo" placeholder="Additional Info" class="box-input-3 w-full h-[100px] bg-b-neutral-4 text-white"></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-w-neutral-1 mb-1">Product Image</label>
+                        <input type="file" name="ImageFile" class="w-full text-white bg-b-neutral-4 border border-shap rounded px-3 py-2" />
+                    </div>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button type="submit" class="btn btn-md btn-primary rounded-12">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,145 @@
+﻿@model DollarProject.Models.User
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>TradeMax Arena</title>
+    <script defer src="js/app.js"></script>
+    <link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+    <!-- preloader start -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- scroll to top button start -->
+    <button class="scroll-to-top show" id="scrollToTop">
+        <i class="ti ti-arrow-up"></i>
+    </button>
+
+    <!-- app layout start -->
+    <div class="app-layout">
+        <main>
+            <!-- user profile section start -->
+            <section class="section-pt overflow-visible">
+                <div class="container">
+                    <!-- COVER + AVATAR -->
+                    <div class="relative">
+                        <div class="glitch-effect">
+                            <div class="glitch-thumb">
+                                <img class="w-full xl:h-[490px] h-[400px] hover:scale-110 object-cover"
+                                     src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="cover image">
+                            </div>
+                            <div class="glitch-thumb">
+                                <img class="w-full xl:h-[490px] lg:h-[400px] md:h-[340px] sm:h-[300px] h-[240px] hover:scale-110 object-cover"
+                                     src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="cover image">
+                            </div>
+                        </div>
+
+                        <!-- Avatar and Name -->
+                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-black bg-opacity-50 px-6 py-4 rounded-xl">
+                            <img class="rounded-full w-24 h-24 mx-auto border-4 border-white shadow"
+                                 src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="avatar">
+                            <h2 class="text-white text-2xl font-bold mt-2">
+                                @(Model?.FirstName ?? "") @(Model?.LastName ?? "")
+                            </h2>
+                            <p class="text-white text-sm mt-1 italic">
+                                @(Model?.SellerDescription ?? "I'm a proud member of TradeMax Arena – Dedicated & Reliable.")
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Main profile info -->
+                    <div class="grid grid-cols-12 gap-30p bg-b-neutral-3 rounded-12 pb-30p">
+                        <div class="4xl:col-start-2 4xl:col-end-12 col-span-12 max-4xl:px-48p">
+                            <div class="relative flex 3xl:items-end max-3xl:items-center 3xl:justify-between max-3xl:flex-col gap-30p mt-4 4xl:mb-[70px] mb-60p">
+                                <!-- Followers - Following - Products -->
+                                <div class="3xl:order-1 order-2 flex text-center divide-x divide-shap">
+                                    <div class="pr-6">
+                                        <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Following?.Count ?? 0)</h2>
+                                        <span class="text-m-medium text-w-neutral-4/70">Following</span>
+                                    </div>
+                                    <div class="px-24p">
+                                        <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Followers?.Count ?? 0)</h2>
+                                        <span class="text-m-medium text-w-neutral-4/70">Followers</span>
+                                    </div>
+                                    <div class="pl-6">
+                                        <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Products?.Count ?? 0)</h2>
+                                        <span class="text-m-medium text-w-neutral-4/70">Products</span>
+                                    </div>
+                                </div>
+
+                                <!-- Social Icons -->
+                                <div class="order-3 flex items-center gap-3">
+                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-facebook"></i></a>
+                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-twitch"></i></a>
+                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-instagram"></i></a>
+                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-discord"></i></a>
+                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-youtube"></i></a>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="order-4 3xl:absolute 3xl:right-0 3xl:-top-25 flex items-center justify-center flex-wrap gap-20p z-[3]">
+                                    <button type="button" class="btn btn-lg btn-primary rounded-12">
+                                        Follow <i class="ti ti-plus"></i>
+                                    </button>
+                                    <a href="/chat" class="btn btn-lg btn-neutral-2 rounded-12">Products</a>
+                                </div>
+
+                                <!-- Settings Dropdown -->
+                                <div x-data="dropdown" class="absolute top-0 right-0 z-[10] dropdown">
+                                    <button @@click="toggle()" class="relative btn-c btn-c-xxl btn-neutral-2 text-w-neutral-4">
+                                        <i class="ti ti-dots"></i>
+                                    </button>
+                                    <div x-show="isOpen" @@click.away="close()" class="dropdown-content sm:right-0 max-sm:left-0 sm:top-18 top-15 z-20">
+                                        <a asp-controller="Profile" asp-action="Edit" class="dropdown-item">Settings</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Link to Create Product page -->
+            <div class="flex justify-center m-10">
+                <a href="@Url.Action("Create", "Seller")" class="btn btn-primary rounded-12 px-6 py-2 text-white font-semibold">
+                    Post New Product
+                </a>
+
+            </div>
+
+            <!-- Product Listing -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 rounded-xl overflow-hidden shadow-xl transform hover:scale-105 transition duration-300">
+                        <img src="@Url.Content(product.ImageURL ?? "default-product.png")"
+                             class="w-full h-52 object-cover border-b-4 border-white/20" alt="Product Image" />
+
+
+                        <div class="p-5 bg-black bg-opacity-50 backdrop-blur-md text-white h-full flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">@product.ProductName</h4>
+                                <p class="text-sm text-white/80 line-clamp-2">@product.Description</p>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <span class="bg-yellow-400 text-black px-3 py-1 text-sm font-semibold rounded-full shadow">
+                                    @product.PriceXu.ToString("N0") Xu
+                                </span>
+                                <span class="bg-white text-black text-xs font-semibold px-2 py-1 rounded-full shadow">
+                                    @product.ProductType
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>

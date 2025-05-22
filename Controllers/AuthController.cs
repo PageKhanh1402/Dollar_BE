@@ -184,9 +184,15 @@ namespace DollarProject.Controllers
         #endregion
 
         [HttpGet]
+        public IActionResult LoginFull(string? returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View("LoginFull", new LoginViewModel());
+
         public IActionResult BlockedAccount()
         {
             return View();
+
         }
     }
 }
