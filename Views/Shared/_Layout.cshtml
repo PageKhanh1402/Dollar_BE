@@ -103,7 +103,7 @@
                                         <div x-show="isOpen" x-transition="" @@click.away="close()" class="dropdown-content">
                                             <a asp-controller="Profile" asp-action="Index" class="dropdown-item">Profile</a>
                                             <a href="./user-settings.html" class="dropdown-item">Settings</a>
-                                            <form asp-controller="Auth" asp-action="Logout" method="post">
+                                            <form asp-controller="Auth" asp-action="Logout" method="post" id="logoutForm">
                                                 <button type="submit" class="dropdown-item">Logout</button>
                                             </form>
                                             <a href="./contact-us.html" class="dropdown-item">Help</a>
@@ -188,116 +188,117 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', function () {
-            const loginButton = document.getElementById("loginButton");
-            const loginWrapper = document.getElementById("loginWrapper");
-            const closeLogin = document.getElementById("closeLogin");
-            const appLayout = document.querySelector(".app-layout");
-            const loginForm = document.getElementById("loginForm");
+        // Handle login button
+        document.getElementById("loginButton").addEventListener("click", function () {
+            document.getElementById("loginWrapper").classList.remove("hidden");
+            document.getElementById("loginWrapper").classList.add("show");
+            document.querySelector(".app-layout").classList.add("blur");
+        });
 
-            // Mở modal login
-            if (loginButton && loginWrapper && appLayout) {
-                loginButton.addEventListener("click", function () {
-                    loginWrapper.classList.remove("hidden");
-                    loginWrapper.classList.add("show");
-                    appLayout.classList.add("blur");
-                });
-            }
+        // Handle close login modal
+        document.getElementById("closeLogin").addEventListener("click", function () {
+            document.getElementById("loginWrapper").classList.remove("show");
+            document.getElementById("loginWrapper").classList.add("hidden");
+            document.querySelector(".app-layout").classList.remove("blur");
+        });
 
-            // Đóng modal khi nhấn nút x
-            if (closeLogin && loginWrapper && appLayout) {
-                closeLogin.addEventListener("click", function () {
-                    loginWrapper.classList.remove("show");
-                    appLayout.classList.remove("blur");
-                });
-            }
-
-            // Đóng modal khi click ra ngoài
-            if (loginWrapper && appLayout) {
-                loginWrapper.addEventListener("click", function (e) {
-                    if (e.target === loginWrapper) {
-                        loginWrapper.classList.remove("show");
-                        appLayout.classList.remove("blur");
-                    }
-                });
-            }
-
-            // Auto mở modal nếu có ?showLogin=true
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('showLogin') === 'true' && loginWrapper && appLayout) {
-                loginWrapper.classList.remove("hidden");
-                loginWrapper.classList.add("show");
-                appLayout.classList.add("blur");
-            }
-
-            // Xử lý submit form login
-            if (loginForm) {
-                loginForm.addEventListener("submit", function (e) {
-                    e.preventDefault();
-
-                    const formData = new FormData(loginForm);
-
-                    fetch(loginForm.action, {
-                        method: loginForm.method,
-                        body: formData
-                    })
-                        .then(response => response.json().then(data => ({ status: response.status, data })))
-                        .then(({ status, data }) => {
-                            if (status === 200 && data.success) {
-                                window.location.href = data.redirectUrl;
-                            } else {
-                                const errorContainer = document.querySelector(".text-danger");
-                                if (errorContainer) {
-                                    errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Login Error:', error);
-                        });
-                });
+        // Handle click outside modal
+        document.getElementById("loginWrapper").addEventListener("click", function (e) {
+            if (e.target === this) {
+                this.classList.remove("show");
+                this.classList.add("hidden");
+                document.querySelector(".app-layout").classList.remove("blur");
             }
         });
 
-        // Xử lý callback từ Google login
-        window.addEventListener('load', function () {
-            const loginWrapper = document.getElementById("loginWrapper");
-            const appLayout = document.querySelector(".app-layout");
+            // Auto mở modal nếu có ?showLogin=true
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('showLogin') === 'true') {
+                document.getElementById("loginWrapper").classList.remove("hidden");
+                document.getElementById("loginWrapper").classList.add("show");
+                document.querySelector(".app-layout").classList.add("blur");
+            }
 
+        // Handle submit form login
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+                .then(response => response.json().then(data => ({ status: response.status, data })))
+                .then(({ status, data }) => {
+                    if (status === 200 && data.success) {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        const errorContainer = document.querySelector(".text-danger");
+                        errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Handle logout
+        document.getElementById("logoutForm")?.addEventListener("submit", function (e) {
+            e.preventDefault();
+            // Clear Google session by redirecting to Google's logout endpoint
+            fetch(this.action, {
+                method: this.method,
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirect to Google logout to clear session
+                        window.location.href = 'https://accounts.google.com/Logout?continue=' + encodeURIComponent(window.location.origin);
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout Error:', error);
+                });
+        });
+
+        // Handle Google Sign-In callback
+        window.addEventListener('load', function () {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('code') || urlParams.has('error')) {
-                fetch(`/Auth/ExternalLoginCallback?returnUrl=${encodeURIComponent(urlParams.get('returnUrl') || '/')}`, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            window.location.href = data.redirectUrl;
-                        } else {
-                            if (loginWrapper && appLayout) {
-                                loginWrapper.classList.remove("hidden");
-                                loginWrapper.classList.add("show");
-                                appLayout.classList.add("blur");
-                            }
-                            const errorContainer = document.querySelector(".text-danger");
-                            if (errorContainer) {
-                                errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
-                            }
+                // Only process callback if not just logged out
+                if (!sessionStorage.getItem('justLoggedOut')) {
+                    fetch(`/Auth/ExternalLoginCallback?returnUrl=${encodeURIComponent(urlParams.get('returnUrl') || '/')}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
                         }
                     })
-                    .catch(error => {
-                        console.error('Google Sign-In Error:', error);
-                        if (loginWrapper && appLayout) {
-                            loginWrapper.classList.remove("hidden");
-                            loginWrapper.classList.add("show");
-                            appLayout.classList.add("blur");
-                        }
-                        const errorContainer = document.querySelector(".text-danger");
-                        if (errorContainer) {
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = data.redirectUrl;
+                            } else {
+                                document.getElementById("loginWrapper").classList.remove("hidden");
+                                document.getElementById("loginWrapper").classList.add("show");
+                                document.querySelector(".app-layout").classList.add("blur");
+                                const errorContainer = document.querySelector(".text-danger");
+                                errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join("");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Google Sign-In Error:', error);
+                            document.getElementById("loginWrapper").classList.remove("hidden");
+                            document.getElementById("loginWrapper").classList.add("show");
+                            document.querySelector(".app-layout").classList.add("blur");
+                            const errorContainer = document.querySelector(".text-danger");
                             errorContainer.innerHTML = '<p>Google Sign-In failed. Please try again.</p>';
-                        }
-                    });
+                        });
+                } else {
+                    // Clear justLoggedOut flag
+                    sessionStorage.removeItem('justLoggedOut');
+                }
             }
         });
     </script>
