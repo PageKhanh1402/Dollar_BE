@@ -10,7 +10,6 @@ namespace DollarProject.Models
         public int UserID { get; set; }
 
         public string? ImageURL { get; set; } 
-
  
         [StringLength(100)]
         public string? FirstName { get; set; }
@@ -44,7 +43,6 @@ namespace DollarProject.Models
         public virtual Role Role { get; set; }
 
         public virtual Wallet Wallet { get; set; }
-        public virtual SellerStore SellerStore { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Order> BuyerOrders { get; set; }
         public virtual ICollection<Order> SellerOrders { get; set; }
@@ -63,5 +61,7 @@ namespace DollarProject.Models
         public virtual ICollection<OrderDispute> AssignedDisputes { get; set; }
         public virtual ICollection<OrderStatusHistory> StatusChanges { get; set; }
         public virtual ICollection<CurrencyConversionRate> SetRates { get; set; }
+        //Xoa SellerStore
+        //public virtual SellerStore SellerStore { get; set; }
     }
 }

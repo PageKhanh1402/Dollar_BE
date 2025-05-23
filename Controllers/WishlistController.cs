@@ -40,8 +40,8 @@ namespace DollarProject.Controllers
                 .Include(w => w.Product)
                     .ThenInclude(p => p.Category)
                 .Include(w => w.Product)
-                    .ThenInclude(p => p.Seller)
-                .Where(w => w.Product.IsApproved && w.Product.Category != null && w.Product.Seller != null)
+                    .ThenInclude(p => p.User)
+                .Where(w => w.Product.IsApproved && w.Product.Category != null && w.Product.User != null)
                 .Select(w => w.Product)
                 .AsQueryable();
 

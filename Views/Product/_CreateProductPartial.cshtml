@@ -1,103 +1,93 @@
-﻿@model DollarProject.Models.Product
+﻿@model DollarProject.ViewModels.ProductFormViewModel
+
 @{
-    var categories = ViewData["Categories"] as List<DollarProject.Models.ProductCategory>;
+    var categories = Model.Categories;
 }
 
 
-
-<div class="max-h-[90vh] overflow-y-auto custom-scroll bg-b-neutral-3 rounded-xl p-6 sm:p-8 shadow-lg w-full">
-    <h2 class="text-2xl text-white font-semibold mb-6 text-center">🛒 Post a New Product</h2>
+<div class="max-h-[90vh] overflow-y-auto custom-scroll bg-gradient-to-br from-gray-900 to-black rounded-3xl p-10 shadow-2xl w-full border border-gray-700">
+    <h2 class="text-3xl text-orange-400 font-extrabold mb-10 text-center tracking-wide">✨ Post Product</h2>
 
     <form asp-controller="Product" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
-        <div class="grid grid-cols-1 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
 
             <!-- Product Name -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Product Name</label>
-                <input name="ProductName" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-orange-500" placeholder="Enter product name" required />
+            <div class="col-span-1">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">📝 Product Name</label>
+                <input name="ProductName" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200"
+                       placeholder="E.g. Valorant Premium Account" required />
             </div>
 
             <!-- Product Type -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Product Type</label>
-                <select name="ProductType" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600">
+            <div class="col-span-1">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">🗂 Product Type</label>
+                <select name="ProductType" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200">
                     <option value="GameAccount">Game Account</option>
                     <option value="GameItem">Game Item</option>
                 </select>
             </div>
-
+            
             <!-- Category -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Category</label>
-                @if (categories != null && categories.Any())
-                {
-                    <select name="CategoryID" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600">
-                        @foreach (var cat in categories)
+            <div class="col-span-1">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">📂 Category</label>
+                <select name="CategoryID" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200">
+                    @if (categories != null && categories.Any())
+                    {
+                        foreach (var cat in categories)
                         {
                             <option value="@cat.CategoryID">@cat.CategoryName</option>
                         }
-                    </select>
-                }
-                else
-                {
-                    <select disabled class="w-full px-4 py-2 bg-gray-800 text-red-400 border border-gray-600 rounded-lg">
-                        <option>No categories available</option>
-                    </select>
-                }
+                    }
+                    else
+                    {
+                        <option disabled>No categories available</option>
+                    }
+                </select>
+
             </div>
 
             <!-- Price -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Price (Xu)</label>
-                <input name="PriceXu" type="number" min="0" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600" required />
+            <div class="col-span-1">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">💰 Price (Xu)</label>
+                <input name="PriceXu" type="number" min="0" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200"
+                       required />
             </div>
 
             <!-- Stock -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Stock Quantity</label>
-                <input name="Stock" type="number" min="1" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600" required />
+            <div class="col-span-1">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">📦 Stock Quantity</label>
+                <input name="Stock" type="number" min="1" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200"
+                       required />
             </div>
 
-            <!-- Description -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Description</label>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <input name="GameName" placeholder="Game Name"
-                           class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-orange-500" />
-
-                    <input name="Level" placeholder="Level"
-                           class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-orange-500" />
-
-                    <input name="Skins" placeholder="Skins/Items"
-                           class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-orange-500" />
+            <!-- Description Fields -->
+            <div class="col-span-2">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">🧾 Game Description</label>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input name="Level" placeholder="Level" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200" />
+                    <input name="Skins" placeholder="Skins/Items" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200" />
                 </div>
             </div>
 
-            <!-- Account Information -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1 mt-4">Account Information</label>
-                <textarea name="AccountInfomation" rows="4"
-                          class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-orange-500 resize-none"
-                          placeholder="Enter account information including email/phone number and password..." required></textarea>
+            <!-- Account Info -->
+            <div class="col-span-2">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">🔐 Account Info</label>
+                <textarea name="AccountInfomation" rows="4" class="w-full px-4 py-2 bg-gray-900 text-white placeholder-gray-500 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 resize-none"
+                          placeholder="Email + Password, phone..." required></textarea>
             </div>
 
-
-            <!-- Image -->
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Product Image</label>
-                <input type="file" name="ImageFile" class="w-full text-white bg-gray-800 border border-gray-600 rounded-lg px-3 py-2" />
+            <!-- Image Upload -->
+            <div class="col-span-2">
+                <label class="block text-sm font-semibold text-gray-300 mb-2">🖼 Upload Product Image</label>
+                <input type="file" name="ImageFile" class="w-full file:px-4 file:py-2 file:rounded-lg file:bg-orange-600 file:text-white text-gray-400 bg-gray-800 border border-gray-700 rounded-lg" />
             </div>
         </div>
 
-        <div class="flex justify-end mt-6">
-            <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition font-semibold">
-                Post Product
+        <div class="flex justify-center mt-10">
+            <button type="submit" class="bg-gradient-to-r from-yellow-300 to-white hover:from-orange-600 hover:to-yellow-500 px-10 py-3 text-black font-extrabold rounded-full shadow-lg tracking-wider text-lg transition-all duration-300">
+                🚀 Publish Product
             </button>
         </div>
     </form>
 </div>
-
-@section Styles {
-    <link href="~/css/product-form.css" rel="stylesheet" />
-}

@@ -10,7 +10,8 @@ namespace DollarProject.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductID { get; set; }
 
-        public int SellerID { get; set; }
+        //SellerID => UserID
+        public int UserID { get; set; }
 
         public int CategoryID { get; set; }
 
@@ -19,8 +20,6 @@ namespace DollarProject.Models
         public string ProductName { get; set; }
 
         public string? Description { get; set; }
-
-        [Required(ErrorMessage = "Account information is required.")]
         public string? AccountInfomation { get; set; }
 
         public int PriceXu { get; set; }
@@ -45,17 +44,9 @@ namespace DollarProject.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public int? StoreID { get; set; }
-
-
-        // Navigation properties
         [ValidateNever]
-        [ForeignKey("StoreID")]
-        public virtual SellerStore Store { get; set; } 
-
-        [ValidateNever]
-        [ForeignKey("SellerID")]
-        public virtual User Seller { get; set; }
+        [ForeignKey("UserID")]
+        public virtual User User { get; set; }
 
         [ValidateNever]
         [ForeignKey("CategoryID")]
@@ -73,5 +64,12 @@ namespace DollarProject.Models
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         [ValidateNever]
         public virtual ICollection<Review> Reviews { get; set; }
+
+        //Xoa Store
+        //public int? StoreID { get; set; }
+        // Navigation properties
+        //[ValidateNever]
+        //[ForeignKey("StoreID")]
+        //public virtual SellerStore Store { get; set; }
     }
 }

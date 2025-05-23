@@ -11,9 +11,9 @@ namespace DollarProject.Mappings
             //CreateMap<ProductDto, Product>().ReverseMap();
             CreateMap<Product, ProductDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-                .ForMember(dest => dest.SellerName, opt => opt.MapFrom(src => src.Seller.FirstName + " " + src.Seller.LastName))
-                .ForMember(dest => dest.IsVerifiedSeller, opt => opt.MapFrom(src => src.Seller.IsVerifiedSeller))
-                .ForMember(dest => dest.SellerImageURL, opt => opt.MapFrom(src => src.Seller.ImageURL ?? "user-placeholder.png"))
+                .ForMember(dest => dest.SellerName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
+                .ForMember(dest => dest.IsVerifiedSeller, opt => opt.MapFrom(src => src.User.IsVerifiedSeller))
+                .ForMember(dest => dest.SellerImageURL, opt => opt.MapFrom(src => src.User.ImageURL ?? "user-placeholder.png"))
                 .ForMember(dest => dest.IsInWishlist, opt => opt.Ignore());
         }
     }
