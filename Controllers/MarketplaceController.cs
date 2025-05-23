@@ -23,7 +23,7 @@ namespace DollarProject.Controllers
         {
             var query = _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.Seller)
+                .Include(p => p.User)
                 .Where(p => p.IsApproved)
                 .AsQueryable();
 

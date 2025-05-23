@@ -39,8 +39,13 @@ namespace DollarProject.Controllers
                 return NotFound();
             }
 
+            ViewBag.Categories = await _context.ProductCategories
+                .Where(p => p.ParentCategoryID == null)
+                .ToListAsync(); 
+
             return View(user);
         }
+
 
         // GET: ProfileController/Details/5
         public ActionResult Details(int id)
@@ -150,5 +155,31 @@ namespace DollarProject.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterSeller(bool agreeTerms)
+        {
+            if (!agreeTerms)
+            {
+                TempData["ErrorMessage"] = "You must agree with terms to register.";
+                return RedirectToAction("Index");
+            }
+
+            var userIdStr = User.FindFirstValue("UserId");
+            if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+
+            int userId = int.Parse(userIdStr);
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null) return NotFound();
+
+            user.IsVerifiedSeller = true;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "You had register successful! Let sell something..";
+            return RedirectToAction("Index");
+        }
+
     }
 }

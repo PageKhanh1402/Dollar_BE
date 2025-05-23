@@ -13,7 +13,6 @@ namespace DollarProject.DbConnection
         // DbSet properties for all entities
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<SellerStore> SellerStores { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<CurrencyConversionRate> CurrencyConversionRates { get; set; }
         public DbSet<WalletTransaction> WalletTransactions { get; set; }
@@ -56,17 +55,13 @@ namespace DollarProject.DbConnection
                 .WithOne(w => w.User)
                 .HasForeignKey<Wallet>(w => w.UserID);
 
-            // User - SellerStore relationship (one-to-one)
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.SellerStore)
-                .WithOne(s => s.Seller)
-                .HasForeignKey<SellerStore>(s => s.SellerID);
+            
 
             // User - Product relationship
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Seller)
+                .HasOne(p => p.User)
                 .WithMany(u => u.Products)
-                .HasForeignKey(p => p.SellerID)
+                .HasForeignKey(p => p.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Product approval relationship
@@ -77,12 +72,6 @@ namespace DollarProject.DbConnection
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Product - Sellerstore relationship
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Store)
-                .WithMany(s => s.Products)
-                .HasForeignKey(p => p.StoreID)
-                .OnDelete(DeleteBehavior.Restrict);
 
             // Order - User relationships (buyer and seller)
             modelBuilder.Entity<Order>()
@@ -304,7 +293,7 @@ namespace DollarProject.DbConnection
                     Description = "Full MMORPG account.",
                     PriceXu = 100,
                     ProductType = Enums.ProductType.GameAccount.ToString(),
-                    SellerID = 1, // Admin's store
+                    UserID = 1, // Admin's store
                     CategoryID = 1, // Game Accounts category
                     CreatedAt = DateTime.Now,
                     IsApproved = true,
@@ -319,7 +308,7 @@ namespace DollarProject.DbConnection
                     Description = "In-game weapon for RPG.",
                     PriceXu = 50,
                     ProductType = Enums.ProductType.GameItem.ToString(),
-                    SellerID = 2, // Staff's store
+                    UserID = 2, // Staff's store
                     CategoryID = 9, // Weapons category
                     CreatedAt = DateTime.Now,
                     IsApproved = true,

@@ -1,0 +1,38 @@
+﻿
+
+<div id="registerSellerModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-start justify-center overflow-y-auto pt-20">
+    <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl w-full max-w-3xl relative text-white">
+        <button id="closeRegisterSellerModal" class="absolute top-2 right-3 text-white text-xl">×</button>
+
+        <h2 class="text-3xl font-extrabold text-yellow-400 text-center mb-6">🚀 Become a Verified Seller</h2>
+
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-5 text-sm max-h-96 overflow-y-auto mb-4">
+            <h3 class="text-lg font-bold mb-2">Platform Policies & Seller Agreement</h3>
+            <ul class="list-disc list-inside space-y-2">
+                <li>You must provide accurate account information and ensure it's not stolen or shared without consent.</li>
+                <li>All game accounts listed must be legally owned by you.</li>
+                <li>Fraud, chargebacks, or any form of scam will result in permanent account suspension and possible legal action.</li>
+                <li>All trades are logged and monitored. We work closely with game publishers when necessary.</li>
+                <li>Once an account is sold, the buyer becomes the new rightful owner. No reclaiming or password resets allowed by the seller.</li>
+                <li>All transactions are subject to review by the moderation team before being visible to the marketplace.</li>
+                <li>Spamming, misleading listings, or attempting to bypass moderation will result in penalties or bans.</li>
+                <li>We reserve the right to update these terms and suspend accounts that violate them without prior notice.</li>
+            </ul>
+        </div>
+
+        <form asp-action="RegisterSeller" asp-controller="Profile" method="post">
+            @Html.AntiForgeryToken()
+            <div class="flex items-center mb-6">
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" value="true" class="mr-2 scale-125 text-orange-500" required />
+                <label for="agreeTerms" class="text-sm">I have read and agree to all platform policies above.</label>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" class="bg-gradient-to-r from-yellow-300 to-orange-500 hover:from-orange-500 hover:to-red-500 px-8 py-3 text-black font-bold rounded-full shadow-lg transition-all duration-300">
+                    ✅ Register as Seller
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

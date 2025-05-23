@@ -1,145 +1,280 @@
 ﻿@model DollarProject.Models.User
+@using System.Security.Claims
+@using DollarProject.ViewModels
+@{
+    var currentUserId = int.Parse(User.FindFirstValue("UserId") ?? "0");
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("Staff");
+}
+<!-- user profile section start -->
+<section class="section-pt overflow-visible">
+    <div class="container">
+        <!-- COVER + AVATAR -->
+        <div class="relative">
+            <div class="glitch-effect">
+                <div class="glitch-thumb">
+                    <img class="w-full xl:h-[490px] h-[400px] hover:scale-110 object-cover"
+                         src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="cover image">
+                </div>
+                <div class="glitch-thumb">
+                    <img class="w-full xl:h-[490px] lg:h-[400px] md:h-[340px] sm:h-[300px] h-[240px] hover:scale-110 object-cover"
+                         src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="cover image">
+                </div>
+            </div>
 
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <title>TradeMax Arena</title>
-    <script defer src="js/app.js"></script>
-    <link href="css/app.css" rel="stylesheet">
-</head>
-<body>
-    <!-- preloader start -->
-    <div class="preloader">
-        <div class="loader"></div>
-    </div>
-    <!-- scroll to top button start -->
-    <button class="scroll-to-top show" id="scrollToTop">
-        <i class="ti ti-arrow-up"></i>
-    </button>
+            <!-- Avatar and Name -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-black bg-opacity-50 px-6 py-4 rounded-xl">
+                <img class="rounded-full w-24 h-24 mx-auto border-4 border-white shadow"
+                     src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="avatar">
+                <h2 class="text-white text-2xl font-bold mt-2">
+                    @(Model?.FirstName ?? "") @(Model?.LastName ?? "")
+                </h2>
+                <p class="text-white text-sm mt-1 italic">
+                    @(Model?.SellerDescription ?? "I'm a proud member of TradeMax Arena – Dedicated & Reliable.")
+                </p>
+            </div>
+        </div>
 
-    <!-- app layout start -->
-    <div class="app-layout">
-        <main>
-            <!-- user profile section start -->
-            <section class="section-pt overflow-visible">
-                <div class="container">
-                    <!-- COVER + AVATAR -->
-                    <div class="relative">
-                        <div class="glitch-effect">
-                            <div class="glitch-thumb">
-                                <img class="w-full xl:h-[490px] h-[400px] hover:scale-110 object-cover"
-                                     src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="cover image">
-                            </div>
-                            <div class="glitch-thumb">
-                                <img class="w-full xl:h-[490px] lg:h-[400px] md:h-[340px] sm:h-[300px] h-[240px] hover:scale-110 object-cover"
-                                     src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="cover image">
-                            </div>
+        <!-- Main profile info -->
+        <div class="grid grid-cols-12 gap-30p bg-b-neutral-3 rounded-12 pb-30p">
+            <div class="4xl:col-start-2 4xl:col-end-12 col-span-12 max-4xl:px-48p">
+                <div class="relative flex 3xl:items-end max-3xl:items-center 3xl:justify-between max-3xl:flex-col gap-30p mt-4 4xl:mb-[70px] mb-60p">
+                    <!-- Followers - Following - Products -->
+                    <div class="3xl:order-1 order-2 flex text-center divide-x divide-shap">
+                        <div class="px-24p">
+                            <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Followers?.Count ?? 0)</h2>
+                            <span class="text-m-medium text-w-neutral-4/70">Sold</span>
                         </div>
-
-                        <!-- Avatar and Name -->
-                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-black bg-opacity-50 px-6 py-4 rounded-xl">
-                            <img class="rounded-full w-24 h-24 mx-auto border-4 border-white shadow"
-                                 src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="avatar">
-                            <h2 class="text-white text-2xl font-bold mt-2">
-                                @(Model?.FirstName ?? "") @(Model?.LastName ?? "")
-                            </h2>
-                            <p class="text-white text-sm mt-1 italic">
-                                @(Model?.SellerDescription ?? "I'm a proud member of TradeMax Arena – Dedicated & Reliable.")
-                            </p>
+                        <div class="pl-6">
+                            <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Products?.Count ?? 0)</h2>
+                            <span class="text-m-medium text-w-neutral-4/70">Products</span>
                         </div>
                     </div>
 
-                    <!-- Main profile info -->
-                    <div class="grid grid-cols-12 gap-30p bg-b-neutral-3 rounded-12 pb-30p">
-                        <div class="4xl:col-start-2 4xl:col-end-12 col-span-12 max-4xl:px-48p">
-                            <div class="relative flex 3xl:items-end max-3xl:items-center 3xl:justify-between max-3xl:flex-col gap-30p mt-4 4xl:mb-[70px] mb-60p">
-                                <!-- Followers - Following - Products -->
-                                <div class="3xl:order-1 order-2 flex text-center divide-x divide-shap">
-                                    <div class="pr-6">
-                                        <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Following?.Count ?? 0)</h2>
-                                        <span class="text-m-medium text-w-neutral-4/70">Following</span>
-                                    </div>
-                                    <div class="px-24p">
-                                        <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Followers?.Count ?? 0)</h2>
-                                        <span class="text-m-medium text-w-neutral-4/70">Followers</span>
-                                    </div>
-                                    <div class="pl-6">
-                                        <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Products?.Count ?? 0)</h2>
-                                        <span class="text-m-medium text-w-neutral-4/70">Products</span>
-                                    </div>
-                                </div>
+                    <!-- Social Icons -->
+                    <div class="order-3 flex items-center gap-3">
+                        <a href="#" class="btn-socal-primary"><i class="ti ti-brand-facebook"></i></a>
+                        <a href="#" class="btn-socal-primary"><i class="ti ti-brand-twitch"></i></a>
+                        <a href="#" class="btn-socal-primary"><i class="ti ti-brand-instagram"></i></a>
+                        <a href="#" class="btn-socal-primary"><i class="ti ti-brand-discord"></i></a>
+                        <a href="#" class="btn-socal-primary"><i class="ti ti-brand-youtube"></i></a>
+                    </div>
 
-                                <!-- Social Icons -->
-                                <div class="order-3 flex items-center gap-3">
-                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-facebook"></i></a>
-                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-twitch"></i></a>
-                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-instagram"></i></a>
-                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-discord"></i></a>
-                                    <a href="#" class="btn-socal-primary"><i class="ti ti-brand-youtube"></i></a>
-                                </div>
+                    <!-- Seller action -->
+                    <div class="order-4 3xl:absolute 3xl:right-0 3xl:-top-25 flex items-center justify-center flex-wrap gap-20p z-[3]">
+                        @if (Model?.IsVerifiedSeller == true)
+                        {
+                            <a id="openPostModal"
+                               class="text-base md:text-lg
+                                  bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                                  hover:from-yellow-500 hover:to-red-600
+                                  text-black font-bold px-6 py-3 rounded-full shadow-xl
+                                  transition-all duration-300 transform hover:scale-105 tracking-wide">
+                                🎮 Sell +
+                            </a>
+                            <a href="#product-list" class="text-base md:text-lg
+                                  bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                                  hover:from-yellow-500 hover:to-red-600
+                                  text-black font-bold px-6 py-3 rounded-full shadow-xl
+                                  transition-all duration-300 transform hover:scale-105 tracking-wide">All Products</a>
+                        }
+                        else
+                        {
+                            <a id="openRegisterModal"
+                               class="text-base md:text-lg
+                                bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500
+                                hover:from-yellow-500 hover:to-red-600
+                                text-black font-bold px-6 py-3 rounded-full shadow-xl
+                                transition-all duration-300 transform hover:scale-105 tracking-wide">
+                                🚀 Register to Sell
+                            </a>
 
-                                <!-- Buttons -->
-                                <div class="order-4 3xl:absolute 3xl:right-0 3xl:-top-25 flex items-center justify-center flex-wrap gap-20p z-[3]">
-                                    <button type="button" class="btn btn-lg btn-primary rounded-12">
-                                        Follow <i class="ti ti-plus"></i>
-                                    </button>
-                                    <a href="/chat" class="btn btn-lg btn-neutral-2 rounded-12">Products</a>
-                                </div>
+                        }
+                    </div>
 
-                                <!-- Settings Dropdown -->
-                                <div x-data="dropdown" class="absolute top-0 right-0 z-[10] dropdown">
-                                    <button @@click="toggle()" class="relative btn-c btn-c-xxl btn-neutral-2 text-w-neutral-4">
-                                        <i class="ti ti-dots"></i>
-                                    </button>
-                                    <div x-show="isOpen" @@click.away="close()" class="dropdown-content sm:right-0 max-sm:left-0 sm:top-18 top-15 z-20">
-                                        <a asp-controller="Profile" asp-action="Edit" class="dropdown-item">Settings</a>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Modal Register Seller Wrapper -->
+                    @await Html.PartialAsync("~/Views/Seller/_RegisterSellerPartial.cshtml", Model.UserID)
+
+
+                    <!-- Modal post product wrapper -->
+                    <div id="postProductModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-start justify-center overflow-y-auto pt-20">
+                        <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl w-full max-w-4xl relative">
+                            <button id="closePostModal" class="absolute top-2 right-3 text-white text-xl">×</button>
+                            @await Html.PartialAsync(
+                                     "~/Views/Product/_CreateProductPartial.cshtml",
+                                     new ProductFormViewModel
+                            {
+                                Product = new Product(),
+                                Categories = ViewBag.Categories as List<ProductCategory> ?? new()
+                            })
+                        </div>
+                    </div>
+
+                    <!-- Settings Dropdown -->
+                    <div x-data="dropdown" class="absolute top-0 right-0 z-[10] dropdown">
+                        <button @@click="toggle()" class="relative btn-c btn-c-xxl btn-neutral-2 text-w-neutral-4">
+                            <i class="ti ti-dots"></i>
+                        </button>
+                        <div x-show="isOpen" @@click.away="close()" class="dropdown-content sm:right-0 max-sm:left-0 sm:top-18 top-15 z-20">
+                            <a asp-controller="Profile" asp-action="Edit" class="dropdown-item">Settings</a>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <!-- Link to Create Product page -->
-            <div class="flex justify-center m-10">
-                <a href="@Url.Action("Create", "Seller")" class="btn btn-primary rounded-12 px-6 py-2 text-white font-semibold">
-                    Post New Product
-                </a>
-
             </div>
+        </div>
+    </div>
+</section>
 
-            <!-- Product Listing -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach (var product in Model.Products)
-                {
-                    <div class="bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 rounded-xl overflow-hidden shadow-xl transform hover:scale-105 transition duration-300">
-                        <img src="@Url.Content(product.ImageURL ?? "default-product.png")"
-                             class="w-full h-52 object-cover border-b-4 border-white/20" alt="Product Image" />
+<!-- Product Listing -->
+<div id="product-list" class="bg-b-neutral-3 p-6 rounded-xl shadow-xl mt-10">
+    <h2 class="text-2xl font-extrabold text-white mb-6 text-center">🛍️ All Products</h2>
 
+    @if (Model.Products != null && Model.Products.Any())
+    {
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
+            @foreach (var product in Model.Products)
+            {
+                var isOwner = product.UserID == currentUserId;
 
-                        <div class="p-5 bg-black bg-opacity-50 backdrop-blur-md text-white h-full flex flex-col justify-between">
-                            <div>
-                                <h4 class="text-xl font-bold mb-1">@product.ProductName</h4>
-                                <p class="text-sm text-white/80 line-clamp-2">@product.Description</p>
+                <div class="bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1c1c1c] rounded-xl shadow-md hover:scale-105 transform transition duration-300 overflow-hidden text-sm">
+                    <img src="@Url.Content(product.ImageURL ?? "default-product.png")"
+                         class="w-full h-36 object-cover border-b border-yellow-500" alt="@product.ProductName" />
+                    <div class="p-3 text-white flex flex-col gap-2">
+                        <h3 class="text-base font-bold truncate">@product.ProductName</h3>
+                        <div style="white-space: pre-line" class="text-xs text-gray-300 bg-black/20 p-2 rounded-md max-h-16">
+                            @product.Description
+                        </div>
+
+                        @if (isOwner || isAdmin)
+                        {
+                            <div class="bg-yellow-100/10 border border-yellow-400 rounded-md p-1 text-xs">
+                                <span class="font-semibold text-yellow-400">🔐 Info:</span><br />
+                                <span class="text-yellow-200">@product.AccountInfomation</span>
                             </div>
-                            <div class="mt-4 flex justify-between items-center">
-                                <span class="bg-yellow-400 text-black px-3 py-1 text-sm font-semibold rounded-full shadow">
-                                    @product.PriceXu.ToString("N0") Xu
-                                </span>
-                                <span class="bg-white text-black text-xs font-semibold px-2 py-1 rounded-full shadow">
-                                    @product.ProductType
-                                </span>
+                            <div class="flex justify-between mt-2 gap-2">
+                                <button onclick="openEditModal(@product.ProductID)"
+                                        class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                    ✏️ Edit
+                                </button>
+                                <form asp-controller="Product" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure?');">
+                                    <input type="hidden" name="id" value="@product.ProductID" />
+                                    <button type="submit"
+                                            class="text-xs font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                        🗑 Delete
+                                    </button>
+                                </form>
                             </div>
+                        }
+
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
+                                💰 @product.PriceXu.ToString("N0") Xu
+                            </span>
+                            <span class="bg-white text-black text-[10px] font-semibold px-2 py-1 rounded shadow">
+                                🏷️ @product.ProductType
+                            </span>
                         </div>
                     </div>
-                }
-            </div>
-
-        </main>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-gray-400 italic mt-6">No products available.</p>
+    }
+    <!-- Modal Wrapper -->
+    <div id="editProductModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-start justify-center overflow-y-auto pt-20">
+        <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl w-full max-w-4xl relative">
+            <button onclick="closeEditModal()" class="absolute top-2 right-3 text-white text-xl">×</button>
+            <div id="editProductContent"></div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+@section Scripts {
+    <script>
+        //open create modal
+        const modal = document.getElementById("postProductModal");
+        const openBtn = document.getElementById("openPostModal");
+        const closeBtn = document.getElementById("closePostModal");
+
+        openBtn?.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        });
+
+        closeBtn?.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+        //open edit modal
+        function openEditModal(productId) {
+            fetch(`/Product/EditModal/${productId}`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById("editProductContent").innerHTML = html;
+                    document.getElementById("editProductModal").classList.remove("hidden");
+                    document.getElementById("editProductModal").classList.add("flex");
+                });
+        }
+
+        function closeEditModal() {
+            document.getElementById("editProductModal").classList.add("hidden");
+        }
+
+        // Modal Register Seller
+        window.addEventListener("DOMContentLoaded", () => {
+            const registerModal = document.getElementById("registerSellerModal");
+            const openRegisterBtn = document.getElementById("openRegisterModal");
+            const closeRegisterBtn = document.getElementById("closeRegisterSellerModal");
+
+            openRegisterBtn?.addEventListener("click", () => {
+                registerModal.classList.remove("hidden");
+                registerModal.classList.add("flex");
+            });
+
+            closeRegisterBtn?.addEventListener("click", () => {
+                registerModal.classList.add("hidden");
+            });
+
+            window.addEventListener("click", (e) => {
+                if (e.target === registerModal) {
+                    registerModal.classList.add("hidden");
+                }
+            });
+        });
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '@TempData["SuccessMessage"]',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700'
+                    },
+                    buttonsStyling: false
+                });
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: '@TempData["ErrorMessage"]',
+                    confirmButtonColor: '#d33'
+                });
+            </text>
+        }
+    </script>
+}
