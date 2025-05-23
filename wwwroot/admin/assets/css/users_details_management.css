@@ -1,0 +1,154 @@
+﻿
+/* Container for the details page */
+.details-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Page title */
+.details-container h2 {
+    font-size: 28px;
+    color: #2d3748;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Subtitle    User subtitle */
+.details-container h4 {
+    font-size: 20px;
+    color: #4a5568;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+/* Horizontal rule */
+hr {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 20px 0;
+}
+
+/* Definition list styling */
+.details-dl {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 15px;
+    align-items: start;
+    margin-bottom: 30px;
+}
+
+.details-dl dt {
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 14px;
+    text-align: left;
+    padding: 10px 0;
+}
+
+.details-dl dd {
+    color: #2d3748;
+    font-size: 14px;
+    padding: 10px 0;
+    margin: 0;
+    word-break: break-word;
+}
+
+/* Image styling */
+.user-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+    display: block;
+}
+
+.no-image {
+    font-style: italic;
+    color: #718096;
+}
+
+/* Action buttons */
+.action-links {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.action-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.action-links .edit-btn {
+    background-color: #48bb78;
+    color: #fff;
+}
+
+.action-links .edit-btn:hover {
+    background-color: #38a169;
+}
+
+.action-links .back-btn {
+    background-color: #4299e1;
+    color: #fff;
+}
+
+.action-links .back-btn:hover {
+    background-color: #3182ce;
+}
+
+.action-links i {
+    margin-right: 8px;
+}
+    
+/* Responsive design */
+@media (max-width: 768px) {
+    .details-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+        .details-container h1 {
+            font-size: 24px;
+        }
+
+    .details-dl {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+        .details-dl dt {
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .details-dl dd {
+            font-size: 13px;
+            padding-left: 10px;
+            border-left: 2px solid #e2e8f0;
+        }
+
+    .user-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .action-links a {
+        padding: 8px 16px;
+        font-size: 13px;
+        margin: 5px;
+    }
+}

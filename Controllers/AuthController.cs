@@ -52,6 +52,12 @@ namespace DollarProject.Controllers
                 return Json(new { success = false, errors = new[] { "Invalid email or password." } });
             }
 
+            if (user.IsBlock == true)
+            {
+                ModelState.AddModelError("", "Your account is blocked. Please contact the administrator.");
+                return View(model);
+            }
+
             try
             {
                 var claims = new List<Claim>
@@ -132,6 +138,13 @@ namespace DollarProject.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            if (user.IsBlock == true)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                TempData["Error"] = "Your account is blocked. Please contact the administrator.";
+                return RedirectToAction("BlockedAccount");
+            }
+
             var claims = new List<Claim>
             {
                 new Claim("UserId", user.UserID.ToString()),
@@ -175,6 +188,11 @@ namespace DollarProject.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return View("LoginFull", new LoginViewModel());
+
+        public IActionResult BlockedAccount()
+        {
+            return View();
+
         }
     }
 }

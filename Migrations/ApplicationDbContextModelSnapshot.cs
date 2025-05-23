@@ -967,6 +967,9 @@ namespace DollarProject.Migrations
                     b.Property<string>("ImageURL")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsBlock")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVerifiedSeller")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")

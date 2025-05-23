@@ -21,9 +21,6 @@ namespace DollarProject.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, string? sortOrder = null)
         {
-            string userIdClaim = User.FindFirstValue("UserId");
-            int userId = Int32.Parse(userIdClaim);
-
             var query = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.User)
@@ -50,16 +47,22 @@ namespace DollarProject.Controllers
             // Map to ProductDto
             var productDtos = _mapper.Map<List<ProductDto>>(products);
 
-            // Update Wishlist status
-            var wishlistProductIds = await _context.Wishlists
-                .Where(w => w.UserID == userId)
-                .Select(w => w.ProductID)
-                .ToListAsync();
-
-            foreach (var dto in productDtos)
+            string userIdClaim = User.FindFirstValue("UserId");
+            if (userIdClaim != null)
             {
-                dto.IsInWishlist = wishlistProductIds.Contains(dto.ProductID);
+                int userId = Int32.Parse(userIdClaim);
+                // Update Wishlist status
+                var wishlistProductIds = await _context.Wishlists
+                    .Where(w => w.UserID == userId)
+                    .Select(w => w.ProductID)
+                    .ToListAsync();
+
+                foreach (var dto in productDtos)
+                {
+                    dto.IsInWishlist = wishlistProductIds.Contains(dto.ProductID);
+                }
             }
+            
 
             // Get categories
             var categories = await _context.ProductCategories
