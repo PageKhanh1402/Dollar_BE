@@ -41,7 +41,7 @@ namespace DollarProject.Controllers
                     .ThenInclude(p => p.Category)
                 .Include(w => w.Product)
                     .ThenInclude(p => p.Seller)
-                .Where(w => w.Product.IsApproved && w.Product.Category != null && w.Product.Seller != null)
+                .Where(w => w.Product.IsApproved && w.Product.Category != null)
                 .Select(w => w.Product)
                 .AsQueryable();
 
