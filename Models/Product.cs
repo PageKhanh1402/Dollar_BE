@@ -35,6 +35,8 @@ namespace DollarProject.Models
 
         public bool IsApproved { get; set; } = false;
 
+        public bool IsRejected { get; set; } = false;
+
         public int? ApprovedByUserID { get; set; }
 
         public string? RejectionReason { get; set; }

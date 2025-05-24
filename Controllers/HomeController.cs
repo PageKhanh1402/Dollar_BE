@@ -22,7 +22,7 @@ namespace DollarProject.Controllers
             }
             else if (User.IsInRole("Staff"))
             {
-                return RedirectToAction("Index", "Dashboard", new { Area = "Staff" }); // Redirect to Staff Dashboard
+                return RedirectToAction("Index", "Dashboard", new { Area = "Admin" }); // Redirect to Staff Dashboard
             }
             return View();
         }

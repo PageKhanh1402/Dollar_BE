@@ -81,7 +81,7 @@ namespace DollarProject.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                return Json(new { success = true, redirectUrl = user.RoleID == 1 ? "/Admin/Dashboard" : user.RoleID == 2 ? "/Staff/Dashboard" : (returnUrl ?? "/") });
+                return Json(new { success = true, redirectUrl = user.RoleID == 3 ? (returnUrl ?? "/") : "/Admin/Dashboard" });
             }
             catch (Exception ex)
             {
@@ -166,7 +166,7 @@ namespace DollarProject.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            var redirectUrl = user.RoleID == 1 ? "/Admin/Dashboard" : user.RoleID == 2 ? "/Staff/Dashboard" : (returnUrl ?? "/");
+            var redirectUrl = user.RoleID == 3 ? (returnUrl ?? "/") : "/Admin/Dashboard";
             return Redirect(redirectUrl);
         }
         #endregion
@@ -188,11 +188,21 @@ namespace DollarProject.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return View("LoginFull", new LoginViewModel());
+        }
 
         public IActionResult BlockedAccount()
         {
             return View();
 
         }
+
+        #region Access Denied
+        [HttpGet]
+        [AllowAnonymous] // Allow all users, including unauthenticated ones, to see this page
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        #endregion
     }
 }
