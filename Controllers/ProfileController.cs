@@ -106,7 +106,6 @@ namespace DollarProject.Controllers
             var user = await _context.Users.FindAsync(userId);
             if (user == null) return NotFound();
 
-            // Cập nhật thông tin
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.Email = model.Email;
@@ -114,9 +113,16 @@ namespace DollarProject.Controllers
             user.Address = model.Address;
             user.SellerDescription = model.SellerDescription;
 
-            // Xử lý ảnh nếu có
             if (model.ProfilePhoto != null && model.ProfilePhoto.Length > 0)
             {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(model.ProfilePhoto.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("ProfilePhoto", "Only image files (.jpg, .jpeg, .png, .gif) are allowed.");
+                    return View(model);
+                }
+
                 var fileName = $"{Guid.NewGuid()}_{model.ProfilePhoto.FileName}";
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
@@ -125,8 +131,18 @@ namespace DollarProject.Controllers
                     await model.ProfilePhoto.CopyToAsync(stream);
                 }
 
+                if (!string.IsNullOrEmpty(user.ImageURL))
+                {
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", user.ImageURL);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
+
                 user.ImageURL = fileName;
             }
+
 
             await _context.SaveChangesAsync();
 
