@@ -10,6 +10,7 @@ namespace DollarProject.DbConnection
             : base(options)
         {
         }
+        
         // DbSet properties for all entities
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }

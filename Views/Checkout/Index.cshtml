@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+<div class="min-h-screen flex flex-col items-center bg-black text-white px-4 py-12">
+    <!-- Checkout Header -->
+    <div class="w-full max-w-5xl mb-10 flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-orange-500">Checkout</h1>
+        <a href="/cart" class="text-orange-400 hover:text-orange-300 transition">← Back to Cart</a>
+    </div>
+
+    <!-- Checkout Form Container -->
+    <div class="bg-zinc-900 border border-zinc-700 p-8 rounded-xl w-full max-w-2xl shadow-lg">
+        <h2 class="text-2xl font-semibold mb-6 text-white">Billing Information</h2>
+
+        <!-- Form gửi về action CreateOrder -->
+        <form id="checkoutForm" asp-controller="Order" asp-action="CreateOrder" method="post" class="space-y-5">
+            <input name="ProductID" value="@ViewBag.ProductID" />
+            <input name="TotalPriceXu" value="@ViewBag.PriceXu" />
+            <!-- Full Name -->
+            <div>
+                <label class="block text-sm mb-1 text-gray-300">Full Name</label>
+                <input type="text" name="FullName" placeholder="Your name"
+                       class="w-full p-3 rounded bg-zinc-800 text-black border border-zinc-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                       required />
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label class="block text-sm mb-1 text-gray-300">Email Address</label>
+                <input type="email" name="Email" placeholder="you@example.com"
+                       class="w-full p-3 rounded bg-zinc-800 text-black border border-zinc-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                       required />
+            </div>
+
+            <!-- Shipping Address -->
+            <div>
+                <label class="block text-sm mb-1 text-gray-300">Shipping Address</label>
+                <input type="text" name="ShippingAddress" placeholder="123 Main St, City, Country"
+                       class="w-full p-3 rounded bg-zinc-800 text-black border border-zinc-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                       required />
+            </div>
+
+            <!-- Payment Method -->
+            <div>
+                <label class="block text-sm mb-1 text-gray-300">Payment Method</label>
+                <select name="PaymentMethod"
+                        class="w-full p-3 rounded bg-zinc-800 text-black border border-zinc-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        required>
+                    <option value="">Select Payment Method</option>
+                    <option value="credit">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="crypto">Crypto</option>
+                </select>
+            </div>
+
+
+            <!-- Total & Submit -->
+            <div class="flex items-center justify-between pt-4 border-t border-zinc-700">
+                <span class="text-lg text-white">Total:</span>
+                <span class="text-xl font-bold text-orange-500">@ViewBag.PriceXu Coins</span>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded text-lg font-medium transition duration-200">
+                Confirm & Pay
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Thank You Popup -->
+    <div id="thankYouPopup" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 hidden">
+        <div class="bg-zinc-900 text-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+            <h2 class="text-2xl font-bold text-orange-500 mb-4">Thank You!</h2>
+            <p class="mb-6">Your payment has been successfully submitted.</p>
+            <button onclick="closePopup()" class="bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded text-white">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            // Chuyển FormData thành JSON object cho API
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    // Hiện popup thank you nếu lưu thành công
+                    document.getElementById('thankYouPopup').classList.remove('hidden');
+                } else {
+                    const errMsg = await response.text();
+                    alert('Failed to submit order: ' + errMsg);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        function closePopup() {
+            document.getElementById('thankYouPopup').classList.add('hidden');
+            // Redirect sang trang khác nếu cần, ví dụ:
+            window.location.href = "/Marketplace";
+        }
+    </script>
+}
