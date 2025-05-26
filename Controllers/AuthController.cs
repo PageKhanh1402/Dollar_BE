@@ -47,6 +47,7 @@ namespace DollarProject.Controllers
                 return Json(new { success = false, errors = new[] { "Invalid email or password." } });
             }
 
+
             if (model.Password != user.Password)
             {
                 return Json(new { success = false, errors = new[] { "Invalid email or password." } });
