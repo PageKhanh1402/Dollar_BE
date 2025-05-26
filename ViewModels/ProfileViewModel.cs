@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace DollarProject.ViewModels
 {
     public class ProfileViewModel
     {
+        public int UserID { get; set; }
+
         [Required, StringLength(100)]
         public string FirstName { get; set; }
 
@@ -12,6 +15,8 @@ namespace DollarProject.ViewModels
 
         [EmailAddress]
         public string Email { get; set; }
+
+        public string Username { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -22,8 +27,9 @@ namespace DollarProject.ViewModels
         public string? ImageURL { get; set; }
 
         [Display(Name = "Profile Photo")]
-        public IFormFile? ProfilePhoto { get; set; } 
+        public IFormFile? ProfilePhoto { get; set; }
+
+        [Display(Name = "Cover Photo")]
+        public IFormFile? CoverPhoto { get; set; }
     }
-
-
 }

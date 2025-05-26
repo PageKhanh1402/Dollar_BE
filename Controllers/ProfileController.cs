@@ -85,6 +85,7 @@ namespace DollarProject.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
+                Username = user.Username,
                 PhoneNumber = user.PhoneNumber,
                 Address = user.Address,
                 SellerDescription = user.SellerDescription,
@@ -94,21 +95,22 @@ namespace DollarProject.Controllers
             return View(model); 
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProfileViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model); 
-
             var userId = int.Parse(User.FindFirst("UserId").Value);
             var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return View(model);
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.Email = model.Email;
+            user.Username = model.Username;
             user.PhoneNumber = model.PhoneNumber;
             user.Address = model.Address;
             user.SellerDescription = model.SellerDescription;
@@ -117,16 +119,17 @@ namespace DollarProject.Controllers
             {
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
                 var extension = Path.GetExtension(model.ProfilePhoto.FileName).ToLowerInvariant();
+
                 if (!allowedExtensions.Contains(extension))
                 {
                     ModelState.AddModelError("ProfilePhoto", "Only image files (.jpg, .jpeg, .png, .gif) are allowed.");
                     return View(model);
                 }
 
-                var fileName = $"{Guid.NewGuid()}_{model.ProfilePhoto.FileName}";
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
-                using (var stream = new FileStream(path, FileMode.Create))
+                using (var stream = new FileStream(savePath, FileMode.Create))
                 {
                     await model.ProfilePhoto.CopyToAsync(stream);
                 }
@@ -135,21 +138,17 @@ namespace DollarProject.Controllers
                 {
                     var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", user.ImageURL);
                     if (System.IO.File.Exists(oldPath))
-                    {
                         System.IO.File.Delete(oldPath);
-                    }
                 }
 
                 user.ImageURL = fileName;
             }
-
 
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Profile updated successfully!";
             return RedirectToAction("Index");
         }
-
 
         // GET: ProfileController/Delete/5
         public ActionResult Delete(int id)
