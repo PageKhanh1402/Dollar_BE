@@ -23,10 +23,48 @@ namespace DollarProject.Areas.Admin.Controllers
         }
 
         // GET: Admin/Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int? roleId, int pageNumber = 1, int pageSize = 5)
         {
-            var applicationDbContext = _context.Users.Include(u => u.Role);
-            return View(await applicationDbContext.ToListAsync());
+            // Prepare the query
+            var usersQuery = _context.Users.Include(u => u.Role).AsQueryable();
+
+            // Search by name or email
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                usersQuery = usersQuery.Where(u => u.FirstName.ToLower().Contains(searchString) ||
+                                                  u.LastName.ToLower().Contains(searchString) ||
+                                                  u.Email.ToLower().Contains(searchString));
+            }
+
+            // Filter by role
+            if (roleId.HasValue)
+            {
+                usersQuery = usersQuery.Where(u => u.RoleID == roleId.Value);
+            }
+
+            // Pagination
+            int totalRecords = await usersQuery.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+            pageNumber = Math.Max(1, Math.Min(pageNumber, totalPages)); // Ensure pageNumber is within valid range
+
+            var users = await usersQuery
+                .OrderBy(u => u.UserID)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Pass pagination and filter data to the view
+            ViewBag.CurrentPage = pageNumber;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.SearchString = searchString;
+            ViewBag.RoleId = roleId;
+
+            // Populate roles for the dropdown
+            ViewData["Roles"] = new SelectList(_context.Roles, "RoleID", "RoleName", roleId);
+
+            return View(users);
         }
 
         // GET: Admin/Users/Details/5
