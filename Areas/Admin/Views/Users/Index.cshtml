@@ -9,10 +9,28 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="~/admin/assets/css/users_management.css" />
 
-<p>
+<!-- Search and Filter Form -->
+<div class="filter-section">
+    <form asp-action="Index" method="get" class="form-inline d-flex gap-3">
+        <div class="form-group" style="width: 33%;">
+            <input type="text" name="searchString" class="form-control" placeholder="Search by name or email" value="@ViewBag.SearchString" />
+        </div>
+        <div class="form-group" style="width: 33%;">
+            <select name="roleId" class="form-control">
+                <option value="">All Roles</option>
+                @foreach (var role in ViewData["Roles"] as SelectList)
+                {
+                    <option value="@role.Value" selected="@(role.Value == ViewBag.RoleId?.ToString() ? "selected" : null)">@role.Text</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="height: 42px"><i class="fas fa-search"></i> Filter</button>
+    </form>
     <a asp-action="Create" class="create-new"><i class="fas fa-plus"></i> Create New</a>
-</p>
+</div>
 
+
+<!-- Success/Error Messages -->
 @if (TempData["UpdateUserSuccess"] != null)
 {
     <div class="alert alert-success" role="alert">
@@ -83,3 +101,45 @@
 }
     </tbody>
 </table>
+
+<!-- Pagination -->
+<div class="pagination">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <a asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage - 1)" asp-route-searchString="@ViewBag.SearchString" asp-route-roleId="@ViewBag.RoleId">&laquo; Previous</a>
+    }
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        <a asp-action="Index" asp-route-pageNumber="@i" asp-route-searchString="@ViewBag.SearchString" asp-route-roleId="@ViewBag.RoleId" class="@(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+    }
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <a asp-action="Index" asp-route-pageNumber="@(ViewBag.CurrentPage + 1)" asp-route-searchString="@ViewBag.SearchString" asp-route-roleId="@ViewBag.RoleId">Next &raquo;</a>
+    }
+</div>
+
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .pagination a {
+        text-decoration: none;
+        color: #4a5568;
+        padding: 10px 16px;
+        margin: 0 4px;
+        border-radius: 5px;
+        background-color: #edf2f7;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .pagination a:hover {
+        background-color: #4a5568;
+        color: #fff;
+    }
+    .pagination .active {
+        background-color: #4a5568;
+        color: #fff;
+        font-weight: bold;
+    }
+</style>

@@ -26,12 +26,16 @@ namespace DollarProject.Models
 
         public int Stock { get; set; }
 
+
+
         [StringLength(255)]
         public string ImageURL { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
         public string ProductType { get; set; } // From ProductTypeEnum
+
+        public bool IsSold { get; set; } = false;
 
         public bool IsApproved { get; set; } = false;
 

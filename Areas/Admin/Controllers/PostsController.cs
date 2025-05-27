@@ -31,11 +31,33 @@ namespace DollarProject.Areas.Admin.Controllers
         }
 
         // GET: Admin/All Posts
-        public async Task<IActionResult> AllPost()
+        public async Task<IActionResult> AllPost(string searchString, string soldStatus)
         {
             var applicationDbContext = _context.Products
                 .Include(p => p.ApprovedByUser).Include(p => p.Category).Include(p => p.User)
                 .Where(p => p.IsApproved);
+
+            // Apply search filter if searchString is provided
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                applicationDbContext = applicationDbContext
+                    .Where(p => p.ProductName.ToLower().Contains(searchString) ||
+                                p.Category.CategoryName.ToLower().Contains(searchString) ||
+                                p.Description.ToLower().Contains(searchString));
+            }
+            // Apply sold status filter
+            if (soldStatus == "Sold")
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.IsSold);
+            }
+            else if (soldStatus == "Selling")
+            {
+                applicationDbContext = applicationDbContext.Where(p => !p.IsSold);
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["SoldStatus"] = soldStatus;
             return View(await applicationDbContext.ToListAsync());
         }
 

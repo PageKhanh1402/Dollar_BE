@@ -2,6 +2,7 @@
 @using System.Security.Claims
 @using DollarProject.ViewModels
 @{
+    var products = Model.Products;
     var currentUserId = int.Parse(User.FindFirstValue("UserId") ?? "0");
     var isAdmin = User.IsInRole("Admin") || User.IsInRole("Staff");
 }
@@ -24,7 +25,7 @@
             <!-- Avatar and Name -->
             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-black bg-opacity-50 px-6 py-4 rounded-xl">
                 <img class="rounded-full w-24 h-24 mx-auto border-4 border-white shadow"
-                     src="~/images/@(Model?.ImageURL ?? "avatar3.png")" alt="avatar">
+                     src="~/images/@(Model.ImageURL ?? "avatar3.png")" alt="avatar">
                 <h2 class="text-white text-2xl font-bold mt-2">
                     @(Model?.FirstName ?? "") @(Model?.LastName ?? "")
                 </h2>
@@ -41,7 +42,7 @@
                     <!-- Followers - Following - Products -->
                     <div class="3xl:order-1 order-2 flex text-center divide-x divide-shap">
                         <div class="px-24p">
-                            <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Followers?.Count ?? 0)</h2>
+                            <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Products?.Count ?? 0)</h2>
                             <span class="text-m-medium text-w-neutral-4/70">Sold</span>
                         </div>
                         <div class="pl-6">
@@ -136,7 +137,7 @@
                 var isOwner = product.UserID == currentUserId;
 
                 <div class="bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1c1c1c] rounded-xl shadow-md hover:scale-105 transform transition duration-300 overflow-hidden text-sm">
-                    <img src="@Url.Content(product.ImageURL ?? "default-product.png")"
+                    <img src="~/images/@Url.Content(product.ImageURL ?? "default-product.png")"
                          class="w-full h-36 object-cover border-b border-yellow-500" alt="@product.ProductName" />
                     <div class="p-3 text-white flex flex-col gap-2">
                         <h3 class="text-base font-bold truncate">@product.ProductName</h3>
@@ -150,19 +151,22 @@
                                 <span class="font-semibold text-yellow-400">🔐 Info:</span><br />
                                 <span class="text-yellow-200">@product.AccountInfomation</span>
                             </div>
-                            <div class="flex justify-between mt-2 gap-2">
-                                <button onclick="openEditModal(@product.ProductID)"
-                                        class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                                    ✏️ Edit
-                                </button>
-                                <form asp-controller="Product" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure?');">
-                                    <input type="hidden" name="id" value="@product.ProductID" />
-                                    <button type="submit"
-                                            class="text-xs font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
-                                        🗑 Delete
+                            @if (product.IsApproved == false && product.IsRejected == false)
+                            {
+                                <div class="flex justify-between mt-2 gap-2">
+                                    <button onclick="openEditModal(@product.ProductID)"
+                                            class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                        ✏️ Edit
                                     </button>
-                                </form>
-                            </div>
+                                    <form asp-controller="Product" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure?');">
+                                        <input type="hidden" name="id" value="@product.ProductID" />
+                                        <button type="submit"
+                                                class="text-xs font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                                            🗑 Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            }
                         }
 
                         <div class="flex justify-between items-center mt-2">

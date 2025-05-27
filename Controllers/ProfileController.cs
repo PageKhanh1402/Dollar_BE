@@ -85,6 +85,7 @@ namespace DollarProject.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
+                Username = user.Username,
                 PhoneNumber = user.PhoneNumber,
                 Address = user.Address,
                 SellerDescription = user.SellerDescription,
@@ -94,35 +95,50 @@ namespace DollarProject.Controllers
             return View(model); 
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProfileViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model); 
-
             var userId = int.Parse(User.FindFirst("UserId").Value);
             var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound();
 
-            // Cập nhật thông tin
+            if (!ModelState.IsValid)
+                return View(model);
+
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.Email = model.Email;
+            user.Username = model.Username;
             user.PhoneNumber = model.PhoneNumber;
             user.Address = model.Address;
             user.SellerDescription = model.SellerDescription;
 
-            // Xử lý ảnh nếu có
             if (model.ProfilePhoto != null && model.ProfilePhoto.Length > 0)
             {
-                var fileName = $"{Guid.NewGuid()}_{model.ProfilePhoto.FileName}";
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(model.ProfilePhoto.FileName).ToLowerInvariant();
 
-                using (var stream = new FileStream(path, FileMode.Create))
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("ProfilePhoto", "Only image files (.jpg, .jpeg, .png, .gif) are allowed.");
+                    return View(model);
+                }
+
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(savePath, FileMode.Create))
                 {
                     await model.ProfilePhoto.CopyToAsync(stream);
+                }
+
+                if (!string.IsNullOrEmpty(user.ImageURL))
+                {
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", user.ImageURL);
+                    if (System.IO.File.Exists(oldPath))
+                        System.IO.File.Delete(oldPath);
                 }
 
                 user.ImageURL = fileName;
@@ -133,7 +149,6 @@ namespace DollarProject.Controllers
             TempData["SuccessMessage"] = "Profile updated successfully!";
             return RedirectToAction("Index");
         }
-
 
         // GET: ProfileController/Delete/5
         public ActionResult Delete(int id)

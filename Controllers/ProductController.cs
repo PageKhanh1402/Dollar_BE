@@ -110,7 +110,7 @@ namespace DollarProject.Controllers
                 using var stream = new FileStream(savePath, FileMode.Create);
                 await imageFile.CopyToAsync(stream);
 
-                product.ImageURL = "/images/" + fileName;
+                product.ImageURL = fileName;
             }
 
             _context.Products.Add(product);
@@ -183,7 +183,7 @@ namespace DollarProject.Controllers
                 using var stream = new FileStream(savePath, FileMode.Create);
                 await imageFile.CopyToAsync(stream);
 
-                existingProduct.ImageURL = "/images/" + fileName;
+                existingProduct.ImageURL = fileName;
             }
 
             _context.Products.Update(existingProduct);
