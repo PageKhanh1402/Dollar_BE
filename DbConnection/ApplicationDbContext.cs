@@ -14,7 +14,6 @@ namespace DollarProject.DbConnection
         // DbSet properties for all entities
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<SellerStore> SellerStores { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<CurrencyConversionRate> CurrencyConversionRates { get; set; }
         public DbSet<WalletTransaction> WalletTransactions { get; set; }
@@ -24,7 +23,7 @@ namespace DollarProject.DbConnection
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Cart> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+        public DbSet<OrderHistory> OrderHistories { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ProductDeliveryDetail> ProductDeliveryDetails { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -57,17 +56,13 @@ namespace DollarProject.DbConnection
                 .WithOne(w => w.User)
                 .HasForeignKey<Wallet>(w => w.UserID);
 
-            // User - SellerStore relationship (one-to-one)
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.SellerStore)
-                .WithOne(s => s.Seller)
-                .HasForeignKey<SellerStore>(s => s.SellerID);
+            
 
             // User - Product relationship
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Seller)
+                .HasOne(p => p.User)
                 .WithMany(u => u.Products)
-                .HasForeignKey(p => p.SellerID)
+                .HasForeignKey(p => p.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Product approval relationship
@@ -77,6 +72,7 @@ namespace DollarProject.DbConnection
                 .HasForeignKey(p => p.ApprovedByUserID)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             // Order - User relationships (buyer and seller)
             modelBuilder.Entity<Order>()
@@ -133,7 +129,7 @@ namespace DollarProject.DbConnection
                 .OnDelete(DeleteBehavior.Restrict);
 
             // OrderStatusHistory - User relationship
-            modelBuilder.Entity<OrderStatusHistory>()
+            modelBuilder.Entity<OrderHistory>()
                 .HasOne(h => h.ChangedByUser)
                 .WithMany(u => u.StatusChanges)
                 .HasForeignKey(h => h.ChangedByUserID)
@@ -298,11 +294,12 @@ namespace DollarProject.DbConnection
                     Description = "Full MMORPG account.",
                     PriceXu = 100,
                     ProductType = Enums.ProductType.GameAccount.ToString(),
-                    SellerID = 1, // Admin's store
+                    UserID = 1, // Admin's store
                     CategoryID = 1, // Game Accounts category
                     CreatedAt = DateTime.Now,
                     IsApproved = true,
                     ImageURL = "marketplace5.png",
+                    AccountInfomation = "product1@gmail.com + Pass: 123456",
 
                 },
                 new Product
@@ -312,11 +309,12 @@ namespace DollarProject.DbConnection
                     Description = "In-game weapon for RPG.",
                     PriceXu = 50,
                     ProductType = Enums.ProductType.GameItem.ToString(),
-                    SellerID = 2, // Staff's store
+                    UserID = 2, // Staff's store
                     CategoryID = 9, // Weapons category
                     CreatedAt = DateTime.Now,
                     IsApproved = true,
                     ImageURL = "marketplace6.png",
+                    AccountInfomation = "product2@gmail.com + Pass: 123456",
                 }
             );
 
@@ -389,8 +387,8 @@ namespace DollarProject.DbConnection
            
 
             // Seed initial order status history
-            modelBuilder.Entity<OrderStatusHistory>().HasData(
-                new OrderStatusHistory
+            modelBuilder.Entity<OrderHistory>().HasData(
+                new OrderHistory
                 {
                     HistoryID = 1,
                     OrderID = 1,

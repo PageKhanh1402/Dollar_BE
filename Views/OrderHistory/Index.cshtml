@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Lịch sử đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="min-h-screen flex flex-col items-center bg-black text-white px-4 py-12">
+    <!-- Header -->
+    <div class="w-full max-w-5xl mb-10 flex items-center justify-between">
+        <h2 class="text-3xl font-bold text-orange-500">Lịch sử đơn hàng</h2>
+        <a href="/Marketplace" class="text-orange-400 hover:text-orange-300 transition">← Quay lại Marketplace</a>
+    </div>
+
+    <!-- Table Container -->
+    <div class="bg-zinc-900 border border-zinc-700 p-6 rounded-xl w-full max-w-6xl shadow-lg overflow-x-auto">
+        <table class="min-w-full table-auto border-collapse border border-gray-600 text-sm text-white">
+            <thead>
+                <tr class="bg-zinc-800 text-orange-400">
+                    <th class="border border-gray-700 px-4 py-2">#</th>
+                    <th class="border border-gray-700 px-4 py-2">Product Name</th>
+                    <th class="border border-gray-700 px-4 py-2">Unit Price (Xu)</th>
+                    <th class="border border-gray-700 px-4 py-2">Quantity</th>
+                    <th class="border border-gray-700 px-4 py-2">Total Price (Xu)</th>
+                    <th class="border border-gray-700 px-4 py-2">Order Status</th>
+                    <th class="border border-gray-700 px-4 py-2">Delivery Status</th>
+                    <th class="border border-gray-700 px-4 py-2">Order Date</th>
+                </tr>
+            </thead>
+            <tbody id="orderHistoryBody">
+                <tr>
+                    <td colspan="8" class="text-center py-6 text-gray-300">Đang tải dữ liệu...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function loadOrderHistory() {
+            const tbody = document.getElementById("orderHistoryBody");
+            try {
+                const response = await fetch("/OrderHistory/GetOrderHistory");
+                const data = await response.json();
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-400">Chưa có đơn hàng nào.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = "";
+                data.forEach((item, index) => {
+                    const row = `
+                        <tr class="hover:bg-zinc-800">
+                            <td class="border border-gray-700 px-3 py-2 text-center">${index + 1}</td>
+                            <td class="border border-gray-700 px-3 py-2">${item.productName}</td>
+                            <td class="border border-gray-700 px-3 py-2 text-right">${item.unitPriceXu.toLocaleString()} Xu</td>
+                            <td class="border border-gray-700 px-3 py-2 text-center">${item.quantity}</td>
+                            <td class="border border-gray-700 px-3 py-2 text-right font-semibold">${item.totalPriceXu.toLocaleString()} Xu</td>
+                            <td class="border border-gray-700 px-3 py-2 text-center">${item.orderStatus}</td>
+                            <td class="border border-gray-700 px-3 py-2 text-center">${item.deliveryStatus}</td>
+                            <td class="border border-gray-700 px-3 py-2 text-center">${new Date(item.orderDate).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML("beforeend", row);
+                });
+            } catch (error) {
+                console.error("Error loading order history:", error);
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-red-500">Lỗi khi tải dữ liệu đơn hàng.</td></tr>`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadOrderHistory);
+    </script>
+}

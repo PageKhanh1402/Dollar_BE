@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using DollarProject.DbConnection;
 using DollarProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DollarProject.Controllers
@@ -17,6 +18,14 @@ namespace DollarProject.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Dashboard", new {Area = "Admin" }); // Redirect to Admin Dashboard
+            }
+            else if (User.IsInRole("Staff"))
+            {
+                return RedirectToAction("Index", "Dashboard", new { Area = "Admin" }); // Redirect to Staff Dashboard
+            }
             return View();
         }
 

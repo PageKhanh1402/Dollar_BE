@@ -52,6 +52,12 @@ namespace DollarProject.Controllers
                 return Json(new { success = false, errors = new[] { "Invalid email or password." } });
             }
 
+            if (user.IsBlock == true)
+            {
+                ModelState.AddModelError("", "Your account is blocked. Please contact the administrator.");
+                return View(model);
+            }
+
             try
             {
                 var claims = new List<Claim>
@@ -75,7 +81,7 @@ namespace DollarProject.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                return Json(new { success = true, redirectUrl = user.RoleID == 1 ? "/Admin/Dashboard" : user.RoleID == 2 ? "/Staff/Dashboard" : (returnUrl ?? "/") });
+                return Json(new { success = true, redirectUrl = user.RoleID == 3 ? (returnUrl ?? "/") : "/Admin/Dashboard" });
             }
             catch (Exception ex)
             {
@@ -142,6 +148,13 @@ namespace DollarProject.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            if (user.IsBlock == true)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                TempData["Error"] = "Your account is blocked. Please contact the administrator.";
+                return RedirectToAction("BlockedAccount");
+            }
+
             var claims = new List<Claim>
             {
                 new Claim("UserId", user.UserID.ToString()),
@@ -163,7 +176,7 @@ namespace DollarProject.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            var redirectUrl = user.RoleID == 1 ? "/Admin/Dashboard" : user.RoleID == 2 ? "/Staff/Dashboard" : (returnUrl ?? "/");
+            var redirectUrl = user.RoleID == 3 ? (returnUrl ?? "/") : "/Admin/Dashboard";
             return Redirect(redirectUrl);
         }
         #endregion
@@ -177,6 +190,28 @@ namespace DollarProject.Controllers
             // Set flag to indicate logout
             Response.Cookies.Append("JustLoggedOut", "true", new CookieOptions { Expires = DateTimeOffset.Now.AddMinutes(1) });
             return RedirectToAction("Index", "Home");
+        }
+        #endregion
+
+        [HttpGet]
+        public IActionResult LoginFull(string? returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View("LoginFull", new LoginViewModel());
+        }
+
+        public IActionResult BlockedAccount()
+        {
+            return View();
+
+        }
+
+        #region Access Denied
+        [HttpGet]
+        [AllowAnonymous] // Allow all users, including unauthenticated ones, to see this page
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
         #endregion
     }

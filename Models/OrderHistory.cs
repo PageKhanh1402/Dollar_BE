@@ -3,13 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DollarProject.Models
 {
-    public class OrderStatusHistory
+    public class OrderHistory
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int HistoryID { get; set; }
 
         public int OrderID { get; set; }
+
+        public int TotalPriceXu { get; set; }
 
         [StringLength(50)]
         public string? PreviousStatus { get; set; }

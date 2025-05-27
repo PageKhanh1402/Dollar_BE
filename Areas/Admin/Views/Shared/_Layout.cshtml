@@ -1,0 +1,168 @@
+﻿@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Management</title>
+
+    <link rel="icon" href="~/admin/assets/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" id="main-font-link">
+    <link rel="stylesheet" href="~/admin/assets/fonts/tabler-icons.min.css">
+    <link rel="stylesheet" href="~/admin/assets/fonts/feather.css">
+    <link rel="stylesheet" href="~/admin/assets/fonts/fontawesome.css">
+    <link rel="stylesheet" href="~/admin/assets/fonts/material.css">
+    <link rel="stylesheet" href="~/admin/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="~/admin/assets/css/style-preset.css">
+</head>
+
+<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+    <div class="loader-bg">
+        <div class="loader-track"><div class="loader-fill"></div></div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="pc-sidebar">
+        <div class="navbar-wrapper">
+            <div class="m-header">
+                <a href="#" class="b-brand text-primary">
+                    <img src="~/admin/assets/images/favicon.svg" class="img-fluid logo-lg" alt="logo">
+                </a>
+            </div>
+            <div class="navbar-content">
+                <ul class="pc-navbar">
+                    <li class="pc-item">
+                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+                            <span class="pc-mtext">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item pc-caption">
+                        <label>UI Components</label>
+                        <i class="ti ti-dashboard"></i>
+                    </li>
+
+                    <li class="pc-item">
+                        <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">Users</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">Pending Posts</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-area="Admin" asp-controller="Posts" asp-action="AllPost" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">All Posts</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item pc-caption">
+                        <label>Pages</label>
+                        <i class="ti ti-news"></i>
+                    </li>
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-lock"></i></span>
+                            <span class="pc-mtext">Login</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
+                            <span class="pc-mtext">Register</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Sidebar -->
+    <!-- Header Topbar -->
+    <header class="pc-header">
+        <div class="header-wrapper">
+            <div class="me-auto pc-mob-drp">
+                <ul class="list-unstyled">
+                    <li class="pc-h-item pc-sidebar-collapse">
+                        <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                            <i class="ti ti-menu-2"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="ms-auto">
+                <ul class="list-unstyled">
+                    <li class="dropdown pc-h-item header-user-">
+                        <a class="pc-head-link dropdown-toggle arrow-none me-0">
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">
+                                    Login
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-dark" href="javascript:document.getElementById('logoutForm').submit();">
+                                    || Logout
+                                </a>
+                                <form id="logoutForm" asp-area="" asp-controller="Auth" asp-action="Logout" method="post"> </form>
+                            }
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!-- End Header -->
+    <!-- Main Content -->
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- Breadcrumb -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">@ViewData["Title"]</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Home</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    @ViewData["Title"]
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumb -->
+            @RenderBody()
+        </div>
+    </div>
+    <!-- End Main Content -->
+    <!-- Page Specific JS -->
+    <script src="~/admin/assets/js/plugins/apexcharts.min.js"></script>
+    <script src="~/admin/assets/js/pages/dashboard-default.js"></script>
+    <!-- Required Js -->
+    <script src="~/admin/assets/js/plugins/popper.min.js"></script>
+    <script src="~/admin/assets/js/plugins/simplebar.min.js"></script>
+    <script src="~/admin/assets/js/plugins/bootstrap.min.js"></script>
+    <script src="~/admin/assets/js/fonts/custom-font.js"></script>
+    <script src="~/admin/assets/js/pcoded.js"></script>
+    <script src="~/admin/assets/js/plugins/feather.min.js"></script>
+    <script>layout_change('light');</script>
+    <script>change_box_container('false');</script>
+    <script>layout_rtl_change('false');</script>
+    <script>preset_change("preset-1");</script>
+    <script>font_change("Public-Sans");</script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

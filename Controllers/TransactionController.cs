@@ -39,16 +39,15 @@ namespace DollarProject.Controllers
 
             if (TransactionType == "Deposit")
             {
-                // Nhận VND, quy đổi sang Xu
+
                 xuAmount = (int)(AmountVND / 1000);
                 vndAmount = AmountVND;
 
-                // Cộng vào số dư
                 wallet.XuBalance += xuAmount;
             }
             else if (TransactionType == "Withdraw")
             {
-                // Nhận Xu, quy đổi sang VND
+
                 xuAmount = AmountXu;
                 vndAmount = xuAmount * 1000;
 

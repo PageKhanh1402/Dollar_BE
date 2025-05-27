@@ -10,7 +10,6 @@ namespace DollarProject.Models
         public int UserID { get; set; }
 
         public string? ImageURL { get; set; } 
-
  
         [StringLength(100)]
         public string? FirstName { get; set; }
@@ -39,12 +38,13 @@ namespace DollarProject.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public bool? IsBlock { get; set; }
+
         // Navigation properties
         [ForeignKey("RoleID")]
         public virtual Role Role { get; set; }
 
         public virtual Wallet Wallet { get; set; }
-        public virtual SellerStore SellerStore { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Order> BuyerOrders { get; set; }
         public virtual ICollection<Order> SellerOrders { get; set; }
@@ -61,7 +61,9 @@ namespace DollarProject.Models
         public virtual ICollection<UserActivityLog> ActivityLogs { get; set; }
         public virtual ICollection<OrderDispute> ReportedDisputes { get; set; }
         public virtual ICollection<OrderDispute> AssignedDisputes { get; set; }
-        public virtual ICollection<OrderStatusHistory> StatusChanges { get; set; }
+        public virtual ICollection<OrderHistory> StatusChanges { get; set; }
         public virtual ICollection<CurrencyConversionRate> SetRates { get; set; }
+        //Xoa SellerStore
+        //public virtual SellerStore SellerStore { get; set; }
     }
 }

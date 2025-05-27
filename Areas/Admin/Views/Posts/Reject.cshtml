@@ -1,0 +1,47 @@
+﻿@model DollarProject.Models.Product
+
+@{
+    ViewData["Title"] = "Reject Product";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Reject Product</h1>
+
+<h4>Are you sure you want to reject this product?</h4>
+<div>
+    <h4>Product Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Product Name</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.ProductName)</dd>
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+        <dt class="col-sm-2">Price</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.PriceXu) Xu</dd>
+        <dt class="col-sm-2">Stock</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Stock)</dd>
+        <dt class="col-sm-2">Category</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Category.CategoryName)</dd>
+        <dt class="col-sm-2">Posted by</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.User.UserID)</dd>
+    </dl>
+
+    <form asp-action="Reject">
+        <input type="hidden" asp-for="ProductID" />
+        <div class="form-group">
+            <label class="control-label">Rejection Reason</label>
+            <textarea asp-for="RejectionReason" class="form-control" rows="4" required></textarea>
+            <span asp-validation-for="RejectionReason" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-3">
+            <input type="submit" value="Reject" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

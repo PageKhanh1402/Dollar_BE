@@ -1,6 +1,7 @@
 ﻿using DollarProject.DbConnection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DollarProject.Controllers
 {
@@ -16,22 +17,16 @@ namespace DollarProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(int productId)
         {
-            var product = await _context.Products
-                .Where(p => p.ProductID == productId)
-                .Select(p => new
-                {
-                    p.ProductID,
-                    p.ProductName,
-                    p.PriceXu
-                }).FirstOrDefaultAsync();
-            
-            if (product == null) return NotFound();
-          
-            ViewBag.ProductId = product.ProductID;
-            ViewBag.ProductName = product.ProductName;
-            ViewBag.PriceXu = product.PriceXu;
+            var product = await _context.Products.FindAsync(productId);
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+            var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserID == userId);
 
-            return View(product);
+            ViewBag.ProductId = product?.ProductID;
+            ViewBag.PriceXu = product?.PriceXu;
+            ViewBag.WalletId = wallet?.WalletID;
+            ViewBag.WalletBalance = wallet?.XuBalance;
+
+            return View();
         }
         [HttpGet]
         public IActionResult Index()

@@ -20,8 +20,9 @@ builder.Services.AddAutoMapper(typeof(ProductProfile));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Auth/SignIn";
+        options.LoginPath = "/Auth/LoginFull";
         options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.Cookie.SameSite = SameSiteMode.Lax;
     })
     .AddGoogle(googleoptions =>
     {
@@ -46,6 +47,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
