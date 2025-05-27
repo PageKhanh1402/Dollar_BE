@@ -137,6 +137,16 @@ namespace DollarProject.Controllers
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+                // Tạo wallet cho user mới
+                var wallet = new Wallet
+                {
+                    UserID = user.UserID, // Bây giờ đã có ID
+                    XuBalance = 0,
+                    LastUpdated = DateTime.Now
+                };
+
+                _context.Wallets.Add(wallet);
+                await _context.SaveChangesAsync();
             }
 
             if (user.IsBlock == true)

@@ -70,6 +70,18 @@
                                         </svg>
                                     </a>
                                 </div>
+
+
+                                <!-- Coin display -->
+                                <div class="flex items-center gap-2 text-white bg-yellow-500 px-5 py-2 rounded-full min-w-[120px] h-10">
+                                    <img src="~/images/coins.png" alt="coin" class="w-8 h-8 object-contain" />
+                                    <span id="xuBalance" class="text-base font-semibold leading-none">
+                                        ******
+                                    </span>
+                                </div>
+                                
+
+
                                 @if (!User.Identity.IsAuthenticated)
                                 {
                                     <!-- Button Login -->
@@ -107,6 +119,14 @@
 
                                             <a asp-controller="Profile" asp-action="Index" class="dropdown-item">Profile</a>
                                             <a href="./user-settings.html" class="dropdown-item">Settings</a>
+
+
+                                            <!-- MỤC MỚI: Transaction -->
+                                            <a asp-controller="Transaction" asp-action="Index" class="dropdown-item">Transaction</a>
+
+                                            <!-- ✅ MỤC MỚI: Order History -->
+                                            <a asp-controller="OrderHistory" asp-action="Index" class="dropdown-item">History</a>
+
 
                                             <form asp-controller="Auth" asp-action="Logout" method="post" id="logoutForm">
                                                 <button type="submit" class="dropdown-item">Logout</button>
@@ -192,6 +212,24 @@
     @RenderSection("Scripts", required: false)
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        async function loadWalletBalance() {
+            try {
+                const response = await fetch('/Wallet/GetBalance');
+                const data = await response.json();
+
+                // Gán số dư vào thẻ span
+                document.getElementById('xuBalance').innerText =
+                    parseInt(data.balance).toLocaleString('vi-VN') + ' Coins';
+            } catch (error) {
+                console.error('Lỗi khi lấy số dư Xu:', error);
+                document.getElementById('xuBalance').innerText = '*******';
+            }
+        }
+
+        // Gọi hàm khi trang đã tải xong
+        window.addEventListener('DOMContentLoaded', loadWalletBalance);
+    </script>
     <script>
         // Handle login button
         document.getElementById("loginButton").addEventListener("click", function () {
@@ -306,6 +344,7 @@
                 }
             }
         });
+
     </script>
 
 </body>

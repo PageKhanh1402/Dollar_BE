@@ -92,15 +92,18 @@
                                             <button class="wishlist-btn text-w-neutral-1 hover:text-primary @(product.IsInWishlist ? "text-red-500" : "")" data-product-id="@product.ProductID">
                                                 <i class="ti ti-heart icon-24"></i>
                                             </button>
-                                            <button class="text-w-neutral-1 hover:text-primary">
-                                                <i class="ti ti-shopping-cart icon-24"></i>
-                                            </button>
+
+                                            <form asp-controller="Checkout" asp-action="Index" asp-route-productId="@product.ProductID">
+                                                <button class="text-w-neutral-1 hover:text-primary">
+                                                    <i class="ti ti-shopping-cart icon-24"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                         <img src="~/images/@(product.ImageURL ?? "placeholder.png")" class="w-full 3xl:h-[310px] xl:h-[280px] lg:h-[260px] h-[240px] object-cover object-top group-hover:scale-110 group-hover:rotate-2 transition-1" alt="@product.ProductName">
                                     </div>
                                     <div class="p-28p">
                                         <a asp-controller="Marketplace" asp-action="Details" asp-route-id="@product.ProductID" class="heading-3 link-1 mb-2 line-clamp-1">
-                                            @product.ProductName
+                                            @product.ProductName 
                                         </a>
                                         <p class="text-l-regular text-w-neutral-2">
                                             Price: <span class="span">@product.PriceXu Coins</span>

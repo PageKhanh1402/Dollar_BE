@@ -10,6 +10,7 @@ namespace DollarProject.DbConnection
             : base(options)
         {
         }
+        
         // DbSet properties for all entities
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
@@ -22,7 +23,7 @@ namespace DollarProject.DbConnection
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Cart> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+        public DbSet<OrderHistory> OrderHistories { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ProductDeliveryDetail> ProductDeliveryDetails { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -128,7 +129,7 @@ namespace DollarProject.DbConnection
                 .OnDelete(DeleteBehavior.Restrict);
 
             // OrderStatusHistory - User relationship
-            modelBuilder.Entity<OrderStatusHistory>()
+            modelBuilder.Entity<OrderHistory>()
                 .HasOne(h => h.ChangedByUser)
                 .WithMany(u => u.StatusChanges)
                 .HasForeignKey(h => h.ChangedByUserID)
@@ -386,8 +387,8 @@ namespace DollarProject.DbConnection
            
 
             // Seed initial order status history
-            modelBuilder.Entity<OrderStatusHistory>().HasData(
-                new OrderStatusHistory
+            modelBuilder.Entity<OrderHistory>().HasData(
+                new OrderHistory
                 {
                     HistoryID = 1,
                     OrderID = 1,
