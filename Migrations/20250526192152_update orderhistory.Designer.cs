@@ -4,6 +4,7 @@ using DollarProject.DbConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DollarProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250526192152_update orderhistory")]
+    partial class updateorderhistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -638,9 +641,6 @@ namespace DollarProject.Migrations
                     b.Property<bool>("IsRejected")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSold")
-                        .HasColumnType("bit");
-
                     b.Property<int>("PriceXu")
                         .HasColumnType("int");
 
@@ -687,7 +687,6 @@ namespace DollarProject.Migrations
                             ImageURL = "marketplace5.png",
                             IsApproved = true,
                             IsRejected = false,
-                            IsSold = false,
                             PriceXu = 100,
                             ProductName = "Valorant Account",
                             ProductType = "GameAccount",
@@ -704,7 +703,6 @@ namespace DollarProject.Migrations
                             ImageURL = "marketplace6.png",
                             IsApproved = true,
                             IsRejected = false,
-                            IsSold = false,
                             PriceXu = 50,
                             ProductName = "Mastering Mindset",
                             ProductType = "GameItem",

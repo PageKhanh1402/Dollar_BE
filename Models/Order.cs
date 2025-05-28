@@ -45,7 +45,7 @@ namespace DollarProject.Models
         public virtual User Seller { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual ICollection<OrderStatusHistory> StatusHistories { get; set; }
+        public virtual ICollection<OrderHistory> StatusHistories { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<OrderDispute> Disputes { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }

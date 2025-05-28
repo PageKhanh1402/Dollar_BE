@@ -7,6 +7,31 @@
 
 <link rel="stylesheet" href="~/admin/assets/css/posts_css.css" />
 
+<div class="d-flex gap-5 align-items-center">
+    <!-- Search Form -->
+    <div class="search-container" style="margin-bottom: 20px; width: 33%;">
+        <form asp-action="AllPost" method="get">
+            <div class="input-group">
+                <input type="text" name="searchString" class="form-control" placeholder="Search by product name, category, or description" value="@ViewData["CurrentFilter"]" style="height: 40px;" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit" style="height: 40px;">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Sold Status Filter -->
+    <div class="col-auto" style="width: 33%;">
+        <form asp-action="AllPost" method="get">
+            <select name="soldStatus" id="soldStatus" class="form-control" onchange="this.form.submit()" style="width: 50%; height: 40px; margin-top: -20px">
+                <option value="" selected="@(ViewData["SoldStatus"]?.ToString() == "")">All</option>
+                <option value="Sold" selected="@(ViewData["SoldStatus"]?.ToString() == "Sold")">Sold</option>
+                <option value="Selling" selected="@(ViewData["SoldStatus"]?.ToString() == "Selling")">Selling</option>
+            </select>
+        </form>
+    </div>
+</div>
+
+
 <div class="grid-container">
     @foreach (var item in Model)
     {
@@ -21,25 +46,30 @@
             }
             <div class="product-body">
                 <h5 class="product-title">@Html.DisplayFor(modelItem => item.ProductName)</h5>
+                <p class="product-info"><strong>Category:</strong> @Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
                 <p class="product-info">
                     <strong>Description:</strong>
                     @(item.Description?.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)
                 </p>
-                <p class="product-info"><strong>Price:</strong> @Html.DisplayFor(modelItem => item.PriceXu) Xu</p>
-                <p class="product-info"><strong>Stock:</strong> @Html.DisplayFor(modelItem => item.Stock)</p>
+                <p class="product-info"><strong>Information:</strong> @Html.DisplayFor(modelItem => item.AccountInfomation)</p>
                 <p class="product-info"><strong>Type:</strong> @Html.DisplayFor(modelItem => item.ProductType)</p>
+                <p class="product-info"><strong>Stock:</strong> @Html.DisplayFor(modelItem => item.Stock)</p>
+                <p class="product-info"><strong>Price:</strong> @Html.DisplayFor(modelItem => item.PriceXu) Xu</p>
                 <p class="product-info">
                     <strong>Status:</strong>
                     <span class="@(item.IsApproved ? "approved" : "not-approved")">
                         @(item.IsApproved ? "Approved" : "Not Approved")
+                    </span>,
+                    <span class="@(item.IsSold ? "approved" : "not-approved")">
+                        @(item.IsSold ? "Sold" : "Selling")
                     </span>
                 </p>
-                <p class="product-info"><strong>Category:</strong> @Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
+                
                 <p class="product-info"><strong>Created:</strong> @Html.DisplayFor(modelItem => item.CreatedAt)</p>
-                <p class="product-info"><strong>Posted by:</strong> @Html.DisplayFor(modelItem => item.User.UserID)</p>
+                <p class="product-info"><strong>Posted by:</strong> @Html.DisplayFor(modelItem => item.User.UserID) - @(item.User.FirstName + ' ' + item.User.LastName) </p>
                 @if (item.ApprovedByUser != null)
                 {
-                    <p class="product-info"><strong>Approved by:</strong> @Html.DisplayFor(modelItem => item.ApprovedByUser.UserID)</p>
+                    <p class="product-info"><strong>Approved by:</strong> @Html.DisplayFor(modelItem => item.ApprovedByUser.UserID) - @(item.ApprovedByUser.FirstName + ' ' + item.ApprovedByUser.LastName)</p>
                 }
             </div>
             <div class="product-actions">
