@@ -43,6 +43,17 @@ namespace DollarProject.Controllers
             return View(user);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.ProductID == id);
+
+            if (product == null) return NotFound();
+
+            return View("Details", product);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Create()

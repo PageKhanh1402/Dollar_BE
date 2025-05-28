@@ -1,0 +1,77 @@
+﻿@model DollarProject.ViewModels.ProductDetailViewModel
+
+@{
+    var product = Model.Product;
+    var seller = Model.Seller;
+    var related = Model.RelatedProducts;
+    ViewData["Title"] = product.ProductName;
+}
+
+<main class="section-pt section-pb">
+    <div class="container grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Product Image Gallery -->
+        <div>
+            <img src="~/images/@(product.ImageURL ?? "placeholder.png")" class="w-full rounded-xl shadow-md mb-4" alt="@product.ProductName" />
+            <!-- Future enhancement: image thumbnails carousel -->
+        </div>
+
+        <!-- Product Info -->
+        <div class="bg-b-neutral-3 p-6 rounded-xl shadow-xl">
+            <h1 class="text-3xl font-bold text-white mb-4">@product.ProductName</h1>
+            <div class="flex items-center gap-4 mb-3">
+                <span class="text-2xl font-semibold text-yellow-400">💰 @product.PriceXu.ToString("N0") Xu</span>
+                <span class="bg-white text-black px-2 py-1 text-xs rounded shadow">🏷️ @product.ProductType</span>
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed whitespace-pre-line bg-black/20 p-4 rounded-xl">
+                @product.Description
+            </p>
+
+            <div class="mt-6" hidden>
+                <h3 class="text-white font-semibold mb-2">🔐 Account Information</h3>
+                <p class="text-sm text-yellow-300 break-words bg-yellow-900/10 p-3 rounded">@product.AccountInfomation</p>
+            </div>
+
+            <div class="mt-6">
+                <button class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 px-5 py-2 rounded-full text-white font-bold shadow-md">🛒 Buy now</button>
+                <button class="ml-4 text-red-500 hover:text-red-700 font-semibold text-lg">❤ Wishlist</button>
+            </div>
+
+            <div class="mt-8 text-gray-400 text-sm">
+                <div>📦 Category: <span class="text-white">@product.Category?.CategoryName</span></div>
+                <div>🕒 Posted: <span class="text-white">@product.CreatedAt.ToString("dd/MM/yyyy")</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seller Info -->
+    <div class="container mt-16 bg-b-neutral-3 p-6 rounded-xl shadow-xl">
+        <h2 class="text-xl font-bold text-white mb-4">👤 Seller Information</h2>
+        <div class="flex items-center gap-4">
+            <img src="~/images/@(seller.ImageURL ?? "user-placeholder.png")" class="w-20 h-20 rounded-full border-4 border-yellow-400" alt="Seller avatar" />
+            <div>
+                <h3 class="text-lg font-semibold text-white">@seller.FirstName @seller.LastName</h3>
+                <p class="text-sm text-gray-400 italic">@seller.SellerDescription</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    @if (related != null && related.Any())
+    {
+        <div class="container mt-16">
+            <h2 class="text-xl font-bold text-white mb-4">🕹️ More from this seller</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                @foreach (var item in related)
+                {
+                    <a asp-controller="Marketplace" asp-action="Details" asp-route-id="@item.ProductID" class="bg-b-neutral-3 rounded-lg overflow-hidden shadow hover:scale-105 transform transition duration-300">
+                        <img src="~/images/@(item.ImageURL ?? "placeholder.png")" class="w-full h-36 object-cover" alt="@item.ProductName" />
+                        <div class="p-3 text-white">
+                            <h3 class="text-base font-semibold truncate">@item.ProductName</h3>
+                            <p class="text-sm text-yellow-300">@item.PriceXu.ToString("N0") Xu</p>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</main>
