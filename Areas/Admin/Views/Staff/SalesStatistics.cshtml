@@ -5,112 +5,26 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<div class="min-w-[1024px] flex flex-col lg:flex-row gap-6 items-start">
-    <!-- Chart (smaller) -->
-    <div class="bg-white rounded-lg shadow p-6 w-full lg:w-1/2">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold text-gray-700">📊 Monthly Sales Chart</h2>
-            <select id="yearSelector" class="border rounded px-2 py-1 text-sm">
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-            </select>
+<!-- Import CSS giống Pending Posts -->
+<link rel="stylesheet" href="~/admin/assets/css/posts_css.css" />
+
+<div class="grid-container">
+    @foreach (var record in Model.SaleRecords)
+    {
+        <div class="product-card">
+            <div class="product-body">
+                <h5 class="product-title">@record.ProductName</h5>
+                <p class="product-info"># @record.Date.ToString("dd MMM yyyy")</p>
+                <p class="product-info"><strong>👤 Buyer:</strong> @record.BuyerName</p>
+                <p class="product-info"><strong>💼 Seller:</strong> @record.SellerName</p>
+                <p class="product-info"><strong>💰 Price:</strong> @record.PriceXu.ToString("N0") Xu</p>
+                <p class="product-info">
+                    <strong>Status:</strong>
+                    <span class="@(record.Status == "Delivered" ? "approved" : record.Status == "Failed" ? "not-approved" : "pending")">
+                        @record.Status
+                    </span>
+                </p>
+            </div>
         </div>
-        <canvas id="salesChart" class="w-full h-[250px]"></canvas>
-    </div>
-
-    <!-- Table (larger) -->
-    <div class=" flex flex-direction bg-white rounded-lg shadow p-6 w-full lg:w-2/3 max-h-[600px] overflow-auto">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4">📦 Sales Records</h2>
-        <table class="min-w-full text-sm text-left text-gray-600">
-            <thead class="bg-gray-100 text-xs uppercase text-gray-700">
-                <tr>
-                    <th class="px-4 py-2">Product</th>
-                    <th class="px-4 py-2">Buyer</th>
-                    <th class="px-4 py-2">Seller</th>
-                    <th class="px-4 py-2">Price</th>
-                    <th class="px-4 py-2">Date</th>
-                    <th class="px-4 py-2">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var record in Model.SaleRecords)
-                {
-                    <tr class="hover:bg-gray-50 border-b">
-                        <td class="px-4 py-2">@record.ProductName</td>
-                        <td class="px-4 py-2">@record.BuyerName</td>
-                        <td class="px-4 py-2">@record.SellerName</td>
-                        <td class="px-4 py-2">@record.PriceXu.ToString("N0") Xu</td>
-                        <td class="px-4 py-2">@record.Date.ToString("dd MMM yyyy")</td>
-                        <td class="px-4 py-2">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                @(record.Status == "Delivered" ? "bg-green-100 text-green-700" :
-                                  record.Status == "Failed" ? "bg-red-100 text-red-700" :
-                                  "bg-yellow-100 text-yellow-700")">
-                                @record.Status
-                            </span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    }
 </div>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const rawLabels = @Html.Raw(Json.Serialize(Model.Labels));
-        const rawValues = @Html.Raw(Json.Serialize(Model.Values));
-
-        // Parse labels into year and month
-        const monthlyData = {};
-        rawLabels.forEach((label, index) => {
-            const [year, month] = label.split('-');
-            if (!monthlyData[year]) monthlyData[year] = Array(12).fill(0);
-            monthlyData[year][parseInt(month) - 1] = rawValues[index];
-        });
-
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-        const ctx = document.getElementById('salesChart').getContext('2d');
-        let chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: monthNames,
-                datasets: [{
-                    label: 'Products Sold',
-                    data: monthlyData["2025"],
-                    backgroundColor: '#facc15'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { labels: { color: '#4b5563' } }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: '#6b7280',
-                            stepSize: 10,
-                            callback: function (value) {
-                                return value; 
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: { color: '#6b7280' }
-                    }
-                }
-            }
-        });
-
-        document.getElementById('yearSelector').addEventListener('change', function () {
-            const selectedYear = this.value;
-            chart.data.datasets[0].data = monthlyData[selectedYear] || Array(12).fill(0);
-            chart.update();
-        });
-    </script>
-}

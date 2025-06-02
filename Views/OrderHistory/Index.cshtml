@@ -1,13 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Lịch sử đơn hàng";
+    ViewData["Title"] = "Order history";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="min-h-screen flex flex-col items-center bg-black text-white px-4 py-12">
     <!-- Header -->
     <div class="w-full max-w-5xl mb-10 flex items-center justify-between">
-        <h2 class="text-3xl font-bold text-orange-500">Lịch sử đơn hàng</h2>
-        <a href="/Marketplace" class="text-orange-400 hover:text-orange-300 transition">← Quay lại Marketplace</a>
+        <h2 class="text-3xl font-bold text-orange-500">Order history</h2>
+        <a href="/Marketplace" class="text-orange-400 hover:text-orange-300 transition">← Back to Marketplace</a>
     </div>
 
     <!-- Table Container -->
@@ -27,7 +27,7 @@
             </thead>
             <tbody id="orderHistoryBody">
                 <tr>
-                    <td colspan="8" class="text-center py-6 text-gray-300">Đang tải dữ liệu...</td>
+                    <td colspan="8" class="text-center py-6 text-gray-300">Loading data...</td>
                 </tr>
             </tbody>
         </table>
@@ -43,7 +43,7 @@
                 const data = await response.json();
 
                 if (!data || data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-400">Chưa có đơn hàng nào.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-400">No orders yet.</td></tr>`;
                     return;
                 }
 
@@ -65,7 +65,7 @@
                 });
             } catch (error) {
                 console.error("Error loading order history:", error);
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-red-500">Lỗi khi tải dữ liệu đơn hàng.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-red-500">Error loading order data.</td></tr>`;
             }
         }
 

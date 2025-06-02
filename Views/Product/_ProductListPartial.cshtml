@@ -15,51 +15,54 @@
             @foreach (var product in Model)
             {
                 var isOwner = product.UserID == currentUserId;
-                <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductID" class="block">
-                    <div class="bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1c1c1c] rounded-xl shadow-md hover:scale-105 transform transition duration-300 overflow-hidden text-sm">
-                        <img src="~/images/@Url.Content(product.ImageURL ?? "default-product.png")"
-                             class="w-full h-36 object-cover border-b border-yellow-500" alt="@product.ProductName" />
-                        <div class="p-3 text-white flex flex-col gap-2">
-                            <h3 class="text-base font-bold truncate">@product.ProductName</h3>
-                            <div style="white-space: pre-line" class="text-xs text-gray-300 bg-black/20 p-2 rounded-md max-h-16">
-                                @product.Description
-                            </div>
-
-                            @if (isOwner || isAdmin)
-                            {
-                                <div class="bg-yellow-100/10 border border-yellow-400 rounded-md p-1 text-xs">
-                                    <span class="font-semibold text-yellow-400">🔐 Info:</span><br />
-                                    <span class="text-yellow-200">@product.AccountInfomation</span>
+                <div class="relative group">
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductID" class="block">
+                        <div class="bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1c1c1c] rounded-xl shadow-md hover:scale-105 transform transition duration-300 overflow-hidden text-sm">
+                            <img src="~/images/@Url.Content(product.ImageURL ?? "default-product.png")"
+                                 class="w-full h-36 object-cover border-b border-yellow-500" alt="@product.ProductName" />
+                            <div class="p-3 text-white flex flex-col gap-2">
+                                <h3 class="text-base font-bold truncate">@product.ProductName</h3>
+                                <div style="white-space: pre-line" class="text-xs text-gray-300 bg-black/20 p-2 rounded-md max-h-16">
+                                    @product.Description
                                 </div>
-                                @if (!product.IsApproved && !product.IsRejected)
+
+                                @if (isOwner || isAdmin)
                                 {
-                                    <div class="flex justify-between mt-2 gap-2">
-                                        <button onclick="openEditModal(@product.ProductID)"
-                                                class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                                            ✏️ Edit
-                                        </button>
-                                        <form asp-controller="Product" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure?');">
-                                            <input type="hidden" name="id" value="@product.ProductID" />
-                                            <button type="submit"
-                                                    class="text-xs font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
-                                                🗑 Delete
-                                            </button>
-                                        </form>
+                                    <div class="bg-yellow-100/10 border border-yellow-400 rounded-md p-1 text-xs">
+                                        <span class="font-semibold text-yellow-400">🔐 Info:</span><br />
+                                        <span class="text-yellow-200">@product.AccountInfomation</span>
                                     </div>
                                 }
-                            }
 
-                            <div class="flex justify-between items-center mt-2">
-                                <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
-                                    💰 @product.PriceXu.ToString("N0") Xu
-                                </span>
-                                <span class="bg-white text-black text-[10px] font-semibold px-2 py-1 rounded shadow">
-                                    🏷️ @product.ProductType
-                                </span>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
+                                        💰 @product.PriceXu.ToString("N0") Xu
+                                    </span>
+                                    <span class="bg-white text-black text-[10px] font-semibold px-2 py-1 rounded shadow">
+                                        🏷️ @product.ProductType
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+
+                    @if ((isOwner || isAdmin) && !product.IsApproved && !product.IsRejected && !product.IsSold)
+                    {
+                        <div class="absolute top-2 right-2 flex gap-2 z-10">
+                            <button onclick="openEditModal(@product.ProductID)"
+                                    class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow">
+                                ✏️ Edit
+                            </button>
+                            <form asp-controller="Product" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure?');">
+                                <input type="hidden" name="id" value="@product.ProductID" />
+                                <button type="submit"
+                                        class="text-xs font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded shadow">
+                                    🗑 Delete
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
             }
         </div>
     }
