@@ -2,9 +2,9 @@
 @using System.Security.Claims
 @using DollarProject.ViewModels
 @{
-    var products = Model.Products;
     var currentUserId = int.Parse(User.FindFirstValue("UserId") ?? "0");
     var isAdmin = User.IsInRole("Admin") || User.IsInRole("Staff");
+    var filter = Context.Request.Query["filter"].ToString();
 }
 <!-- user profile section start -->
 <section class="section-pt overflow-visible">
@@ -42,7 +42,7 @@
                     <!-- Followers - Following - Products -->
                     <div class="3xl:order-1 order-2 flex text-center divide-x divide-shap">
                         <div class="px-24p">
-                            <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Products?.Count ?? 0)</h2>
+                            <h2 class="heading-40 text-w-neutral-1 mb-1">@(Model?.Products?.Count(p => p.IsSold) ?? 0)</h2>
                             <span class="text-m-medium text-w-neutral-4/70">Sold</span>
                         </div>
                         <div class="pl-6">
@@ -124,79 +124,71 @@
         </div>
     </div>
 </section>
+<!-- Filter Menu Start -->
+<div class="flex justify-end px-4 mt-6 mb-8 relative z-40">
+    <div id="filterWrapper" class="relative inline-block text-left">
+        <button id="filterToggle" type="button"
+                class="inline-flex items-center justify-between rounded-lg border border-yellow-400 bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            <span id="currentFilterText">Filter: All Products</span>
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
 
-<!-- Product Listing -->
-<div id="product-list" class="bg-b-neutral-3 p-6 rounded-xl shadow-xl mt-10">
-    <h2 class="text-2xl font-extrabold text-white mb-6 text-center">🛍️ All Products</h2>
-
-    @if (Model.Products != null && Model.Products.Any())
-    {
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
-            @foreach (var product in Model.Products)
-            {
-                var isOwner = product.UserID == currentUserId;
-
-                <div class="bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1c1c1c] rounded-xl shadow-md hover:scale-105 transform transition duration-300 overflow-hidden text-sm">
-                    <img src="~/images/@Url.Content(product.ImageURL ?? "default-product.png")"
-                         class="w-full h-36 object-cover border-b border-yellow-500" alt="@product.ProductName" />
-                    <div class="p-3 text-white flex flex-col gap-2">
-                        <h3 class="text-base font-bold truncate">@product.ProductName</h3>
-                        <div style="white-space: pre-line" class="text-xs text-gray-300 bg-black/20 p-2 rounded-md max-h-16">
-                            @product.Description
-                        </div>
-
-                        @if (isOwner || isAdmin)
-                        {
-                            <div class="bg-yellow-100/10 border border-yellow-400 rounded-md p-1 text-xs">
-                                <span class="font-semibold text-yellow-400">🔐 Info:</span><br />
-                                <span class="text-yellow-200">@product.AccountInfomation</span>
-                            </div>
-                            @if (product.IsApproved == false && product.IsRejected == false)
-                            {
-                                <div class="flex justify-between mt-2 gap-2">
-                                    <button onclick="openEditModal(@product.ProductID)"
-                                            class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                                        ✏️ Edit
-                                    </button>
-                                    <form asp-controller="Product" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure?');">
-                                        <input type="hidden" name="id" value="@product.ProductID" />
-                                        <button type="submit"
-                                                class="text-xs font-semibold bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
-                                            🗑 Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            }
-                        }
-
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
-                                💰 @product.PriceXu.ToString("N0") Xu
-                            </span>
-                            <span class="bg-white text-black text-[10px] font-semibold px-2 py-1 rounded shadow">
-                                🏷️ @product.ProductType
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <p class="text-center text-gray-400 italic mt-6">No products available.</p>
-    }
-    <!-- Modal Wrapper -->
-    <div id="editProductModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-start justify-center overflow-y-auto pt-20">
-        <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl w-full max-w-4xl relative">
-            <button onclick="closeEditModal()" class="absolute top-2 right-3 text-white text-xl">×</button>
-            <div id="editProductContent"></div>
+        <div id="filterMenu"
+             class="hidden absolute right-0 mt-2 w-44 rounded-md bg-[#1c1c1c] border border-yellow-500 shadow-2xl ring-1 ring-black ring-opacity-20 z-50">
+            <div class="py-1 divide-y divide-gray-700">
+                <a href="#" data-filter="" class="block px-4 py-2 text-sm text-white hover:bg-yellow-400 hover:text-black">All Products</a>
+                <a href="#" data-filter="sold" class="block px-4 py-2 text-sm text-white hover:bg-yellow-400 hover:text-black">Sold</a>
+                <a href="#" data-filter="pending" class="block px-4 py-2 text-sm text-white hover:bg-yellow-400 hover:text-black">Pending</a>
+                <a href="#" data-filter="approved" class="block px-4 py-2 text-sm text-white hover:bg-yellow-400 hover:text-black">Approved</a>
+                <a href="#" data-filter="rejected" class="block px-4 py-2 text-sm text-white hover:bg-yellow-400 hover:text-black">Rejected</a>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Product List -->
+<div id="product-list-container">
+    @await Html.PartialAsync("~/Views/Product/_ProductListPartial.cshtml", Model.Products.ToList())
+</div>
+
+<!-- Modal Wrapper -->
+<div id="editProductModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-start justify-center overflow-y-auto pt-20">
+    <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl w-full max-w-4xl relative">
+        <button onclick="closeEditModal()" class="absolute top-2 right-3 text-white text-xl">×</button>
+        <div id="editProductContent"></div>
+    </div>
+</div>
+</div>
+
 @section Scripts {
     <script>
+        //filter
+        const filterToggle = document.getElementById("filterToggle");
+        const filterMenu = document.getElementById("filterMenu");
+        const currentFilterText = document.getElementById("currentFilterText");
+
+        filterToggle.addEventListener("click", () => {
+            filterMenu.classList.toggle("hidden");
+        });
+
+        filterMenu.querySelectorAll("a").forEach(item => {
+            item.addEventListener("click", function (e) {
+                e.preventDefault();
+                const selectedFilter = this.getAttribute("data-filter");
+                const selectedText = this.textContent.trim();
+                currentFilterText.textContent = `Filter: ${selectedText}`;
+                filterMenu.classList.add("hidden");
+
+                fetch(`/Profile/FilterProducts?filter=${selectedFilter}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById("product-list-container").innerHTML = html;
+                    });
+            });
+        });
         //open create modal
         const modal = document.getElementById("postProductModal");
         const openBtn = document.getElementById("openPostModal");
