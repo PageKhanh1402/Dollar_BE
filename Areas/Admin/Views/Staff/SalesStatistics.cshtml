@@ -1,0 +1,30 @@
+﻿@model DollarProject.ViewModels.SalesStatsViewModel
+
+@{
+    ViewData["Title"] = "Sales Statistics";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Import CSS giống Pending Posts -->
+<link rel="stylesheet" href="~/admin/assets/css/posts_css.css" />
+
+<div class="grid-container">
+    @foreach (var record in Model.SaleRecords)
+    {
+        <div class="product-card">
+            <div class="product-body">
+                <h5 class="product-title">@record.ProductName</h5>
+                <p class="product-info"># @record.Date.ToString("dd MMM yyyy")</p>
+                <p class="product-info"><strong>👤 Buyer:</strong> @record.BuyerName</p>
+                <p class="product-info"><strong>💼 Seller:</strong> @record.SellerName</p>
+                <p class="product-info"><strong>💰 Price:</strong> @record.PriceXu.ToString("N0") Xu</p>
+                <p class="product-info">
+                    <strong>Status:</strong>
+                    <span class="@(record.Status == "Delivered" ? "approved" : record.Status == "Failed" ? "not-approved" : "pending")">
+                        @record.Status
+                    </span>
+                </p>
+            </div>
+        </div>
+    }
+</div>
