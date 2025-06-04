@@ -36,33 +36,33 @@ namespace DollarProject.Models
 
         public string? SellerDescription { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
         public bool? IsBlock { get; set; }
 
         // Navigation properties
         [ForeignKey("RoleID")]
-        public virtual Role Role { get; set; }
+        public virtual Role? Role { get; set; }
 
-        public virtual Wallet Wallet { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<Order> BuyerOrders { get; set; }
-        public virtual ICollection<Order> SellerOrders { get; set; }
-        public virtual ICollection<Wishlist> Wishlists { get; set; }
-        public virtual ICollection<Cart> CartItems { get; set; }
-        public virtual ICollection<WithdrawRequest> WithdrawRequests { get; set; }
-        public virtual ICollection<Review> Reviews { get; set; }
-        public virtual ICollection<Message> SentMessages { get; set; }
-        public virtual ICollection<ConversationParticipant> ConversationParticipants { get; set; }
-        public virtual ICollection<MessageReadStatus> MessageReadStatuses { get; set; }
-        public virtual ICollection<Notification> Notifications { get; set; }
-        public virtual ICollection<Follower> Followers { get; set; }
-        public virtual ICollection<Follower> Following { get; set; }
-        public virtual ICollection<UserActivityLog> ActivityLogs { get; set; }
-        public virtual ICollection<OrderDispute> ReportedDisputes { get; set; }
-        public virtual ICollection<OrderDispute> AssignedDisputes { get; set; }
-        public virtual ICollection<OrderHistory> StatusChanges { get; set; }
-        public virtual ICollection<CurrencyConversionRate> SetRates { get; set; }
+        public virtual Wallet? Wallet { get; set; }
+        public virtual ICollection<Product>? Products { get; set; }
+        public virtual ICollection<Order>? BuyerOrders { get; set; }
+        public virtual ICollection<Order>? SellerOrders { get; set; }
+        public virtual ICollection<Wishlist>? Wishlists { get; set; }
+        public virtual ICollection<Cart>? CartItems { get; set; }
+        public virtual ICollection<WithdrawRequest>? WithdrawRequests { get; set; }
+        public virtual ICollection<Review>? Reviews { get; set; }
+        public virtual ICollection<Message>? SentMessages { get; set; }
+        public virtual ICollection<ConversationParticipant>? ConversationParticipants { get; set; }
+        public virtual ICollection<MessageReadStatus>? MessageReadStatuses { get; set; }
+        public virtual ICollection<Notification>? Notifications { get; set; }
+        public virtual ICollection<Follower>? Followers { get; set; }
+        public virtual ICollection<Follower>? Following { get; set; }
+        public virtual ICollection<UserActivityLog>? ActivityLogs { get; set; }
+        public virtual ICollection<OrderDispute>? ReportedDisputes { get; set; }
+        public virtual ICollection<OrderDispute>? AssignedDisputes { get; set; }
+        public virtual ICollection<OrderHistory>? StatusChanges { get; set; }
+        public virtual ICollection<CurrencyConversionRate>? SetRates { get; set; }
         //Xoa SellerStore
         //public virtual SellerStore SellerStore { get; set; }
     }

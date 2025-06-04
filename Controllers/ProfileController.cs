@@ -21,7 +21,7 @@ namespace DollarProject.Controllers
 
         // GET: ProfileController
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? filter)
         {
             var userIdStr = User.FindFirstValue("UserId");
             if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
@@ -32,19 +32,31 @@ namespace DollarProject.Controllers
                 .Include(u => u.Followers)
                 .Include(u => u.Following)
                 .Include(u => u.Products)
+                .ThenInclude(p => p.Category)
                 .FirstOrDefaultAsync(u => u.UserID == userId);
 
             if (user == null)
-            {
                 return NotFound();
+
+            if (!string.IsNullOrEmpty(filter) && user.Products != null)
+            {
+                user.Products = filter switch
+                {
+                    "sold" => user.Products.Where(p => p.IsSold).ToList(),
+                    "pending" => user.Products.Where(p => !p.IsApproved && !p.IsRejected).ToList(),
+                    "approved" => user.Products.Where(p => p.IsApproved).ToList(),
+                    "rejected" => user.Products.Where(p => p.IsRejected).ToList(),
+                    _ => user.Products.ToList()
+                };
             }
 
             ViewBag.Categories = await _context.ProductCategories
                 .Where(p => p.ParentCategoryID == null)
-                .ToListAsync(); 
+                .ToListAsync();
 
             return View(user);
         }
+
 
 
         // GET: ProfileController/Details/5
@@ -195,6 +207,29 @@ namespace DollarProject.Controllers
             TempData["SuccessMessage"] = "You had register successful! Let sell something..";
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> FilterProducts(string? filter)
+        {
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.UserID == userId);
+
+            query = filter switch
+            {
+                "sold" => query.Where(p => p.IsSold),
+                "pending" => query.Where(p => !p.IsApproved && !p.IsRejected),
+                "approved" => query.Where(p => p.IsApproved),
+                "rejected" => query.Where(p => p.IsRejected),
+                _ => query
+            };
+
+            var products = await query.ToListAsync();
+            return PartialView("~/Views/Product/_ProductListPartial.cshtml", products);
+        }
+
 
     }
 }

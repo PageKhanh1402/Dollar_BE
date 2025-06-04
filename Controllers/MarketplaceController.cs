@@ -2,6 +2,7 @@
 using DollarProject.DbConnection;
 using DollarProject.Dto;
 using DollarProject.Models;
+using DollarProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -74,6 +75,32 @@ namespace DollarProject.Controllers
             ViewData["CategoryId"] = categoryId;
 
             return View(productDtos);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.User)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.ProductID == id && p.IsApproved);
+
+            if (product == null)
+                return NotFound();
+
+            var relatedProducts = await _context.Products
+                .Where(p => p.UserID == product.UserID && p.ProductID != id && p.IsApproved)
+                .Take(4)
+                .ToListAsync();
+
+            var viewModel = new ProductDetailViewModel
+            {
+                Product = product,
+                Seller = product.User,
+                RelatedProducts = relatedProducts
+            };
+
+            return View("~/Views/Marketplace/ProductDetail.cshtml", viewModel);
         }
     }
 }
