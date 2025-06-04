@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Transaction";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -25,21 +25,80 @@
         width: 100%;
     }
 
+    .balance-display {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .balance-amount {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
     @@media (max-width: 768px) {
-        .transaction-container {
-            margin-top: 80px;
+        .transaction-container
+
+        .transaction-item {
             padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .transaction-form {
-            padding: 20px;
+        .transaction-item:last-child {
+            border-bottom: none;
         }
-    }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background-color: #10B981;
+            color: white;
+        }
+
+        .status-pending {
+            background-color: #F59E0B;
+            color: white;
+        }
+
+        .status-failed {
+            background-color: #EF4444;
+            color: white;
+        }
+
+        @@media (max-width: 768px) {
+            .transaction-container {
+                margin-top: 80px;
+                padding: 15px;
+            }
+
+            .transaction-form {
+                padding: 20px;
+            }
+        }
 </style>
 
 <div class="transaction-container flex gap-6 p-6 bg-gray-100 min-h-[400px]">
-    <!-- Sidebar hoặc button chọn -->
+    <!-- Sidebar với hiển thị số dư -->
     <div class="w-1/4 flex flex-col gap-4">
+        <!-- Hiển thị số dư hiện tại -->
+        <div class="balance-display">
+            <h3 class="text-lg font-semibold">Current Balance</h3>
+            <div class="balance-amount" id="currentBalance">@ViewBag.CurrentBalance Xu</div>
+            <p class="text-sm opacity-90">≈ @((ViewBag.CurrentBalance ?? 0) * 1000) VND</p>
+        </div>
+
         <button id="btnDeposit"
                 class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                 onclick="showForm('deposit')">
@@ -50,14 +109,58 @@
                 onclick="showForm('withdraw')">
             Withdraw
         </button>
+
+        <!-- Transaction History -->
+        <div class="transaction-history">
+            <h3 class="text-lg font-semibold mb-4">Recent Transactions</h3>
+            @if (ViewBag.RecentTransactions != null && ViewBag.RecentTransactions.Count > 0)
+            {
+                foreach (var transaction in ViewBag.RecentTransactions)
+                {
+                    <div class="transaction-item">
+                        <div>
+                            <div class="font-medium">@transaction.TransactionType</div>
+                            <div class="text-sm text-gray-500">@transaction.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                            <div class="text-sm">@transaction.Description</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-medium">@transaction.AmountXu Xu</div>
+                            <div class="text-sm text-gray-500">@transaction.AmountVND.ToString("N0") VND</div>
+                            <span class="status-badge @(transaction.Status.ToLower() == "completed" ? "status-completed" :
+                                                     transaction.Status.ToLower() == "pending" ? "status-pending" : "status-failed")">
+                                @transaction.Status
+                            </span>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-gray-500 text-center">No recent transactions</p>
+            }
+        </div>
     </div>
 
     <!-- Nội dung form -->
     <div class="w-3/4 bg-white p-6 rounded shadow-md">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
         <!-- Form Deposit -->
-        <form id="formDeposit" class="space-y-4" method="post" action="/Transaction/Index">
+        <form id="formDeposit" class="space-y-4" method="POST">
             <h2 class="text-2xl font-bold text-blue-600 mb-4">Deposit Money</h2>
-            <!-- Các input form giống như bạn có, nhưng chỉ dùng cho Deposit -->
+
             <div>
                 <label for="FullName_Deposit" class="block font-medium text-gray-900">Full Name</label>
                 <input id="FullName_Deposit" name="FullName" type="text" required
@@ -72,10 +175,7 @@
 
             <div>
                 <label for="AmountVND_Deposit" class="block font-medium text-gray-900">Amount you want to deposit</label>
-
-                <!-- Flex container -->
                 <div class="flex items-center gap-4">
-                    <!-- Select: Số tiền -->
                     <select id="AmountVND_Deposit" name="AmountVND" required
                             class="w-1/2 mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 bg-white">
                         <option value="" disabled selected>-- Choose amount of money --</option>
@@ -88,8 +188,8 @@
                         <option value="10000000">10,000,000 VND</option>
                     </select>
 
-                    <!-- Hiển thị Xu quy đổi -->
-                    <div id="ConvertedXuDisplay" class="w-1/2 mt-1 px-4 py-2 border border-gray-200 bg-gray-100 rounded-md text-gray-900">
+                    <div id="ConvertedXuDisplay"
+                         class="w-1/2 mt-1 px-4 py-2 border border-gray-200 bg-gray-100 rounded-md text-gray-900">
                         0 Coins
                     </div>
                 </div>
@@ -97,9 +197,8 @@
 
             <div>
                 <label for="PaymentMethod_Deposit" class="block font-medium text-gray-900">Payment Method</label>
-                <select id="PaymentMethod_Deposit" name="PaymentMethod"
+                <select id="PaymentMethod_Deposit" name="PaymentMethod" required
                         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 bg-white">
-                    <option value="Wallet">Wallet</option>
                     <option value="VNPay">VNPay</option>
                     <option value="Manual">Manual</option>
                 </select>
@@ -114,9 +213,9 @@
         </form>
 
         <!-- Form Withdraw -->
-        <form id="formWithdraw" class="space-y-4 hidden" method="post" action="/Transaction/Index">
+        <form id="formWithdraw" class="space-y-4 hidden" method="post">
             <h2 class="text-2xl font-bold text-blue-600 mb-4">Withdraw Money</h2>
-            <!-- Tương tự input nhưng dùng cho rút tiền -->
+
             <div>
                 <label for="FullName_Withdraw" class="block font-medium text-gray-900">Full Name</label>
                 <input id="FullName_Withdraw" name="FullName" type="text" required
@@ -131,10 +230,7 @@
 
             <div>
                 <label for="AmountXu_Withdraw" class="block font-medium text-gray-900">Amount you want to withdraw</label>
-
-                <!-- Flex container -->
                 <div class="flex items-center gap-4">
-                    <!-- Select: Số Xu -->
                     <select id="AmountXu_Withdraw" name="AmountXu" required
                             class="w-1/2 mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 bg-white">
                         <option value="" disabled selected>-- Choose amount of Coins --</option>
@@ -146,7 +242,6 @@
                         <option value="10000">10000 Coins</option>
                     </select>
 
-                    <!-- Hiển thị VND quy đổi -->
                     <div id="ConvertedVNDDisplay" class="w-1/2 mt-1 px-4 py-2 border border-gray-200 bg-gray-100 rounded-md text-gray-900">
                         0 VND
                     </div>
@@ -155,10 +250,8 @@
 
             <div>
                 <label for="PaymentMethod_Withdraw" class="block font-medium text-gray-900">Payment Method</label>
-                <select id="PaymentMethod_Withdraw" name="PaymentMethod"
+                <select id="PaymentMethod_Withdraw" name="PaymentMethod" required
                         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 bg-white">
-                    <option value="Wallet">Wallet</option>
-                    <option value="VNPay">VNPay</option>
                     <option value="Manual">Manual</option>
                 </select>
             </div>
@@ -171,86 +264,60 @@
             </button>
         </form>
     </div>
-    <div id="thankYouPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-md shadow-lg text-center max-w-sm w-full">
-            <h3 class="text-xl font-semibold text-green-600 mb-2">Transaction Successful!</h3>
-            <p class="text-gray-700 mb-4">Thank you for your transaction.</p>
-            <button onclick="closeThankYouPopup()"
-                    class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">
-                Close
-            </button>
-        </div>
-    </div>
 </div>
 
-<script>
-    const rate = 1000; // 1,000 VND = 1 Xu
-    const amountSelect = document.getElementById("AmountVND_Deposit");
-    const xuDisplay = document.getElementById("ConvertedXuDisplay");
+@section Scripts {
+    <script>
+        function showForm(type) {
+            const depositForm = document.getElementById('formDeposit');
+            const withdrawForm = document.getElementById('formWithdraw');
+            const depositBtn = document.getElementById('btnDeposit');
+            const withdrawBtn = document.getElementById('btnWithdraw');
 
-    amountSelect.addEventListener("change", function () {
-        const amountVND = parseInt(this.value);
-        if (!isNaN(amountVND)) {
-            const xu = amountVND / rate;
-            xuDisplay.textContent = `${xu} Coins`;
-        } else {
-            xuDisplay.textContent = "0 Coins";
+            if (type === 'deposit') {
+                depositForm.classList.remove('hidden');
+                withdrawForm.classList.add('hidden');
+                depositBtn.classList.remove('bg-gray-300', 'text-gray-700');
+                depositBtn.classList.add('bg-blue-600', 'text-white');
+                withdrawBtn.classList.remove('bg-blue-600', 'text-white');
+                withdrawBtn.classList.add('bg-gray-300', 'text-gray-700');
+            } else {
+                depositForm.classList.add('hidden');
+                withdrawForm.classList.remove('hidden');
+                withdrawBtn.classList.remove('bg-gray-300', 'text-gray-700');
+                withdrawBtn.classList.add('bg-blue-600', 'text-white');
+                depositBtn.classList.remove('bg-blue-600', 'text-white');
+                depositBtn.classList.add('bg-gray-300', 'text-gray-700');
+            }
         }
-    });
-    const xuSelect = document.getElementById("AmountXu_Withdraw");
-    const vndDisplay = document.getElementById("ConvertedVNDDisplay");
 
-    xuSelect.addEventListener("change", function () {
-        const amountXu = parseInt(this.value);
-        if (!isNaN(amountXu)) {
-            const vnd = amountXu * rate;
-            vndDisplay.textContent = `${vnd.toLocaleString()} VND`;
-        } else {
-            vndDisplay.textContent = "0 VND";
+        // Convert VND to Xu for deposit
+        document.getElementById('AmountVND_Deposit').addEventListener('change', function () {
+            const vndAmount = parseFloat(this.value) || 0;
+            const xuAmount = Math.floor(vndAmount / 1000);
+            document.getElementById('ConvertedXuDisplay').textContent = `${xuAmount} Coins`;
+        });
+
+        // Convert Xu to VND for withdraw
+        document.getElementById('AmountXu_Withdraw').addEventListener('change', function () {
+            const xuAmount = parseFloat(this.value) || 0;
+            const vndAmount = xuAmount * 1000;
+            document.getElementById('ConvertedVNDDisplay').textContent = `${vndAmount.toLocaleString()} VND`;
+        });
+
+        // Auto-refresh balance
+        function refreshBalance() {
+            fetch('/Transaction/GetCurrentBalance')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('currentBalance').textContent = `${data.balance} Xu`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
-    });
-</script>
-<script>
-    function showForm(type) {
-      const depositBtn = document.getElementById('btnDeposit');
-      const withdrawBtn = document.getElementById('btnWithdraw');
-      const formDeposit = document.getElementById('formDeposit');
-      const formWithdraw = document.getElementById('formWithdraw');
 
-      if (type === 'deposit') {
-        formDeposit.classList.remove('hidden');
-        formWithdraw.classList.add('hidden');
-
-        depositBtn.classList.add('bg-blue-600', 'text-white');
-        depositBtn.classList.remove('bg-gray-300', 'text-gray-700');
-
-        withdrawBtn.classList.add('bg-gray-300', 'text-gray-700');
-        withdrawBtn.classList.remove('bg-blue-600', 'text-white');
-      } else {
-        formWithdraw.classList.remove('hidden');
-        formDeposit.classList.add('hidden');
-
-        withdrawBtn.classList.add('bg-blue-600', 'text-white');
-        withdrawBtn.classList.remove('bg-gray-300', 'text-gray-700');
-
-        depositBtn.classList.add('bg-gray-300', 'text-gray-700');
-        depositBtn.classList.remove('bg-blue-600', 'text-white');
-      }
-    }
-
-    // Mặc định show Deposit
-    showForm('deposit');
-</script>
-
-<script>
-    window.onload = function () {
-        var showPopup = '@TempData["ShowThankYou"]' === 'True';
-        if (showPopup) {
-            document.getElementById("thankYouPopup").classList.remove("hidden");
-        }
-    };
-
-    function closeThankYouPopup() {
-        document.getElementById("thankYouPopup").classList.add("hidden");
-    }
-</script>
+        // Refresh balance every 30 seconds
+        setInterval(refreshBalance, 30000);
+    </script>
+}

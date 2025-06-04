@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DollarProject.Services.Vnpay;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         googleoptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
         googleoptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     });
+// 👇 Thêm dịch vụ VnPay trước khi gọi Build()
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout 30 phút
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
 
 var app = builder.Build();
 
@@ -47,6 +58,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "areas",
