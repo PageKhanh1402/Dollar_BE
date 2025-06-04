@@ -25,5 +25,6 @@ namespace DollarProject.Controllers
 
             return Json(new { balance = wallet.XuBalance });
         }
+
     }
 }
