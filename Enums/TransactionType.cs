@@ -8,6 +8,7 @@ namespace DollarProject.Enums
         Withdraw,
         Purchase,
         Refund,
-        AdminAdjust
+        AdminAdjust,
+        CompleteProduct
     }
 }

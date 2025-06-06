@@ -40,53 +40,172 @@
         margin: 10px 0;
     }
 
-    @@media (max-width: 768px) {
-        .transaction-container
+    .transaction-history {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+    }
 
-        .transaction-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+    .transaction-item {
+        background: white;
+        padding: 16px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .transaction-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
         }
 
         .transaction-item:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
         }
 
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
+        .transaction-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
         }
 
-        .status-completed {
-            background-color: #10B981;
-            color: white;
+        .transaction-item.deposit::before {
+            background: linear-gradient(to bottom, #10b981, #059669);
         }
 
-        .status-pending {
-            background-color: #F59E0B;
-            color: white;
+        .transaction-item.withdraw::before {
+            background: linear-gradient(to bottom, #f59e0b, #d97706);
         }
 
-        .status-failed {
-            background-color: #EF4444;
-            color: white;
-        }
+    .transaction-left {
+        flex: 1;
+    }
 
-        @@media (max-width: 768px) {
-            .transaction-container {
-                margin-top: 80px;
-                padding: 15px;
-            }
+    .transaction-right {
+        text-align: right;
+        min-width: 120px;
+    }
 
-            .transaction-form {
-                padding: 20px;
-            }
-        }
+    .transaction-type {
+        font-weight: 600;
+        font-size: 16px;
+        color: #1f2937;
+        margin-bottom: 4px;
+    }
+
+    .transaction-date {
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 2px;
+    }
+
+    .transaction-description {
+        font-size: 13px;
+        color: #4b5563;
+    }
+
+    .transaction-amount-xu {
+        font-weight: 600;
+        font-size: 16px;
+        color: #1f2937;
+        margin-bottom: 2px;
+    }
+
+    .transaction-amount-vnd {
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 6px;
+    }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+    }
+
+    .status-completed {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+    }
+
+    .status-pending {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+    }
+
+    .status-failed {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+    }
+
+    .no-transactions {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .no-transactions-icon {
+        font-size: 48px;
+        color: #d1d5db;
+        margin-bottom: 16px;
+    }
+
+    .no-transactions-text {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    @@media (max-width: 768px) {
+        .transaction-container
+
+    {
+        margin-top: 80px;
+        padding: 15px;
+    }
+
+    .transaction-form {
+        padding: 20px;
+    }
+
+    .transaction-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .transaction-right {
+        text-align: left;
+        min-width: auto;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .transaction-amounts {
+        text-align: right;
+    }
+
+    }
 </style>
 
 <div class="transaction-container flex gap-6 p-6 bg-gray-100 min-h-[400px]">
@@ -112,20 +231,22 @@
 
         <!-- Transaction History -->
         <div class="transaction-history">
-            <h3 class="text-lg font-semibold mb-4">Recent Transactions</h3>
+            <h3 class="text-lg font-semibold mb-4" style="color: #1f2937;">Recent Transactions</h3>
             @if (ViewBag.RecentTransactions != null && ViewBag.RecentTransactions.Count > 0)
             {
                 foreach (var transaction in ViewBag.RecentTransactions)
                 {
-                    <div class="transaction-item">
-                        <div>
-                            <div class="font-medium">@transaction.TransactionType</div>
-                            <div class="text-sm text-gray-500">@transaction.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
-                            <div class="text-sm">@transaction.Description</div>
+                    <div class="transaction-item @transaction.TransactionType.ToLower()">
+                        <div class="transaction-left">
+                            <div class="transaction-type">@transaction.TransactionType</div>
+                            <div class="transaction-date">@transaction.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                            <div class="transaction-description">@transaction.Description</div>
                         </div>
-                        <div class="text-right">
-                            <div class="font-medium">@transaction.AmountXu Xu</div>
-                            <div class="text-sm text-gray-500">@transaction.AmountVND.ToString("N0") VND</div>
+                        <div class="transaction-right">
+                            <div class="transaction-amounts">
+                                <div class="transaction-amount-xu">@transaction.AmountXu Xu</div>
+                                <div class="transaction-amount-vnd">@transaction.AmountVND.ToString("N0") VND</div>
+                            </div>
                             <span class="status-badge @(transaction.Status.ToLower() == "completed" ? "status-completed" :
                                                      transaction.Status.ToLower() == "pending" ? "status-pending" : "status-failed")">
                                 @transaction.Status
@@ -136,7 +257,10 @@
             }
             else
             {
-                <p class="text-gray-500 text-center">No recent transactions</p>
+                <div class="no-transactions">
+                    <div class="no-transactions-icon">💳</div>
+                    <p class="no-transactions-text">No recent transactions</p>
+                </div>
             }
         </div>
     </div>
