@@ -23,11 +23,12 @@
                     <th class="border border-gray-700 px-4 py-2">Order Status</th>
                     <th class="border border-gray-700 px-4 py-2">Delivery Status</th>
                     <th class="border border-gray-700 px-4 py-2">Order Date</th>
+                    <th class="border border-gray-700 px-4 py-2">Account Information</th>
                 </tr>
             </thead>
             <tbody id="orderHistoryBody">
                 <tr>
-                    <td colspan="8" class="text-center py-6 text-gray-300">Loading data...</td>
+                    <td colspan="9" class="text-center py-6 text-gray-300">Loading data...</td>
                 </tr>
             </tbody>
         </table>
@@ -36,6 +37,24 @@
 
 @section Scripts {
     <script>
+        async function loadAccountInfo() {
+            try {
+                const response = await fetch("/Account/GetAccountInfo");
+                const data = await response.json();
+
+                document.getElementById("accountUsername").textContent = data.username;
+                document.getElementById("accountEmail").textContent = data.email;
+                document.getElementById("accountBalance").textContent = data.balance.toLocaleString();
+                document.getElementById("accountCreatedDate").textContent = new Date(data.createdDate).toLocaleDateString();
+            } catch (error) {
+                console.error("Error loading account info:", error);
+                document.getElementById("accountUsername").textContent = "Error loading data";
+                document.getElementById("accountEmail").textContent = "Error loading data";
+                document.getElementById("accountBalance").textContent = "Error loading data";
+                document.getElementById("accountCreatedDate").textContent = "Error loading data";
+            }
+        }
+
         async function loadOrderHistory() {
             const tbody = document.getElementById("orderHistoryBody");
             try {
@@ -43,7 +62,7 @@
                 const data = await response.json();
 
                 if (!data || data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-400">No orders yet.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-gray-400">No orders yet.</td></tr>`;
                     return;
                 }
 
@@ -59,16 +78,20 @@
                             <td class="border border-gray-700 px-3 py-2 text-center">${item.orderStatus}</td>
                             <td class="border border-gray-700 px-3 py-2 text-center">${item.deliveryStatus}</td>
                             <td class="border border-gray-700 px-3 py-2 text-center">${new Date(item.orderDate).toLocaleDateString()}</td>
+                            <td class="border border-gray-700 px-3 py-2">${item.accountInfomation}</td>
                         </tr>
                     `;
                     tbody.insertAdjacentHTML("beforeend", row);
                 });
             } catch (error) {
                 console.error("Error loading order history:", error);
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-red-500">Error loading order data.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-red-500">Error loading order data.</td></tr>`;
             }
         }
 
-        document.addEventListener("DOMContentLoaded", loadOrderHistory);
+        document.addEventListener("DOMContentLoaded", () => {
+            loadAccountInfo();
+            loadOrderHistory();
+        });
     </script>
 }

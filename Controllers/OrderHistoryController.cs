@@ -52,11 +52,11 @@ namespace DollarProject.Controllers
                 FullName = od.Order.Buyer?.FirstName ?? "Unknown",
                 Email = od.Order.Buyer?.Email ?? "Unknown",
                 ShippingAddress = od.Order.DeliveryNotes ?? "N/A",
-                PaymentMethod = od.Order.Payments.FirstOrDefault()?.PaymentMethod ?? "Unknown"
+                PaymentMethod = od.Order.Payments.FirstOrDefault()?.PaymentMethod ?? "Unknown",
+                AccountInfomation = od.Product?.AccountInfomation ?? "N/A"
             }).ToList();
 
             return Json(result);
         }
     }
-
 }
