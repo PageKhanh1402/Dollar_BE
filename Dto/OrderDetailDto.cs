@@ -14,6 +14,7 @@
         public string FullName { get; set; }         // Tên người nhận
         public string Email { get; set; }            // Email người nhận
         public string ShippingAddress { get; set; }  // Địa chỉ giao hàng
+        public string AccountInfomation { get; set; }
         public string PaymentMethod { get; set; }    // Phương thức thanh toán (credit/paypal/...)
     }
 }
